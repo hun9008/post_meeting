@@ -1,0 +1,12 @@
+{
+  "name": "post_meeting",
+  "version": "1.0.0",
+  "description": "--- 학교인증을 통한 교내 포스트잇 미팅 보드. --- Basic function 1. mainPage 2. subPage(add post it) 3. 회원가입 4. login",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
