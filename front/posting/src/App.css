@@ -1,0 +1,72 @@
+.App {
+  text-align: center;
+}
+
+.postit {
+  width: 200px;
+  height: 170px;
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+.add-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+}
+
+.subpage-container {
+  position: fixed;
+  right: 0;
+  bottom: 70px; /* +버튼의 높이와 여백을 고려한 값 */
+  width: 400px;
+  height: 340px;
+  background-color: #4CAF50; /* +버튼과 동일한 배경색 */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.postit-input {
+  width: 90%;
+  height: 50px; /* 버튼 높이와 여백을 고려한 값 */
+  margin-bottom: 10px;
+}
+
+.App-header {
+  /* background-color: #282c34; */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
