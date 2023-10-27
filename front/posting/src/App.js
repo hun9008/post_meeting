@@ -25,11 +25,14 @@ function App() {
   };
 
   const handleAddPostitFromSubpage = (text) => {
-  const newPostit = {
+    const [mbtiValue, hobbyValue, instaIdValue] = text.split('\n');
+    const newPostit = {
       id: new Date().getTime(),
       x: window.innerWidth / 2 - 100,
       y: window.innerHeight / 2 - 100,
-      content: text
+      content_mbti: mbtiValue,
+      content_hobby: hobbyValue,
+      content_insta: instaIdValue,
     };
     setPostits([...postits, newPostit]);
     setShowSubpage(false);
@@ -66,11 +69,13 @@ function App() {
       {postits.map(postit => (
         <div 
           key={postit.id} 
-          className="postit" 
+          className="rgyPostIt" 
           style={{ left: postit.x, top: postit.y }}
           onMouseDown={e => handleDragStart(e, postit.id)}
         >
-          {postit.content}
+          {postit.content_mbti}<br/>
+          {postit.content_hobby}<br/>
+          {postit.content_insta}<br/>
         </div>
       ))}
       <button className="add-button" onClick={handleOpenSubpage}>+</button>
