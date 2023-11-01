@@ -30,23 +30,6 @@
   background-color: rgba(69, 105, 144, 1);
 }
 
-.subpage-container {
-  position: fixed;
-  right: 0;
-  bottom: 70px; /* +버튼의 높이와 여백을 고려한 값 */
-  width: 400px;
-  height: 340px;
-  background-color:rgba(69, 105, 144, 1); /* +버튼과 동일한 배경색 */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.postit-input {
-  width: 90%;
-  height: 50px; /* 버튼 높이와 여백을 고려한 값 */
-  margin-bottom: 10px;
-}
-
 .App-header {
   /* background-color: #282c34; */
   min-height: 100vh;
@@ -63,6 +46,7 @@
 }
 
 div.rgyPostIt {
+  user-select: none;
   position: relative;
   display: inline-block;
   padding: 20px 45px 20px 15px;
@@ -74,14 +58,8 @@ div.rgyPostIt {
   font-size: 27px;
   color: #555;
   word-break: break-all;
-  background: #ffff88; /* Old browsers */
-  background: -moz-linear-gradient(-45deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right bottom, color-stop(81%, #ffff88), color-stop(82%, #ffff88), color-stop(82%, #ffff88), color-stop(100%, #ffffc6)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(-45deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(-45deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(-45deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%); /* IE10+ */
-  background: linear-gradient(135deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff88', endColorstr='#ffffc6', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+  background: -webkit-linear-gradient(-45deg, #ffff88 81%, #ffff88 82%, #ffff88 82%, #ffffc6 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff88', endColorstr='#ffffc6', GradientType=1); 
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
 }
@@ -131,4 +109,18 @@ div.rgyPostIt > p::before {
 div.rgyPostIt > p > a {
   color: #555;
 }
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: #555;
+  padding: 0;
+  line-height: 1;
+}
+
 
