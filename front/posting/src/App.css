@@ -20,14 +20,14 @@
   height: 50px;
   border-radius: 50%;
   font-size: 24px;
-  background-color: #4CAF50;
+  background-color: rgba(69, 105, 144, 1);
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .add-button:hover {
-  background-color: #45a049;
+  background-color: rgba(69, 105, 144, 1);
 }
 
 .subpage-container {
@@ -36,7 +36,7 @@
   bottom: 70px; /* +버튼의 높이와 여백을 고려한 값 */
   width: 400px;
   height: 340px;
-  background-color: #4CAF50; /* +버튼과 동일한 배경색 */
+  background-color:rgba(69, 105, 144, 1); /* +버튼과 동일한 배경색 */
   padding: 20px;
   box-sizing: border-box;
 }
