@@ -7,6 +7,10 @@ class PostitSchema(BaseModel):
     y:float
     text: str
 
+class EmailSchema(BaseModel):
+    email:str
+
+
 class UserBaseSchema(BaseModel):
     name: Optional[str]
     email: str
@@ -21,7 +25,6 @@ class UserBaseSchema(BaseModel):
 
 class CreateUserSchema(UserBaseSchema):
     password: constr(min_length=8)
-    passwordConfirm: str
     verified: bool = False
 
 

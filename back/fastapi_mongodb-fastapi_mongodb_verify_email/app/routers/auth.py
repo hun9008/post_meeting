@@ -20,11 +20,11 @@ REFRESH_TOKEN_EXPIRES_IN = settings.REFRESH_TOKEN_EXPIRES_IN
 
 
 @router.post('/register/email',status_code = status.HTTP_201_CREATED)
-async def send_email(email: str, request: Request):
-    # user = User.find_one({'email': email.lower()})
-    # if user:
-    #     raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-    #                         detail='Account already exist')
+async def send_email(emailmodel:schemas.EmailSchema, request: Request):
+    email = emailmodel.email
+    user = User.find_one({'email': email.lower()})
+    if user:
+        User.delete_one({"email":email})
     token = randbytes(10)
     hashedCode = hashlib.sha256()
     hashedCode.update(token)
@@ -32,8 +32,9 @@ async def send_email(email: str, request: Request):
     new_user=schemas.UserBaseSchema(email = email)
     insert_result = User.insert_one(new_user.dict())
     User.find_one_and_update({"_id": insert_result.inserted_id}, {
-    "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
-    url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
+    "$set": {"verification_code": verification_code, "verified":False,"updated_at": datetime.utcnow()}})
+    # url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
+    url =f"https://3ea7-210-107-197-58.ngrok-free.app/api/auth/verifyemail/{token.hex()}"
     try:
         await Email({'name':email}, url, [EmailStr(email)]).sendVerificationCode()
     except Exception as error:
@@ -43,7 +44,8 @@ async def send_email(email: str, request: Request):
     return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
 
 @router.post('/register/vaildcheck',status_code = status.HTTP_201_CREATED)
-def vaild_check(email:str ,request: Request):
+def vaild_check(emailmodel:schemas.EmailSchema ,request: Request):
+    email = emailmodel.email
     user = User.find_one({'email': email.lower()})
     if user:
         if(user['verified']):
@@ -57,57 +59,60 @@ def vaild_check(email:str ,request: Request):
 @router.post('/register/final', status_code=status.HTTP_201_CREATED)
 def creat_user(payload: schemas.CreateUserSchema, request: Request):
     user = User.find_one({'email': payload.email.lower()})
-    if payload.password != payload.passwordConfirm:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
-    del payload.passwordConfirm
+    # if payload.password != payload.passwordConfirm:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
+    # del payload.passwordConfirm
     #  Hash the password
-    user['password'] = utils.hash_password(payload.password)
-    user['role'] =payload.role
-    user['name']= payload.name
-    user['created_at'] = datetime.utcnow()
-    user['updated_at'] = datetime.utcnow()
-    return {'detail': 'resgister success'}
+    User.find_one_and_update({"email": payload.email.lower()}, {
+            "$set":
+                    {'password': utils.hash_password(payload.password),
+                    'role':payload.role,
+                    'name': payload.name,
+                    'created_at': datetime.utcnow(),
+                    'updated_at': datetime.utcnow()}})
 
-@router.post('/register', status_code=status.HTTP_201_CREATED)
-async def create_user(payload: schemas.CreateUserSchema, request: Request):
-    # Check if user already exist
-    user = User.find_one({'email': payload.email.lower()})
-    if user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail='Account already exist')
-    # Compare password and passwordConfirm
-    if payload.password != payload.passwordConfirm:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
-    #  Hash the password
-    payload.password = utils.hash_password(payload.password)
-    del payload.passwordConfirm
-    payload.role = 'user'
-    payload.verified = False
-    payload.email = payload.email.lower()
-    payload.created_at = datetime.utcnow()
-    payload.updated_at = payload.created_at
+    return {'user':user['email'],'detail': 'resgister success'}
 
-    result = User.insert_one(payload.dict())
-    new_user = User.find_one({'_id': result.inserted_id})
-    try:
-        token = randbytes(10)
-        hashedCode = hashlib.sha256()
-        hashedCode.update(token)
-        verification_code = hashedCode.hexdigest()
-        User.find_one_and_update({"_id": result.inserted_id}, {
-            "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
+# @router.post('/register', status_code=status.HTTP_201_CREATED)
+# async def create_user(payload: schemas.CreateUserSchema, request: Request):
+#     # Check if user already exist
+#     user = User.find_one({'email': payload.email.lower()})
+#     if user:
+#         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+#                             detail='Account already exist')
+#     # Compare password and passwordConfirm
+#     if payload.password != payload.passwordConfirm:
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
+#     #  Hash the password
+#     payload.password = utils.hash_password(payload.password)
+#     del payload.passwordConfirm
+#     payload.role = 'user'
+#     payload.verified = False
+#     payload.email = payload.email.lower()
+#     payload.created_at = datetime.utcnow()
+#     payload.updated_at = payload.created_at
 
-        url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
-        await Email(userEntity(new_user), url, [EmailStr(payload.email)]).sendVerificationCode()
-    except Exception as error:
-        User.find_one_and_update({"_id": result.inserted_id}, {
-            "$set": {"verification_code": None, "updated_at": datetime.utcnow()}})
+#     result = User.insert_one(payload.dict())
+#     new_user = User.find_one({'_id': result.inserted_id})
+#     try:
+#         token = randbytes(10)
+#         hashedCode = hashlib.sha256()
+#         hashedCode.update(token)
+#         verification_code = hashedCode.hexdigest()
+#         User.find_one_and_update({"_id": result.inserted_id}, {
+#             "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
 
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f'There was an error sending email {error}')
-    return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
+#         url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
+#         await Email(userEntity(new_user), url, [EmailStr(payload.email)]).sendVerificationCode()
+#     except Exception as error:
+#         User.find_one_and_update({"_id": result.inserted_id}, {
+#             "$set": {"verification_code": None, "updated_at": datetime.utcnow()}})
+
+#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#                             detail=f'There was an error sending email {error}')
+#     return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
 
 
 @router.post('/delete')
