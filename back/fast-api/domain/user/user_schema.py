@@ -18,11 +18,16 @@ class LoginUser(BaseModel):
 class InputUser(BaseModel):
     user_id: str
     user_pw: str
+    user_email:str
+    user_name:str
 
 
 class CreateUser(BaseModel):
     user_id: str
     user_pw: str
+    user_name:str
+
+
 
     class Config:
         from_attributes = True
