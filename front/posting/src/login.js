@@ -13,25 +13,26 @@ function LoginPage() {
         navigate('/SignUp');
     }
 
-    const handleSubmitClick = () => {
-        const url = "...";
+    const handleSubmitClick = (e) => {
+        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/login";
         const payload = {
-            id: user_id,  // Using the studentNumber state
-            pw: password
+            email: user_id,  // Using the studentNumber state
+            password: password
         };
 
-        navigate('/PostitTable');
+        // navigate('/PostitTable');
+        e.preventDefault();
 
-        // axios.post(url, payload)
-        //     .then(response => {
-        //         console.log(response);
-        //         localStorage.setItem('nickname', response.data.nickname);
-        //         localStorage.setItem('token', response.data.token);
-        //         navigate('/');
-        //     })
-        //     .catch(error => {
-        //         console.error("Error fetching data:", error);
-        //     });
+        axios.post(url, payload)
+            .then(response => {
+                console.log(response);
+                localStorage.setItem('nickname', response.data.nickname);
+                localStorage.setItem('token', response.data.token);
+                navigate('/PostitTable');
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
     };
 
     return (

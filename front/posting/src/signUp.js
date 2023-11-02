@@ -8,29 +8,70 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [nickname, setNickname] = useState('');
+    const [emailSent, setEmailSent] = useState(false); 
+    const [isVerified, setIsVerified] = useState(false); 
     const navigate = useNavigate();
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;
     const isPasswordConfirmValid = password === passwordConfirm;
     const isNicknameValid = nickname.trim() !== '';
-    const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid;
+    const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
 
     const handleSubmit = (e) => {
-        const url = "...";
+        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/final";
         const payload = {
-            id: userId,  // Using the studentNumber state
-            pw: password,
-            nickname: nickname
+            email: userId,  // Using the studentNumber state
+            password: password,
+            name: nickname
         };
         e.preventDefault();
 
-        localStorage.setItem('id', JSON.stringify(userId));
-        localStorage.setItem('pw', JSON.stringify(password));
-        localStorage.setItem('nickname', JSON.stringify(nickname));
+        // localStorage.setItem('id', JSON.stringify(userId));
+        // localStorage.setItem('pw', JSON.stringify(password));
+        // localStorage.setItem('nickname', JSON.stringify(nickname));
 
-        alert('회원가입 완료!');
-        navigate('/');
+        axios.post(url, payload)
+            .then(response => {
+                console.log(response);
+                navigate('/');
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
+    const handleEmailSend = () => {
+        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/email";
+        const payload = {
+            email: userId
+        };
+
+        axios.post(url, payload)
+            .then(response => {
+                console.log(response);
+                setEmailSent(true);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    };
+
+    const handleEmailCheck = () => {
+        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/vaildcheck";
+        const payload = {
+            email: userId
+        };
+
+        axios.post(url, payload)
+            .then(response => {
+                console.log(response);
+                setIsVerified(true);
+                alert('인증되었습니다!');
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
     };
 
     return (
@@ -48,6 +89,14 @@ function SignUp() {
                         />
                     </label>
                 </div>
+                <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
+                    메일전송
+                </button>
+                {emailSent && ( // This button will only appear if emailSent is true
+                    <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
+                        인증확인
+                    </button>
+                )}
                 <div>
                     <label>
                         비밀번호
