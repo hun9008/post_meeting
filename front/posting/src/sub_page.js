@@ -25,8 +25,8 @@ function Subpage({ onAdd, onCancel }) {
         value={instaId} 
         onChange={e => setInstaId(e.target.value)}
       />
-      <button className="complete-button" onClick={() => onAdd(`${MBTI}\n${hobby}\n${instaId}`)}>완료</button>
-      <button className="cancel-button" onClick={onCancel}>취소</button>
+      <button className="sub_button" onClick={() => onAdd(`${MBTI}\n${hobby}\n${instaId}`)} style={{marginRight:5}}>완료</button>
+      <button className="sub_button" onClick={onCancel} style={{marginLeft: 5}}>취소</button>
     </div>
   );
 }
