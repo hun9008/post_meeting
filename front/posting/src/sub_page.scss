@@ -43,7 +43,7 @@ $redFire: rgba(244, 91, 105, 1);
 $fontAsap: 'Asap', sans-serif;
 
 .subpage-container {
-    position: absolute;
+    position: fixed;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     width: 400px;

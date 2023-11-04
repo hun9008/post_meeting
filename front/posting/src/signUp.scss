@@ -101,6 +101,17 @@ form.signUp {
     padding: 10px 10px;
     margin: 15px -10px;
   }
+
+  .back-button {
+    position: absolute;
+    top: 10px; 
+    left: 10px; 
+    width:60px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px; 
+    cursor: pointer; 
+  }
   
   > button {
     font-family: $fontAsap;
@@ -121,7 +132,10 @@ form.signUp {
       background-color: darken($blueQueen, 5%);
     }
   }
+
+
 }
+
 
 @include keyframes (wawes) {
   from { @include transform(rotate(0)); }

@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width:3000px;
+  height: 3000px;
 }
 
 .postit {

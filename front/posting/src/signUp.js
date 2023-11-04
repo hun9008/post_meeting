@@ -11,6 +11,7 @@ function SignUp() {
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
     const navigate = useNavigate();
+    const url = 'https://701e-118-34-163-168.ngrok-free.app ';
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;
@@ -19,7 +20,7 @@ function SignUp() {
     const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
 
     const handleSubmit = (e) => {
-        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/final";
+        const endpoint = '/api/auth/register/final';
         const payload = {
             email: userId,  // Using the studentNumber state
             password: password,
@@ -27,11 +28,7 @@ function SignUp() {
         };
         e.preventDefault();
 
-        // localStorage.setItem('id', JSON.stringify(userId));
-        // localStorage.setItem('pw', JSON.stringify(password));
-        // localStorage.setItem('nickname', JSON.stringify(nickname));
-
-        axios.post(url, payload)
+        axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
                 navigate('/');
@@ -42,12 +39,12 @@ function SignUp() {
     };
 
     const handleEmailSend = () => {
-        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/email";
+        const endpoint = '/api/auth/register/email'
         const payload = {
             email: userId
         };
 
-        axios.post(url, payload)
+        axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
                 setEmailSent(true);
@@ -58,12 +55,12 @@ function SignUp() {
     };
 
     const handleEmailCheck = () => {
-        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/register/vaildcheck";
+        const endpoint = '/api/auth/register/vaildcheck'
         const payload = {
             email: userId
         };
 
-        axios.post(url, payload)
+        axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
                 setIsVerified(true);
@@ -74,9 +71,16 @@ function SignUp() {
             });
     };
 
+    const handleBackButton = () => {
+        navigate('/');
+    }
+
     return (
         <div>
             <form className='signUp' onSubmit={handleSubmit}>
+                <button className='back-button' onClick={handleBackButton}>
+                    {'<'}
+                </button>
                 <h2>회원가입</h2>
                 <div>
                     <label>
@@ -92,11 +96,14 @@ function SignUp() {
                 <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
                     메일전송
                 </button>
-                {emailSent && ( // This button will only appear if emailSent is true
+                {emailSent && (
                     <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
                         인증확인
                     </button>
                 )}
+                {/* <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-10}}>
+                    인증확인
+                </button> */}
                 <div>
                     <label>
                         비밀번호
