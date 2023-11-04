@@ -19,6 +19,13 @@ ACCESS_TOKEN_EXPIRES_IN = settings.ACCESS_TOKEN_EXPIRES_IN
 REFRESH_TOKEN_EXPIRES_IN = settings.REFRESH_TOKEN_EXPIRES_IN
 
 
+@router.post('/register/test',status_code= status.HTTP_201_CREATED)
+def add_user(user:schemas.CreateUserSchema):
+    User.insert_one(user.dict())
+    return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
+
+
+
 @router.post('/register/email',status_code = status.HTTP_201_CREATED)
 async def send_email(emailmodel:schemas.EmailSchema, request: Request):
     email = emailmodel.email
@@ -34,7 +41,7 @@ async def send_email(emailmodel:schemas.EmailSchema, request: Request):
     User.find_one_and_update({"_id": insert_result.inserted_id}, {
     "$set": {"verification_code": verification_code, "verified":False,"updated_at": datetime.utcnow()}})
     # url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
-    url =f"https://3ea7-210-107-197-58.ngrok-free.app/api/auth/verifyemail/{token.hex()}"
+    url =f"{settings.EMAIL_SERVER}/api/auth/verifyemail/{token.hex()}"
     try:
         await Email({'name':email}, url, [EmailStr(email)]).sendVerificationCode()
     except Exception as error:
@@ -186,6 +193,28 @@ def refresh_token(response: Response, Authorize: AuthJWT = Depends()):
                         ACCESS_TOKEN_EXPIRES_IN * 60, '/', None, False, False, 'lax')
     return {'access_token': access_token}
 
+@router.post('/find_password')
+def find_password(payload: schemas.LoginUserSchema ,request: Request):
+    email = payload.email
+    user = User.find_one({'email': email.lower()})
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='Incorrect Email or Password')
+    user = userEntity(user)
+    token = randbytes(10)
+    hashedCode = hashlib.sha256()
+    hashedCode.update(token)
+    verification_code = hashedCode.hexdigest()
+    User.find_one_and_update({"email": email.lower()}, {
+        "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
+    url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/reset_password/{token.hex()}"
+    try:
+        Email({'name':email}, url, [EmailStr(email)]).sendResetPasswordCode()
+    except Exception as error:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f'There was an error sending email {error}')
+    return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
+
 
 @router.get('/logout', status_code=status.HTTP_200_OK)
 def logout(response: Response, Authorize: AuthJWT = Depends(), user_id: str = Depends(oauth2.require_user)):
@@ -193,6 +222,8 @@ def logout(response: Response, Authorize: AuthJWT = Depends(), user_id: str = De
     response.set_cookie('logged_in', '', -1)
 
     return {'status': 'success'}
+
+
 
 
 @router.get('/verifyemail/{token}')

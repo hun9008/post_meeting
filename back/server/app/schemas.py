@@ -3,9 +3,12 @@ from pydantic import BaseModel, EmailStr, Json ,constr
 from typing import Optional
 
 class PostitSchema(BaseModel):
+    id: int
     x:float
     y:float
-    text: str
+    content_mbti: str
+    content_hobby: str
+    content_insta: str
 
 class EmailSchema(BaseModel):
     email:str
@@ -22,6 +25,9 @@ class UserBaseSchema(BaseModel):
     class Config:
         from_contribute = True
 
+class PostitListSchema(BaseModel):
+    status: str
+    postits: list[PostitSchema]
 
 class CreateUserSchema(UserBaseSchema):
     password: constr(min_length=8)

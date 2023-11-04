@@ -14,13 +14,13 @@ def get_me(user_id: str = Depends(oauth2.require_user)):
     user = userResponseEntity(User.find_one({'_id': ObjectId(str(user_id))}))
     return {"status": "success", "user": user}
 
-@router.post('/postit')
-def post_postit(payload: schemas.UserBaseSchema ,request: Request = Depends(oauth2.require_user)):
-    User.find_one_and_update({"email": payload.email}, {
-            "$set": {"postit": payload.postit, "updated_at": datetime.utcnow()}})
+
 
 @router.get('/all')
-def get_all(user_id: str = Depends(oauth2.require_user)):
+def get_all():
     users =User.find({})
     user_list = [ userResponseEntity(user) for user in users ]
     return {"status": "success", "user": user_list}
+
+
+
