@@ -8,13 +8,14 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const url = 'https://701e-118-34-163-168.ngrok-free.app' 
 
     const moveToSignUp = () => {
         navigate('/SignUp');
     }
 
     const handleSubmitClick = (e) => {
-        const url = "https://3ea7-210-107-197-58.ngrok-free.app/api/auth/login";
+        const endpoint = '/api/auth/login';
         const payload = {
             email: user_id,  // Using the studentNumber state
             password: password
@@ -23,11 +24,11 @@ function LoginPage() {
         // navigate('/PostitTable');
         e.preventDefault();
 
-        axios.post(url, payload)
+        axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
-                localStorage.setItem('nickname', response.data.nickname);
-                localStorage.setItem('token', response.data.token);
+                // localStorage.setItem('nickname', response.data.nickname);
+                localStorage.setItem('token', response.data.access_token);
                 navigate('/PostitTable');
             })
             .catch(error => {
