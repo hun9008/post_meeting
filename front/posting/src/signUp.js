@@ -10,6 +10,7 @@ function SignUp() {
     const [nickname, setNickname] = useState('');
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
+    const [sex, setSex] = useState('male');
     const navigate = useNavigate();
     const url = 'https://701e-118-34-163-168.ngrok-free.app ';
 
@@ -19,12 +20,17 @@ function SignUp() {
     const isNicknameValid = nickname.trim() !== '';
     const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
 
+    const handleToggleSex = () => {
+        setSex(sex === 'male' ? 'female' : 'male');
+    };
+
     const handleSubmit = (e) => {
         const endpoint = '/api/auth/register/final';
         const payload = {
             email: userId,  // Using the studentNumber state
             password: password,
-            name: nickname
+            name: nickname,
+            sex: sex
         };
         e.preventDefault();
 
@@ -135,6 +141,22 @@ function SignUp() {
                             onChange={(e) => setNickname(e.target.value)}
                             placeholder="닉네임을 입력해주세요."
                         />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        성별
+                        <br/>
+                        <div className="toggle-switch" style={{marginTop:5}}>
+                            <label>
+                                <input 
+                                    type="checkbox" 
+                                    checked={sex === 'female'} 
+                                    onChange={handleToggleSex} 
+                                />
+                                <span className="slider"></span>
+                            </label>
+                        </div>
                     </label>
                 </div>
                 <button type="submit" disabled={!isFormValid}>

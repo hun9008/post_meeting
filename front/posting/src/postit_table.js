@@ -48,19 +48,20 @@ function App() {
             updated_at: "2023-11-04T16:36:44.295Z"
         };
 
-        const headers = {
-            Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
-        };
+        //포스트잇 생성 요청.
+        // const headers = {
+        //     Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
+        // };
 
-        if (postits.length > 0 && access_token) {
-            axios.post(url + endpoint, payload, { headers })
-                 .then(response => {
-                     console.log(response);
-                 })
-                 .catch(error => {
-                     console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
-                 });
-        }
+        // if (postits.length > 0 && access_token) {
+        //     axios.post(url + endpoint, payload, { headers })
+        //          .then(response => {
+        //              console.log(response);
+        //          })
+        //          .catch(error => {
+        //              console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
+        //          });
+        // }
     }, [postits]);
 
     const handleOpenSubpage = () => {
@@ -69,35 +70,42 @@ function App() {
 
     const handleAddPostitFromSubpage = (text) => {
         const [mbtiValue, hobbyValue, instaIdValue] = text.split('\n');
-        const documentWidth = document.documentElement.scrollWidth;
-        const documentHeight = document.documentElement.scrollHeight;
+        const sex = localStorage.getItem('sex'); // 성별 가져오기
+        console.log(sex);
 
-        const randomX = Math.random() * (documentWidth - 1000); // 포스트잇 너비를 고려
-        const randomY = Math.random() * (documentHeight - 170); // 포스트잇 높이를 고려
+        const randomX = Math.random() * 3000 - 1500; // 포스트잇 너비를 고려
+        const randomY = Math.random() * 3000; // 포스트잇 높이를 고려
 
         const newPostit = {
             id: new Date().getTime(),
-            x: window.scrollX + randomX,
-            y: window.scrollY + randomY,
+            x: randomX,
+            y: randomY,
             content_mbti: mbtiValue,
             content_hobby: hobbyValue,
             content_insta: instaIdValue,
+            sex: sex,
         };
         setPostits([...postits, newPostit]);
         setShowSubpage(false);
+
+        window.scrollTo({
+            top: newPostit.y - window.innerHeight / 2, // 화면 중앙에 위치하도록 조정
+            left: newPostit.x + 1500 - window.innerWidth / 2,
+            behavior: 'smooth'
+        });
     };
 
     const handleDragStart = (e, id) => {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
-        const documentWidth = document.documentElement.scrollWidth;
-        const documentHeight = document.documentElement.scrollHeight;
-        const offsetX = e.clientX - (postit.x / documentWidth) * window.innerWidth;
-        const offsetY = e.clientY - (postit.y / documentHeight) * window.innerHeight;
+        // const documentWidth = document.documentElement.scrollWidth;
+        // const documentHeight = document.documentElement.scrollHeight;
+        const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
+        const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
         const onDrag = (event) => {
-            const newPosX = (event.clientX - offsetX) / window.innerWidth * documentWidth;
-            const newPosY = (event.clientY - offsetY) / window.innerHeight * documentHeight;
+            const newPosX = (event.clientX - offsetX) / window.innerWidth * 3000;
+            const newPosY = (event.clientY - offsetY) / window.innerHeight * 3000;
             postit.x = newPosX;
             postit.y = newPosY;
             setPostits([...postits]);
@@ -113,6 +121,29 @@ function App() {
     };
 
     const handleDeletePostit = (id) => {
+        // 서버에 삭제 요청을 보내는 함수
+        // const sendDeleteRequest = () => {
+        //     axios.post('http://your-api-url/remove', { id: id }, {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             // 필요한 경우 인증 헤더를 여기에 포함
+        //         }
+        //     })
+        //     .then(response => {
+        //         console.log('포스트잇 삭제 성공:', response.data);
+        //         // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
+        //         const updatedPostits = postits.filter(postit => postit.id !== id);
+        //         setPostits(updatedPostits);
+        //     })
+        //     .catch(error => {
+        //         console.error('포스트잇 삭제 실패:', error);
+        //     });
+        // };
+    
+        // // 서버에 삭제 요청을 보내는 함수 호출
+        // sendDeleteRequest();
+
+        //임시 삭제 구현
         const updatedPostits = postits.filter(postit => postit.id !== id);
         setPostits(updatedPostits);
     };
@@ -140,8 +171,8 @@ function App() {
         return postits.map((postit, index) => {
           const style = {
             position: 'absolute',
-            left: `${(postit.x / document.documentElement.scrollWidth) * 100}%`,
-            top: `${(postit.y / document.documentElement.scrollHeight) * 100}%`,
+            left: `${(postit.x / 3000) * 100 + 50}%`,
+            top: `${(postit.y / 3000) * 100}%`,
             width: '5px',
             height: '5px',
             borderRadius: '50%',
@@ -163,7 +194,8 @@ function App() {
         {postits.map(postit => (
             <div 
             key={postit.id} 
-            className="rgyPostIt" 
+            // className="rgyPostIt" 
+            className = {`rgyPostIt ${postit.sex}`}
             style={{ left: postit.x, top: postit.y}}
             onMouseDown={e => handleDragStart(e, postit.id)}
             >

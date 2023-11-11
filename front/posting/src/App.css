@@ -2,6 +2,7 @@
   text-align: center;
   width:3000px;
   height: 3000px;
+  overflow:hidden;
 }
 
 .postit {
@@ -86,11 +87,11 @@ div.rgyPostIt::after {
   -webkit-transition: all 0.2s;
 }
 
-div.rgyPostIt:hover {
+div.rgyPostIt:hover, div.rgyPostIt.male:hover, div.rgyPostIt.female:hover {
   border-bottom-right-radius: 75px 30px;
 }
 
-div.rgyPostIt:hover::after {
+div.rgyPostIt:hover::after, div.rgyPostIt.male:hover::after, div.rgyPostIt.female:hover::after {
   box-shadow: 2px 37px 7px rgba(0, 0, 0, 0.37);
   -webkit-box-shadow: 2px 37px 7px rgba(0, 0, 0, 0.37);
 }
@@ -110,6 +111,46 @@ div.rgyPostIt > p::before {
 
 div.rgyPostIt > p > a {
   color: #555;
+}
+
+div.rgyPostIt.male {
+  /* 남성용 색상 */
+  user-select: none;
+  position: relative;
+  display: inline-block;
+  padding: 20px 45px 20px 15px;
+  margin: 5px 0;
+  border: 1px solid rgb(97, 180, 248);
+  border-left: 30px solid hwb(200 38% 3%);
+  border-bottom-right-radius: 60px 10px;
+  font-family: 'Nanum Pen Script';
+  font-size: 27px;
+  color: #555;
+  word-break: break-all;
+  background: -webkit-linear-gradient(-45deg, #88cdff 81%, #88cdff 82%, #88cdff 82%, #88b6ff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#88cdff', endColorstr='#88b6ff', GradientType=1); 
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+}
+
+div.rgyPostIt.female {
+  /* 여성용 색상 */
+  user-select: none;
+  position: relative;
+  display: inline-block;
+  padding: 20px 45px 20px 15px;
+  margin: 5px 0;
+  border: 1px solid #f8618c;
+  border-left: 30px solid #f86189;
+  border-bottom-right-radius: 60px 10px;
+  font-family: 'Nanum Pen Script';
+  font-size: 27px;
+  color: #555;
+  word-break: break-all;
+  background: -webkit-linear-gradient(-45deg, #ff889e 81%, #ff889e 82%, #ff889e 82%, rgb(255, 198, 205) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff889e', endColorstr='#ff889e', GradientType=1); 
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
 }
 
 .close-button {
