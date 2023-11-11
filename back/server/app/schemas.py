@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, Json ,constr
-from typing import Optional
+from typing import Optional ,Union ,List
 
 class PostitSchema(BaseModel):
     id: int
@@ -9,6 +9,10 @@ class PostitSchema(BaseModel):
     content_mbti: str
     content_hobby: str
     content_insta: str
+    sex: str
+
+class PostitDeleteSchema(BaseModel):
+    id: int
 
 class EmailSchema(BaseModel):
     email:str
@@ -18,6 +22,7 @@ class UserBaseSchema(BaseModel):
     name: Optional[str]
     email: str
     role :Optional[str]
+    sex: Optional[str]
     postit: Optional[PostitSchema]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
@@ -27,7 +32,7 @@ class UserBaseSchema(BaseModel):
 
 class PostitListSchema(BaseModel):
     status: str
-    postits: list[PostitSchema]
+    postits: List[Optional[PostitSchema]]
 
 class CreateUserSchema(UserBaseSchema):
     password: constr(min_length=8)

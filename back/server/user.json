@@ -1,0 +1,19 @@
+{
+  "name": "sehyun",
+  "email": "sdfg8931@ajou.ac.kr",
+  "role": "string",
+  "sex": "string",
+  "postit": {
+    "id": 0,
+    "x": 0,
+    "y": 0,
+    "content_mbti": "ISTP",
+    "content_hobby": "soccer",
+    "content_insta": "6sehyun",
+    "sex": "male"
+  },
+  "created_at": "2023-11-11T15:46:55.942Z",
+  "updated_at": "2023-11-11T15:46:55.942Z",
+  "password": "string5786",
+  "verified": true
+}

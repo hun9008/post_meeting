@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
 
     CLIENT_ORIGIN: str
-    SERERVER_URL = 'https://b27d-118-34-163-168.ngrok-free.app'
+    SERERVER_URL = 'https://ba0b-2a09-bac1-3f60-a0-00-1bd-61.ngrok-free.app'
     EMAIL_HOST: str
     EMAIL_PORT: int
     EMAIL_USERNAME: str

@@ -60,3 +60,6 @@ class Email:
 
     async def sendVerificationCode(self):
         await self.sendMail('Your verification code (Valid for 10min)', 'verification')
+
+    async def sendResetPasswordCode(self):
+        await self.sendMail('Reset Password', 'recreate_password')

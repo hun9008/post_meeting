@@ -23,4 +23,11 @@ def get_all():
     return {"status": "success", "user": user_list}
 
 
+@router.post('/makeVaildTrue')
+def make_vaild_true():
+    users = User.find({})
+    for user in users:
+        User.find_one_and_update({"email": user['email']}, {
+            "$set": {"verified": True, "updated_at": datetime.utcnow()}})
+
 
