@@ -8,7 +8,7 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const url = 'https://701e-118-34-163-168.ngrok-free.app' 
+    const url = 'https://ba0b-2a09-bac1-3f60-a0-00-1bd-61.ngrok-free.app' 
 
     const moveToSignUp = () => {
         navigate('/SignUp');
@@ -27,8 +27,9 @@ function LoginPage() {
         axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
-                // localStorage.setItem('nickname', response.data.nickname);
+                localStorage.setItem('sex', response.data.sex);
                 localStorage.setItem('token', response.data.access_token);
+                localStorage.setItem('refresh_token', response.data.refresh_token);
                 navigate('/PostitTable');
             })
             .catch(error => {

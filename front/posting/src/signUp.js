@@ -12,7 +12,7 @@ function SignUp() {
     const [isVerified, setIsVerified] = useState(false); 
     const [sex, setSex] = useState('male');
     const navigate = useNavigate();
-    const url = 'https://701e-118-34-163-168.ngrok-free.app ';
+    const url = 'https://ba0b-2a09-bac1-3f60-a0-00-1bd-61.ngrok-free.app';
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;

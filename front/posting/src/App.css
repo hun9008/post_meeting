@@ -29,6 +29,27 @@
   cursor: pointer;
 }
 
+.logout-button {
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  width: 80px;
+  border: 0;
+  padding: 10px 0;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  border-radius: 5px;
+  background-color: rgba(69, 105, 144, 1);
+  /* @include transition(background-color 300ms); */
+  
+  &:hover {
+    background-color: darken(rgba(69, 105, 144, 1), 5%);
+  }
+  
+}
+
 .add-button:hover {
   background-color: rgba(69, 105, 144, 1);
 }
