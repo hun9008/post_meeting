@@ -47,7 +47,7 @@ $fontAsap: 'Asap', sans-serif;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     width: 400px;
-    height: 340px;
+    height: 400px;
     overflow: hidden;
     background-color: rgb(175, 210, 237);
     padding: 40px 30px 30px 30px;
@@ -106,6 +106,70 @@ $fontAsap: 'Asap', sans-serif;
         }
       }
 
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 80px;
+        height: 34px;
+      }
+      
+      .toggle-switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $blueQueen;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+      
+      .slider:before {
+        position: absolute;
+        content: "✔";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+      
+      input:checked + .slider {
+        background-color: rgb(99, 153, 186);
+      }
+      
+      input:focus + .slider {
+        box-shadow: 0 0 1px rgb(99, 153, 186);
+      }
+      
+      input:checked + .slider:before {
+        content: "🫵";
+        -webkit-transform: translateX(46px);
+        -ms-transform: translateX(46px);
+        transform: translateX(46px);
+      }
+      
+      /* 슬라이더를 둥글게 만들기 */
+      .slider {
+        border-radius: 34px;
+      }
+      
+      .slider:before {
+        border-radius: 50%;
+      }
+
   }
 
 
@@ -121,6 +185,19 @@ $fontAsap: 'Asap', sans-serif;
     font-size: 18px;
     background: white;
     width: 100%;
+    border: 0;
+    padding: 10px 10px;
+    margin: 15px -10px;
+  }
+
+  .postit-input-free {
+    font-family: $fontAsap;
+    display: block;
+    border-radius: 5px;
+    font-size: 18px;
+    background: white;
+    width: 100%;
+    height: 200px;
     border: 0;
     padding: 10px 10px;
     margin: 15px -10px;

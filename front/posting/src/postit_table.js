@@ -76,13 +76,13 @@ function App() {
         const endpoint = '/api/postit/make'
         const access_token = localStorage.getItem('token');
         const payload = {
-            name: 'hun',
-            email: 'younghune135@ajou.ac.kr',
-            role: 'student',
+            name: 'hun', //이게 필요한가?
+            email: 'younghune135@ajou.ac.kr', // 암호화 필요?
+            role: 'student', //이게 필요한가?
             // postit: {postits},
             postit: newPostit,
-            created_at: "2023-11-04T16:36:44.295Z",
-            updated_at: "2023-11-04T16:36:44.295Z"
+            created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
+            updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
         };
 
         //포스트잇 생성 요청.
@@ -128,7 +128,7 @@ function App() {
     };
 
     const handleAddPostitFromSubpage = (text) => {
-        const [mbtiValue, hobbyValue, instaIdValue] = text.split('\n');
+        const [mbtiValue, hobbyValue, instaIdValue, freeFormValue] = text.split('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
         console.log(sex);
 
@@ -142,6 +142,7 @@ function App() {
             content_mbti: mbtiValue,
             content_hobby: hobbyValue,
             content_insta: instaIdValue,
+            content_free_form: freeFormValue,
             sex: sex,
         };
         localStorage.setItem('id', newPostit.id);
