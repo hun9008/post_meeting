@@ -8,10 +8,14 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const url = 'https://ba0b-2a09-bac1-3f60-a0-00-1bd-61.ngrok-free.app' 
+    const url = 'http://127.0.0.1:8000' 
 
     const moveToSignUp = () => {
         navigate('/SignUp');
+    }
+
+    const moveToFindPw = () => { 
+        navigate('/FindPw');
     }
 
     const handleSubmitClick = (e) => {
@@ -65,7 +69,8 @@ function LoginPage() {
           </div>
           <br/>
           <button type="submit" onClick={handleSubmitClick} style={{marginRight: 5}}>Login</button>
-          <button onClick={moveToSignUp} style={{marginLeft: 5}}>SignUp</button>
+          <button onClick={moveToSignUp} style={{marginLeft: 5, marginRight: 5}}>SignUp</button>
+          <button onClick={moveToFindPw} style={{marginLeft: 5}}>Find PW</button>
         </form>
       </div>
     );

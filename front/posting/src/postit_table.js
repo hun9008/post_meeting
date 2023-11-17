@@ -9,7 +9,43 @@ function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'https://ba0b-2a09-bac1-3f60-a0-00-1bd-61.ngrok-free.app'; 
+    const url = 'http://127.0.0.1:8000'; 
+
+    //dummy data
+    useEffect(() => {
+        const dummyData = [
+            {
+                id: 1,
+                x: 100,
+                y: 200,
+                content_mbti: "INTJ",
+                content_hobby: "독서",
+                content_insta: "@example1",
+                sex: "male"
+            },
+            {
+                id: 2,
+                x: 300,
+                y: 400,
+                content_mbti: "ENFP",
+                content_hobby: "여행",
+                content_insta: "@example2",
+                sex: "female"
+            },
+            {
+                id: 3,
+                x: 500,
+                y: 600,
+                content_mbti: "ISTP",
+                content_hobby: "요리",
+                content_insta: "@example3",
+                sex: "male"
+            }
+        ];
+    
+        setPostits(dummyData);
+    }, []);
+    
 
     useEffect(() => {
         const endpoint = '/api/postit/all';
@@ -133,10 +169,13 @@ function App() {
     const handleDragStart = (e, id) => {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
+        // console.log(postit.id);
         const validId = localStorage.getItem('id');
+        console.log(postit.id);
+        console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
-        if (validId && postit.id === validId) {
+        if (postit.id == validId) {
             const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
             const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
@@ -234,12 +273,12 @@ function App() {
         axios.get(url + endpoint)
             .then(response => {
                 console.log(response);
+                localStorage.clear();
+                Navigate('/');
             })
             .catch(error => {
                 console.error('로그아웃에 실패했습니다:', error);
             });
-        localStorage.clear();
-        Navigate('/');
     };
 
     return (
