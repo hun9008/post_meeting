@@ -91,6 +91,7 @@ def delete_user():
 @router.post('/login')
 def login(payload: schemas.LoginUserSchema, response: Response, Authorize: AuthJWT = Depends()):
     # Check if the user exist
+
     db_user = User.find_one({'email': payload.email.lower()})
     if not db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -124,7 +125,7 @@ def login(payload: schemas.LoginUserSchema, response: Response, Authorize: AuthJ
                         ACCESS_TOKEN_EXPIRES_IN * 60, '/', None, False, False, 'lax')
 
     # Send both access
-    return {'status': 'success', 'access_token': access_token, 'refresh_token':refresh_token ,'sex':user["sex"]}
+    return {'status': 'success', 'access_token': access_token, 'refresh_token':refresh_token ,'user_id': str(user["id"]),'sex':user["sex"]}
 
 @router.get('/refresh')
 def refresh_token(response: Response, Authorize: AuthJWT = Depends()):
@@ -155,28 +156,19 @@ def refresh_token(response: Response, Authorize: AuthJWT = Depends()):
                         ACCESS_TOKEN_EXPIRES_IN * 60, '/', None, False, False, 'lax')
     return {'access_token': access_token}
 
+@router.post('/find_password_email')
+
+
 @router.post('/find_password')
-async def find_password(payload: schemas.LoginUserSchema ,request: Request):
+def find_password(payload: schemas.LoginUserSchema ,request: Request):
     email = payload.email
     user = User.find_one({'email': email.lower()})
     if not user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Incorrect Email or Password')
-    user = userEntity(user)
-    token = randbytes(10)
-    hashedCode = hashlib.sha256()
-    hashedCode.update(token)
-    verification_code = hashedCode.hexdigest()
-    User.find_one_and_update({"email": email.lower()}, {
-
-        "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
-    url = f"{settings.SERERVER_URL}/api/auth/reset_password/{token.hex()}"
-    try:
-        await  Email({'name':email}, url, [EmailStr(email)]).sendResetPasswordCode()
-    except Exception as error:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail=f'There was an error sending email {error}')
-    return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
+    User.find_one_and_update({"email": payload.email.lower()}, {
+            "$set": {'password': utils.hash_password(payload.password),}})
+    return {'status': 'success'}
 
 
 @router.get('/logout', status_code=status.HTTP_200_OK)

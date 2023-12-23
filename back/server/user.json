@@ -17,3 +17,14 @@
   "password": "string5786",
   "verified": true
 }
+
+
+
+{
+  "name": "sehyun",
+  "email": "sdfg8931@ajou.ac.kr",
+  "role": "string",
+  "sex": "string",
+  "created_at": "2023-11-11T15:46:55.942Z",
+  "updated_at": "2023-11-11T15:46:55.942Z",
+}

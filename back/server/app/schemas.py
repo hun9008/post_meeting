@@ -3,13 +3,14 @@ from pydantic import BaseModel, EmailStr, Json ,constr
 from typing import Optional ,Union ,List
 
 class PostitSchema(BaseModel):
-    id: int
-    x:float
-    y:float
-    content_mbti: str
-    content_hobby: str
-    content_insta: str
-    sex: str
+    id: Optional[int]
+    x:Optional[int]
+    y:Optional[int]
+    user_id:Optional[str]
+    content_mbti: Optional[str]
+    content_hobby: Optional[str]
+    content_insta: Optional[str]
+    sex: Optional[str]
 
 class PostitDeleteSchema(BaseModel):
     id: int
@@ -18,17 +19,29 @@ class EmailSchema(BaseModel):
     email:str
 
 
+
 class UserBaseSchema(BaseModel):
     name: Optional[str]
     email: str
     role :Optional[str]
     sex: Optional[str]
-    postit: Optional[PostitSchema]
+    postit:Optional[PostitSchema]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
     class Config:
         from_contribute = True
+
+class PostitMakeSchema(BaseModel):
+    postit: Optional[PostitSchema]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+    class Config:
+        from_contribute = True
+class PostitMoveSchema(BaseModel):
+    user_id:str
+    x:float
+    y:float
 
 class PostitListSchema(BaseModel):
     status: str
@@ -47,6 +60,7 @@ class LoginUserSchema(BaseModel):
 class UserResponseSchema(UserBaseSchema):
     id: str
     pass
+
 
 
 class UserResponse(BaseModel):
