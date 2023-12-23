@@ -3,6 +3,7 @@ import './App.css';
 import PostitTable from './postit_table';
 import LoginPage from './login';
 import SignUp from './signUp';
+import FindPw from './findPw';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
           <Route path='/' element={<LoginPage />} />
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/PostitTable' element={<PostitTable />} />
+          <Route path='/FindPw' element={<FindPw />} />
         </Routes>
       </Router>
     </div>

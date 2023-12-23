@@ -3,12 +3,49 @@ import './App.css';
 import Subpage from './sub_page'; 
 import './sub_page.scss';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'https://701e-118-34-163-168.ngrok-free.app'; 
+    const url = 'http://127.0.0.1:8000'; 
+
+    //dummy data
+    useEffect(() => {
+        const dummyData = [
+            {
+                id: 1,
+                x: 100,
+                y: 200,
+                content_mbti: "INTJ",
+                content_hobby: "독서",
+                content_insta: "@example1",
+                sex: "male"
+            },
+            {
+                id: 2,
+                x: 300,
+                y: 400,
+                content_mbti: "ENFP",
+                content_hobby: "여행",
+                content_insta: "@example2",
+                sex: "female"
+            },
+            {
+                id: 3,
+                x: 500,
+                y: 600,
+                content_mbti: "ISTP",
+                content_hobby: "요리",
+                content_insta: "@example3",
+                sex: "male"
+            }
+        ];
+    
+        setPostits(dummyData);
+    }, []);
+    
 
     useEffect(() => {
         const endpoint = '/api/postit/all';
@@ -35,41 +72,63 @@ function App() {
             });
     }, []);
 
-    useEffect(() => {
-        const endpoint = '/postit/make'
+    const handleSubmit = (newPostit) => {
+        const endpoint = '/api/postit/make'
         const access_token = localStorage.getItem('token');
         const payload = {
-            name: 'hun',
-            email: 'younghune135@ajou.ac.kr',
-            role: 'student',
+            name: 'hun', //이게 필요한가?
+            email: 'younghune135@ajou.ac.kr', // 암호화 필요?
+            role: 'student', //이게 필요한가?
             // postit: {postits},
-            postit: postits[0],
-            created_at: "2023-11-04T16:36:44.295Z",
-            updated_at: "2023-11-04T16:36:44.295Z"
+            postit: newPostit,
+            created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
+            updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
         };
 
         //포스트잇 생성 요청.
-        // const headers = {
-        //     Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
-        // };
+        const headers = {
+            Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
+        };
 
-        // if (postits.length > 0 && access_token) {
-        //     axios.post(url + endpoint, payload, { headers })
-        //          .then(response => {
-        //              console.log(response);
-        //          })
-        //          .catch(error => {
-        //              console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
-        //          });
-        // }
-    }, [postits]);
+        if (postits.length > 0 && access_token) {
+            axios.post(url + endpoint, payload, { headers })
+                 .then(response => {
+                     console.log(response);
+                 })
+                 .catch(error => {
+                     console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
+                    handleRefresh();
+                    handleSubmit();
+                });
+        }
+    };
+
+    const handleRefresh = () => {
+        const endpoint = '/api/auth/refresh'
+        const refresh_token = localStorage.getItem('refresh_token');
+
+        const headers = {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+            Authorization: `Bearer ${refresh_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
+        };
+
+        axios.get(url + endpoint, { headers })
+        .then(response => {
+            console.log(response);
+            localStorage.setItem('token', response.data.access_token);
+        })
+        .catch(error => {
+            console.error('토큰을 갱신하는 데 실패했습니다:', error);
+        });
+    };
 
     const handleOpenSubpage = () => {
         setShowSubpage(true);
     };
 
     const handleAddPostitFromSubpage = (text) => {
-        const [mbtiValue, hobbyValue, instaIdValue] = text.split('\n');
+        const [mbtiValue, hobbyValue, instaIdValue, freeFormValue] = text.split('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
         console.log(sex);
 
@@ -83,9 +142,18 @@ function App() {
             content_mbti: mbtiValue,
             content_hobby: hobbyValue,
             content_insta: instaIdValue,
+            content_free_form: freeFormValue,
             sex: sex,
         };
-        setPostits([...postits, newPostit]);
+        localStorage.setItem('id', newPostit.id);
+        handleSubmit();
+        setPostits(prevPostits => {
+            const updatedPostits = [...prevPostits, newPostit];
+            localStorage.setItem('id', newPostit.id);
+            handleSubmit(newPostit); // 새로 추가된 포스트잇을 인자로 전달
+            return updatedPostits;
+        });
+        console.log(postits);
         setShowSubpage(false);
 
         window.scrollTo({
@@ -95,57 +163,75 @@ function App() {
         });
     };
 
+    useEffect(() => {
+        console.log(postits);
+    }, [postits]);
+
     const handleDragStart = (e, id) => {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
+        // console.log(postit.id);
+        const validId = localStorage.getItem('id');
+        console.log(postit.id);
+        console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
-        const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
-        const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
+        if (postit.id == validId) {
+            const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
+            const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
-        const onDrag = (event) => {
-            const newPosX = (event.clientX - offsetX) / window.innerWidth * 3000;
-            const newPosY = (event.clientY - offsetY) / window.innerHeight * 3000;
-            postit.x = newPosX;
-            postit.y = newPosY;
-            setPostits([...postits]);
-        };
+            const onDrag = (event) => {
+                const newPosX = (event.clientX - offsetX) / window.innerWidth * 3000;
+                const newPosY = (event.clientY - offsetY) / window.innerHeight * 3000;
+                postit.x = newPosX;
+                postit.y = newPosY;
+                setPostits([...postits]);
+                handleSubmit();
+            };
 
-        const onDragEnd = () => {
-        window.removeEventListener('mousemove', onDrag);
-        window.removeEventListener('mouseup', onDragEnd);
-        };
+            const onDragEnd = () => {
+            window.removeEventListener('mousemove', onDrag);
+            window.removeEventListener('mouseup', onDragEnd);
+            };
 
-        window.addEventListener('mousemove', onDrag);
-        window.addEventListener('mouseup', onDragEnd);
+            window.addEventListener('mousemove', onDrag);
+            window.addEventListener('mouseup', onDragEnd);
+        }
     };
 
     const handleDeletePostit = (id) => {
+        const endpoint = '/api/postit/remove';
+        const access_token = localStorage.getItem('token');
+
+        const headers = {
+            Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
+        };
+        const payload = {
+            id: id,
+        }
+
         // 서버에 삭제 요청을 보내는 함수
-        // const sendDeleteRequest = () => {
-        //     axios.post('http://your-api-url/remove', { id: id }, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             // 필요한 경우 인증 헤더를 여기에 포함
-        //         }
-        //     })
-        //     .then(response => {
-        //         console.log('포스트잇 삭제 성공:', response.data);
-        //         // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
-        //         const updatedPostits = postits.filter(postit => postit.id !== id);
-        //         setPostits(updatedPostits);
-        //     })
-        //     .catch(error => {
-        //         console.error('포스트잇 삭제 실패:', error);
-        //     });
-        // };
+        const sendDeleteRequest = () => {
+            axios.post(url + endpoint, payload, {headers})
+            .then(response => {
+                console.log('포스트잇 삭제 성공:', response.data);
+                // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
+                const updatedPostits = postits.filter(postit => postit.id !== id);
+                setPostits(updatedPostits);
+            })
+            .catch(error => {
+                console.error('포스트잇 삭제 실패:', error);
+                handleRefresh();
+                handleDeletePostit();
+            });
+        };
     
-        // // 서버에 삭제 요청을 보내는 함수 호출
-        // sendDeleteRequest();
+        // 서버에 삭제 요청을 보내는 함수 호출
+        sendDeleteRequest();
 
         //임시 삭제 구현
-        const updatedPostits = postits.filter(postit => postit.id !== id);
-        setPostits(updatedPostits);
+        // const updatedPostits = postits.filter(postit => postit.id !== id);
+        // setPostits(updatedPostits);
     };
 
     useEffect(() => {
@@ -168,7 +254,7 @@ function App() {
     }, []);
 
     const renderPostitPoints = () => {
-        return postits.map((postit, index) => {
+        return postits.map((postit) => {
           const style = {
             position: 'absolute',
             left: `${(postit.x / 3000) * 100 + 50}%`,
@@ -178,10 +264,23 @@ function App() {
             borderRadius: '50%',
             backgroundColor: 'red'
           };
-          return <div key={index} style={style}></div>;
+          return <div key={postit.id} style={style}></div>;
         });
       };
 
+    const handleLogout = () => {
+        const endpoint = '/api/auth/logout';
+
+        axios.get(url + endpoint)
+            .then(response => {
+                console.log(response);
+                localStorage.clear();
+                Navigate('/');
+            })
+            .catch(error => {
+                console.error('로그아웃에 실패했습니다:', error);
+            });
+    };
 
     return (
         <div className="App">
@@ -205,6 +304,7 @@ function App() {
                 {postit.content_insta}<br/>
             </div>
         ))}
+        <button className="logout-button" onClick={handleLogout}>로그아웃</button>
         <button className="add-button" onClick={handleOpenSubpage}>+</button>
         <div className="minimap" style={{ position: 'fixed', bottom: 0, left: 0, width: '150px', height: '150px', backgroundColor: 'rgba(0, 0, 0, 0.3)', overflow: 'hidden' }}>
             {renderPostitPoints()}

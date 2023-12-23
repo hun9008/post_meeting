@@ -8,10 +8,14 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const url = 'https://701e-118-34-163-168.ngrok-free.app' 
+    const url = 'http://127.0.0.1:8000' 
 
     const moveToSignUp = () => {
         navigate('/SignUp');
+    }
+
+    const moveToFindPw = () => { 
+        navigate('/FindPw');
     }
 
     const handleSubmitClick = (e) => {
@@ -27,8 +31,9 @@ function LoginPage() {
         axios.post(url + endpoint, payload)
             .then(response => {
                 console.log(response);
-                // localStorage.setItem('nickname', response.data.nickname);
+                localStorage.setItem('sex', response.data.sex);
                 localStorage.setItem('token', response.data.access_token);
+                localStorage.setItem('refresh_token', response.data.refresh_token);
                 navigate('/PostitTable');
             })
             .catch(error => {
@@ -64,7 +69,8 @@ function LoginPage() {
           </div>
           <br/>
           <button type="submit" onClick={handleSubmitClick} style={{marginRight: 5}}>Login</button>
-          <button onClick={moveToSignUp} style={{marginLeft: 5}}>SignUp</button>
+          <button onClick={moveToSignUp} style={{marginLeft: 5, marginRight: 5}}>SignUp</button>
+          <button onClick={moveToFindPw} style={{marginLeft: 5}}>Find PW</button>
         </form>
       </div>
     );
