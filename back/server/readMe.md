@@ -32,6 +32,6 @@ Articles in this series:
 
 [CRUD RESTful API Server with Python, FastAPI, and MongoDB](https://codevoweb.com/crud-restful-api-server-with-python-fastapi-and-mongodb)
 
-conda active back
+conda activate back
 pipenv shell
 ...

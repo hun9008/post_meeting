@@ -1,5 +1,5 @@
 // src/LoginPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
@@ -8,7 +8,11 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const url = 'http://127.0.0.1:8000' 
+    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app' 
+
+    useEffect(() => {  // 컴포넌트가 마운트될 때 화면을 최상단 최좌측으로 이동시킵니다.
+      window.scrollTo(0, 0);
+    }, []);
 
     const moveToSignUp = () => {
         navigate('/SignUp');
@@ -34,6 +38,7 @@ function LoginPage() {
                 localStorage.setItem('sex', response.data.sex);
                 localStorage.setItem('token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
+                localStorage.setItem('user_id', response.data.user_id);
                 navigate('/PostitTable');
             })
             .catch(error => {

@@ -3,13 +3,14 @@ import './App.css';
 import Subpage from './sub_page'; 
 import './sub_page.scss';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'http://127.0.0.1:8000'; 
+    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app'; 
+    const navigate = useNavigate();
 
     //dummy data
     useEffect(() => {
@@ -76,31 +77,60 @@ function App() {
         const endpoint = '/api/postit/make'
         const access_token = localStorage.getItem('token');
         const payload = {
-            name: 'hun', //이게 필요한가?
-            email: 'younghune135@ajou.ac.kr', // 암호화 필요?
-            role: 'student', //이게 필요한가?
+            // name: 'hun9008', //이게 필요한가?
+            // email: 'younghune135@ajou.ac.kr', // 암호화 필요?
+            // role: 'student', //이게 필요한가?
             // postit: {postits},
             postit: newPostit,
-            created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
-            updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
+            // created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
+            // updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
         };
-
+        console.log(newPostit);
         //포스트잇 생성 요청.
         const headers = {
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
         };
 
-        if (postits.length > 0 && access_token) {
+        if (access_token) {
+            console.log("submit!!!");
             axios.post(url + endpoint, payload, { headers })
                  .then(response => {
                      console.log(response);
                  })
                  .catch(error => {
+                    console.log(payload);
                      console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
                     handleRefresh();
-                    handleSubmit();
+                    
                 });
         }
+    };
+
+    const handleDragSubmit = (x, y) => {
+        const endpoint = '/api/postit/move'
+        const access_token = localStorage.getItem('token');
+        const payload = {
+            x: x,
+            y: y,
+            user_id: localStorage.getItem('user_id'),
+        };
+
+        const headers = {
+            Authorization: `Bearer ${access_token}`
+        };
+
+        axios.post(url + endpoint, payload, {headers})
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error('move Fail:', error);
+                console.log(payload);
+                //handleRefresh();
+                
+            });
+        
+        
     };
 
     const handleRefresh = () => {
@@ -120,6 +150,7 @@ function App() {
         })
         .catch(error => {
             console.error('토큰을 갱신하는 데 실패했습니다:', error);
+            handleLogout();
         });
     };
 
@@ -144,12 +175,13 @@ function App() {
             content_insta: instaIdValue,
             content_free_form: freeFormValue,
             sex: sex,
+            user_id: localStorage.getItem('user_id'),
         };
-        localStorage.setItem('id', newPostit.id);
-        handleSubmit();
+        //localStorage.setItem('id', newPostit.id);
+        handleSubmit(newPostit); 
         setPostits(prevPostits => {
             const updatedPostits = [...prevPostits, newPostit];
-            localStorage.setItem('id', newPostit.id);
+            //localStorage.setItem('id', newPostit.id);
             handleSubmit(newPostit); // 새로 추가된 포스트잇을 인자로 전달
             return updatedPostits;
         });
@@ -171,12 +203,12 @@ function App() {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
         // console.log(postit.id);
-        const validId = localStorage.getItem('id');
-        console.log(postit.id);
+        const validId = localStorage.getItem('user_id');
+        console.log(postit.user_id);
         console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
-        if (postit.id == validId) {
+        if (postit.user_id == validId) {
             const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
             const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
@@ -186,12 +218,14 @@ function App() {
                 postit.x = newPosX;
                 postit.y = newPosY;
                 setPostits([...postits]);
-                handleSubmit();
+                // handleSubmit(postits[0]);
+                handleDragSubmit(newPosX, newPosY);
             };
 
             const onDragEnd = () => {
             window.removeEventListener('mousemove', onDrag);
             window.removeEventListener('mouseup', onDragEnd);
+            //handleSubmit();
             };
 
             window.addEventListener('mousemove', onDrag);
@@ -222,7 +256,7 @@ function App() {
             .catch(error => {
                 console.error('포스트잇 삭제 실패:', error);
                 handleRefresh();
-                handleDeletePostit();
+               // handleDeletePostit();
             });
         };
     
@@ -269,18 +303,75 @@ function App() {
       };
 
     const handleLogout = () => {
-        const endpoint = '/api/auth/logout';
+        // const endpoint = '/api/auth/logout';
 
-        axios.get(url + endpoint)
-            .then(response => {
-                console.log(response);
-                localStorage.clear();
-                Navigate('/');
-            })
-            .catch(error => {
-                console.error('로그아웃에 실패했습니다:', error);
-            });
+
+        // axios.get(url + endpoint)
+        //     .then(response => {
+        //         console.log(response);
+        //         localStorage.clear();
+        //         Navigate('/');
+        //     })
+        //     .catch(error => {
+        //         console.error('로그아웃에 실패했습니다:', error);
+        //     });
+        localStorage.clear();
+        navigate('/');
     };
+
+    // adding
+    let scrollIntervalRight;
+    let scrollIntervalLeft;
+    
+    useEffect(() => {
+        const marginElementRight = document.querySelector('.scroll-RightMargin');
+        const marginElementLeft = document.querySelector('.scroll-LeftMargin');
+    
+        const handleMouseOverRight = (e) => {
+            const isCursorOverMargin = e.clientX > window.innerWidth - 20;
+            console.log('Mouse Over Right Margin:', isCursorOverMargin);
+    
+            scrollIntervalRight = setInterval(() => {
+                window.scrollBy(10, 0);
+            }, 20);
+        };
+    
+        const handleMouseOverLeft = (e) => {
+            const isCursorOverMargin = e.clientX < 20;
+            console.log('Mouse Over Left Margin:', isCursorOverMargin);
+    
+            scrollIntervalLeft = setInterval(() => {
+                window.scrollBy(-10, 0);
+            }, 20);
+        };
+    
+        const handleMouseOutRight = (e) => {
+            const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
+            console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
+    
+            clearInterval(scrollIntervalRight);
+        };
+    
+        const handleMouseOutLeft = (e) => {
+            const isCursorOutsideMargin = e.clientX >= 20;
+            console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
+    
+            clearInterval(scrollIntervalLeft);
+        };
+    
+        marginElementRight.addEventListener('mouseover', handleMouseOverRight);
+        marginElementRight.addEventListener('mouseout', handleMouseOutRight);
+        marginElementLeft.addEventListener('mouseover', handleMouseOverLeft);
+        marginElementLeft.addEventListener('mouseout', handleMouseOutLeft);
+    
+        return () => {
+            marginElementRight.removeEventListener('mouseover', handleMouseOverRight);
+            marginElementRight.removeEventListener('mouseout', handleMouseOutRight);
+            marginElementLeft.removeEventListener('mouseover', handleMouseOverLeft);
+            marginElementLeft.removeEventListener('mouseout', handleMouseOutLeft);
+        };
+    }, []);
+  
 
     return (
         <div className="App">
@@ -293,15 +384,15 @@ function App() {
         {postits.map(postit => (
             <div 
             key={postit.id} 
-            // className="rgyPostIt" 
             className = {`rgyPostIt ${postit.sex}`}
             style={{ left: postit.x, top: postit.y}}
             onMouseDown={e => handleDragStart(e, postit.id)}
             >
                 <button className="close-button" onClick={() => handleDeletePostit(postit.id)}>X</button>
-                {postit.content_mbti}<br/>
-                {postit.content_hobby}<br/>
-                {postit.content_insta}<br/>
+                {`MBTI : ` + postit.content_mbti}<br/>
+                {`Hobby : ` + postit.content_hobby}<br/>
+                {`Insta ID : ` + postit.content_insta}<br/>
+                {postit.content_free_form}<br/>
             </div>
         ))}
         <button className="logout-button" onClick={handleLogout}>로그아웃</button>
@@ -310,6 +401,32 @@ function App() {
             {renderPostitPoints()}
             <div style={{ position: 'absolute', left: `${viewport.x}%`, top: `${viewport.y}%`, width: `${viewport.width}%`, height: `${viewport.height}%`, border: '2px solid red' }}></div>
         </div>
+        <div
+                className="scroll-RightMargin"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '40px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                    cursor: 'ew-resize',
+                    zIndex: 1000
+                }}
+            ></div>
+        <div
+                className="scroll-LeftMargin"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    width: '40px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                    cursor: 'ew-resize',
+                    zIndex: 1000
+                }}
+            ></div>
         </div>
     );
 }

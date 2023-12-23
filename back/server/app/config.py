@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     class Config:
         env_file = './.env'
 
+    mongo_initdb_root_username: str
+    mongo_initdb_root_password: str
+
+    class Config:
+        extra = "forbid"
+
 
 settings = Settings()
 

@@ -11,7 +11,7 @@ function FindPwPage() {
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
     const navigate = useNavigate();
-    const url = 'http://127.0.0.1:8000' 
+    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app' 
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = newPassword.length >= 8;
@@ -39,6 +39,7 @@ function FindPwPage() {
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('비밀번호 변경에 실패했습니다.');
             });
     };
 
@@ -55,6 +56,7 @@ function FindPwPage() {
           })
           .catch(error => {
               console.error("Error fetching data:", error);
+              console.log(payload);
           });
     };
 
@@ -105,7 +107,7 @@ function FindPwPage() {
             <br/>
             <div>
                 <label>
-                    비밀번호
+                    새 비밀번호
                     <input
                         type="password"
                         value={newPassword}
@@ -116,7 +118,7 @@ function FindPwPage() {
             </div>
             <div>
                 <label>
-                    비밀번호 확인
+                    새 비밀번호 확인
                     <input
                         type="password"
                         value={passwordConfirm}
