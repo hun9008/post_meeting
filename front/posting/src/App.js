@@ -3,7 +3,7 @@ import './App.css';
 import PostitTable from './postit_table';
 import LoginPage from './login';
 import SignUp from './signUp';
-import FindPw from './findPw';
+import FindPw from './findPW';
 
 function App() {
 

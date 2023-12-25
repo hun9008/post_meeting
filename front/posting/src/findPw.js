@@ -11,7 +11,7 @@ function FindPwPage() {
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
     const navigate = useNavigate();
-    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app' 
+    const url = 'http://localhost:8000' 
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = newPassword.length >= 8;

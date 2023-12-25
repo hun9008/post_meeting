@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './signUp.scss';
+import Policy from './aggree';
 
 function SignUp() {
     const [userId, setUserId] = useState('');
@@ -11,14 +12,16 @@ function SignUp() {
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
     const [sex, setSex] = useState('male');
+    const [isAggreed, setIsAggreed] = useState(false);  // [TODO] 개인정보처리방침 동의
     const navigate = useNavigate();
-    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app';
+    const [showPolicy, setShowPolicy] = useState(false);  // 개인정보처리방침 보여주기
+    const url = 'http://localhost:8000';
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;
     const isPasswordConfirmValid = password === passwordConfirm;
     const isNicknameValid = nickname.trim() !== '';
-    const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
+    const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified && isAggreed;
 
     const handleToggleSex = () => {
         setSex(sex === 'male' ? 'female' : 'male');
@@ -79,6 +82,15 @@ function SignUp() {
 
     const handleBackButton = () => {
         navigate('/');
+    }
+
+    const handleOpenPolicy = () => {
+        setShowPolicy(true);
+    }
+
+    const handleCloseAggree = () => {
+        setShowPolicy(false);
+        setIsAggreed(true);
     }
 
     return (
@@ -159,10 +171,27 @@ function SignUp() {
                         </div>
                     </label>
                 </div>
+                <br/>
+                {/* 개인정보처리방침 동의 */}
+                <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center', overflow: 'hidden'}}>
+                    <input
+                        type="checkbox"
+                        checked={isAggreed}
+                        onChange={(e) => setIsAggreed(e.target.checked)}
+                    />
+                    <div>
+                        <button type="button" onClick={handleOpenPolicy} 
+                         style={{background: 'none', border: 'none', color: 'black', textDecoration: 'underline'}}
+                        >개인정보처리방침 동의</button> 
+                    </div>
+                </div>
                 <button type="submit" disabled={!isFormValid}>
                     제출
                 </button>
             </form>
+            <div>
+                {showPolicy && <Policy onClose={handleCloseAggree}/>}
+            </div>
         </div>
     );
 }

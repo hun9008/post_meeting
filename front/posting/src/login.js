@@ -8,7 +8,7 @@ function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app' 
+    const url = 'http://localhost:8000' 
 
     useEffect(() => {  // 컴포넌트가 마운트될 때 화면을 최상단 최좌측으로 이동시킵니다.
       window.scrollTo(0, 0);
@@ -43,6 +43,7 @@ function LoginPage() {
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('로그인에 실패했습니다.');
             });
     };
 

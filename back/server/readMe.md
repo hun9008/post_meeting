@@ -34,4 +34,5 @@ Articles in this series:
 
 conda activate back
 pipenv shell
+make dev, start-server
 ...

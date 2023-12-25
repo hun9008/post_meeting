@@ -9,7 +9,7 @@ function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'https://f2f3-2a09-bac5-478d-1846-00-26b-7f.ngrok-free.app'; 
+    const url = 'http://localhost:8000'; 
     const navigate = useNavigate();
 
     //dummy data
