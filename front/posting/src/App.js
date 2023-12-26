@@ -1,23 +1,34 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import PostitTable from './postit_table';
 import LoginPage from './login';
 import SignUp from './signUp';
 import FindPw from './findPW';
 
-function App() {
+function Main() {
+
+  const location = useLocation();
+  const isLoginOrSignUp = location.pathname === '/' || location.pathname === '/SignUp';
+  const appClass = isLoginOrSignUp ?  'App-small' : 'App';
 
   return (
-    <div className="App">
-      <Router>
+    <div className={appClass}>
         <Routes>
           <Route path='/' element={<LoginPage />} />
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/PostitTable' element={<PostitTable />} />
           <Route path='/FindPw' element={<FindPw />} />
         </Routes>
-      </Router>
+      
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Main />
+    </Router>
   );
 }
 

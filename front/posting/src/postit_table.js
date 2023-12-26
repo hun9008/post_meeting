@@ -159,7 +159,11 @@ function App() {
     };
 
     const handleAddPostitFromSubpage = (text) => {
-        const [mbtiValue, hobbyValue, instaIdValue, freeFormValue] = text.split('\n');
+        console.log('text : ' + text);
+        const textArray = text.split('\n');
+        console.log(textArray);
+        const [mbtiValue, hobbyValue, instaIdValue] = textArray;
+        const freeFormValue = textArray.slice(3).join('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
         console.log(sex);
 
@@ -170,10 +174,10 @@ function App() {
             id: new Date().getTime(),
             x: randomX,
             y: randomY,
-            content_mbti: mbtiValue,
-            content_hobby: hobbyValue,
-            content_insta: instaIdValue,
-            content_free_form: freeFormValue,
+            content_mbti: freeFormValue ? freeFormValue : mbtiValue,
+            content_hobby: freeFormValue ? '' : hobbyValue,
+            content_insta: freeFormValue ? '' : instaIdValue,
+            // content_free_form: freeFormValue,
             sex: sex,
             user_id: localStorage.getItem('user_id'),
         };
@@ -389,10 +393,15 @@ function App() {
             onMouseDown={e => handleDragStart(e, postit.id)}
             >
                 <button className="close-button" onClick={() => handleDeletePostit(postit.id)}>X</button>
-                {`MBTI : ` + postit.content_mbti}<br/>
-                {`Hobby : ` + postit.content_hobby}<br/>
-                {`Insta ID : ` + postit.content_insta}<br/>
-                {postit.content_free_form}<br/>
+                {postit.content_hobby && postit.content_insta ? (
+                    <>
+                    {`MBTI : ` + postit.content_mbti}<br/>
+                    {`Hobby : ` + postit.content_hobby}<br/>
+                    {`Insta ID : ` + postit.content_insta}<br/>
+                    </>
+                ) : (
+                    postit.content_mbti
+                )}
             </div>
         ))}
         <button className="logout-button" onClick={handleLogout}>로그아웃</button>
