@@ -13,39 +13,58 @@ function App() {
     const navigate = useNavigate();
 
     //dummy data
-    useEffect(() => {
-        const dummyData = [
-            {
-                id: 1,
-                x: 100,
-                y: 200,
-                content_mbti: "INTJ",
-                content_hobby: "독서",
-                content_insta: "@example1",
-                sex: "male"
-            },
-            {
-                id: 2,
-                x: 300,
-                y: 400,
-                content_mbti: "ENFP",
-                content_hobby: "여행",
-                content_insta: "@example2",
-                sex: "female"
-            },
-            {
-                id: 3,
-                x: 500,
-                y: 600,
-                content_mbti: "ISTP",
-                content_hobby: "요리",
-                content_insta: "@example3",
-                sex: "male"
-            }
-        ];
-    
-        setPostits(dummyData);
-    }, []);
+    // useEffect(() => {
+    //     const generateDummyData = (count) => {
+    //         const dummyData = [];
+          
+    //         for (let i = 1; i <= count; i++) {
+    //           const data = {
+    //             id: i,
+    //             x: getRandomCoordinate(),
+    //             y: getRandomCoordinateY(),
+    //             content_mbti: generateRandomMbti(),
+    //             content_hobby: generateRandomHobby(),
+    //             content_insta: `@example${i}`,
+    //             sex: generateRandomSex(),
+    //           };
+          
+    //           dummyData.push(data);
+    //         }
+          
+    //         return dummyData;
+    //       };
+          
+    //       const getRandomCoordinate = () => {
+    //         return Math.floor(Math.random() * 3001) - 1500; // -1500 to 1500
+    //       };
+
+    //       const getRandomCoordinateY = () => {
+    //         return Math.floor(Math.random() * 3001); // 0 to 3000
+    //       }
+
+    //       const generateRandomMbti = () => {
+    //         const mbtiOptions = ["INTJ", "ENFP", "ISTP", /* Add more MBTI types as needed */];
+    //         const randomIndex = Math.floor(Math.random() * mbtiOptions.length);
+    //         return mbtiOptions[randomIndex];
+    //       };
+          
+    //       const generateRandomHobby = () => {
+    //         const hobbyOptions = ["독서", "여행", "요리", /* Add more hobbies as needed */];
+    //         const randomIndex = Math.floor(Math.random() * hobbyOptions.length);
+    //         return hobbyOptions[randomIndex];
+    //       };
+          
+    //       const generateRandomSex = () => {
+    //         const sexOptions = ["male", "female"];
+    //         const randomIndex = Math.floor(Math.random() * sexOptions.length);
+    //         return sexOptions[randomIndex];
+    //       };
+          
+    //       const count = 100;
+    //       const dummyData = generateDummyData(count);
+        
+    //     setPostits(dummyData);
+    // }, []);
     
 
     useEffect(() => {
@@ -167,8 +186,8 @@ function App() {
         const sex = localStorage.getItem('sex'); // 성별 가져오기
         console.log(sex);
 
-        const randomX = Math.random() * 3000 - 1500; // 포스트잇 너비를 고려
-        const randomY = Math.random() * 3000; // 포스트잇 높이를 고려
+        const randomX = Math.random() * 2700 - 1500; // 포스트잇 너비를 고려
+        const randomY = Math.random() * 2700; // 포스트잇 높이를 고려
 
         const newPostit = {
             id: new Date().getTime(),
