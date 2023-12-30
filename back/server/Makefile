@@ -1,5 +1,5 @@
 dev:
-	docker-compose up -d
+	d
 
 dev-down:
 	docker-compose down

@@ -16,7 +16,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   postmeeting-api:
-    image: sehyunsix/postmeeting-api:0.1.0
+    image: sehyunsix/postmeeting:0.1.1
     env_file:
       - ./.env
     container_name: postmeeting-api
