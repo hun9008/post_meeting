@@ -27,7 +27,7 @@ function HowToUse({onClose}) {
                     <img src={"img/postits_100.png"} alt="exampleImage" className="img" />
                 </div>
                 <div className="info">
-                    <p>문의 : </p>
+                    <p>문의 : intertw219@gmail.com</p>
                 </div>
             </div>
         </div>
