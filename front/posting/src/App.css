@@ -5,6 +5,13 @@
   overflow:hidden;
 }
 
+.App-small {
+  text-align: center;
+  overflow:hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
 .postit {
   width: 200px;
   height: 170px;

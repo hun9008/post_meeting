@@ -1,14 +1,20 @@
 // src/LoginPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Menual from './howToUse'
 import './login.scss';
 
 function LoginPage() {
     const [user_id, setUserId] = useState('');
     const [password, setPassword] = useState('');
+    const [showMenual, setShowMenual] = useState(false);  // 개인정보처리방침 보여주기
     const navigate = useNavigate();
-    const url = 'http://127.0.0.1:8000' 
+    const url = 'http://localhost:8000' 
+
+    useEffect(() => {  // 컴포넌트가 마운트될 때 화면을 최상단 최좌측으로 이동시킵니다.
+      window.scrollTo(0, 0);
+    }, []);
 
     const moveToSignUp = () => {
         navigate('/SignUp');
@@ -17,6 +23,8 @@ function LoginPage() {
     const moveToFindPw = () => { 
         navigate('/FindPw');
     }
+
+    
 
     const handleSubmitClick = (e) => {
         const endpoint = '/api/auth/login';
@@ -34,18 +42,30 @@ function LoginPage() {
                 localStorage.setItem('sex', response.data.sex);
                 localStorage.setItem('token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
+                localStorage.setItem('user_id', response.data.user_id);
                 navigate('/PostitTable');
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('로그인에 실패했습니다.');
             });
     };
 
+    const handleMenualOpen = () => {
+      setShowMenual(true);
+    }
+
+    const handleMenualClose = () => {
+      setShowMenual(false);
+    }
+
     return (
       <div>
-        {/* <h2>Login</h2> */}
         <form className="login" onSubmit={handleSubmitClick}>
+          <div>
+            <button type="button" onClick={handleMenualOpen}>?</button>
             <h2>Login</h2>
+          </div>
           <div>
             <label>
               <input
@@ -72,6 +92,9 @@ function LoginPage() {
           <button onClick={moveToSignUp} style={{marginLeft: 5, marginRight: 5}}>SignUp</button>
           <button onClick={moveToFindPw} style={{marginLeft: 5}}>Find PW</button>
         </form>
+        <div>
+          {showMenual && <Menual onClose={handleMenualClose} />}
+        </div>
       </div>
     );
 }

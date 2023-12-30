@@ -3,48 +3,68 @@ import './App.css';
 import Subpage from './sub_page'; 
 import './sub_page.scss';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'http://127.0.0.1:8000'; 
+    const url = 'http://localhost:8000'; 
+    const navigate = useNavigate();
 
     //dummy data
-    useEffect(() => {
-        const dummyData = [
-            {
-                id: 1,
-                x: 100,
-                y: 200,
-                content_mbti: "INTJ",
-                content_hobby: "독서",
-                content_insta: "@example1",
-                sex: "male"
-            },
-            {
-                id: 2,
-                x: 300,
-                y: 400,
-                content_mbti: "ENFP",
-                content_hobby: "여행",
-                content_insta: "@example2",
-                sex: "female"
-            },
-            {
-                id: 3,
-                x: 500,
-                y: 600,
-                content_mbti: "ISTP",
-                content_hobby: "요리",
-                content_insta: "@example3",
-                sex: "male"
-            }
-        ];
-    
-        setPostits(dummyData);
-    }, []);
+    // useEffect(() => {
+    //     const generateDummyData = (count) => {
+    //         const dummyData = [];
+          
+    //         for (let i = 1; i <= count; i++) {
+    //           const data = {
+    //             id: i,
+    //             x: getRandomCoordinate(),
+    //             y: getRandomCoordinateY(),
+    //             content_mbti: generateRandomMbti(),
+    //             content_hobby: generateRandomHobby(),
+    //             content_insta: `@example${i}`,
+    //             sex: generateRandomSex(),
+    //           };
+          
+    //           dummyData.push(data);
+    //         }
+          
+    //         return dummyData;
+    //       };
+          
+    //       const getRandomCoordinate = () => {
+    //         return Math.floor(Math.random() * 3001) - 1500; // -1500 to 1500
+    //       };
+
+    //       const getRandomCoordinateY = () => {
+    //         return Math.floor(Math.random() * 3001); // 0 to 3000
+    //       }
+
+    //       const generateRandomMbti = () => {
+    //         const mbtiOptions = ["INTJ", "ENFP", "ISTP", /* Add more MBTI types as needed */];
+    //         const randomIndex = Math.floor(Math.random() * mbtiOptions.length);
+    //         return mbtiOptions[randomIndex];
+    //       };
+          
+    //       const generateRandomHobby = () => {
+    //         const hobbyOptions = ["독서", "여행", "요리", /* Add more hobbies as needed */];
+    //         const randomIndex = Math.floor(Math.random() * hobbyOptions.length);
+    //         return hobbyOptions[randomIndex];
+    //       };
+          
+    //       const generateRandomSex = () => {
+    //         const sexOptions = ["male", "female"];
+    //         const randomIndex = Math.floor(Math.random() * sexOptions.length);
+    //         return sexOptions[randomIndex];
+    //       };
+          
+    //       const count = 100;
+    //       const dummyData = generateDummyData(count);
+        
+    //     setPostits(dummyData);
+    // }, []);
     
 
     useEffect(() => {
@@ -76,31 +96,53 @@ function App() {
         const endpoint = '/api/postit/make'
         const access_token = localStorage.getItem('token');
         const payload = {
-            name: 'hun', //이게 필요한가?
-            email: 'younghune135@ajou.ac.kr', // 암호화 필요?
-            role: 'student', //이게 필요한가?
-            // postit: {postits},
             postit: newPostit,
-            created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
-            updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
         };
-
+        // console.log(newPostit);
         //포스트잇 생성 요청.
         const headers = {
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
         };
 
-        if (postits.length > 0 && access_token) {
+        if (access_token) {
+            // console.log("submit!!!");
             axios.post(url + endpoint, payload, { headers })
                  .then(response => {
-                     console.log(response);
+                     // console.log(response);
                  })
                  .catch(error => {
+                    // console.log(payload);
                      console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
                     handleRefresh();
-                    handleSubmit();
+                    
                 });
         }
+    };
+
+    const handleDragSubmit = (x, y) => {
+        const endpoint = '/api/postit/move'
+        const access_token = localStorage.getItem('token');
+        const payload = {
+            x: x,
+            y: y,
+            user_id: localStorage.getItem('user_id'),
+        };
+
+        const headers = {
+            Authorization: `Bearer ${access_token}`
+        };
+
+        axios.post(url + endpoint, payload, {headers})
+            .then(response => {
+                // console.log(response);
+            })
+            .catch(error => {
+                console.error('move Fail:', error);
+                // console.log(payload);
+                
+            });
+        
+        
     };
 
     const handleRefresh = () => {
@@ -115,11 +157,12 @@ function App() {
 
         axios.get(url + endpoint, { headers })
         .then(response => {
-            console.log(response);
+            // console.log(response);
             localStorage.setItem('token', response.data.access_token);
         })
         .catch(error => {
             console.error('토큰을 갱신하는 데 실패했습니다:', error);
+            handleLogout();
         });
     };
 
@@ -128,32 +171,37 @@ function App() {
     };
 
     const handleAddPostitFromSubpage = (text) => {
-        const [mbtiValue, hobbyValue, instaIdValue, freeFormValue] = text.split('\n');
+        // console.log('text : ' + text);
+        const textArray = text.split('\n');
+        // console.log(textArray);
+        const [mbtiValue, hobbyValue, instaIdValue] = textArray;
+        const freeFormValue = textArray.slice(3).join('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
-        console.log(sex);
+        // console.log(sex);
 
-        const randomX = Math.random() * 3000 - 1500; // 포스트잇 너비를 고려
-        const randomY = Math.random() * 3000; // 포스트잇 높이를 고려
+        const randomX = Math.random() * 2700 - 1500; // 포스트잇 너비를 고려
+        const randomY = Math.random() * 2700; // 포스트잇 높이를 고려
 
         const newPostit = {
             id: new Date().getTime(),
             x: randomX,
             y: randomY,
-            content_mbti: mbtiValue,
-            content_hobby: hobbyValue,
-            content_insta: instaIdValue,
-            content_free_form: freeFormValue,
+            content_mbti: freeFormValue ? freeFormValue : mbtiValue,
+            content_hobby: freeFormValue ? '' : hobbyValue,
+            content_insta: freeFormValue ? '' : instaIdValue,
+            // content_free_form: freeFormValue,
             sex: sex,
+            user_id: localStorage.getItem('user_id'),
         };
-        localStorage.setItem('id', newPostit.id);
-        handleSubmit();
+        //localStorage.setItem('id', newPostit.id);
+        handleSubmit(newPostit); 
         setPostits(prevPostits => {
             const updatedPostits = [...prevPostits, newPostit];
-            localStorage.setItem('id', newPostit.id);
+            //localStorage.setItem('id', newPostit.id);
             handleSubmit(newPostit); // 새로 추가된 포스트잇을 인자로 전달
             return updatedPostits;
         });
-        console.log(postits);
+        // console.log(postits);
         setShowSubpage(false);
 
         window.scrollTo({
@@ -164,19 +212,19 @@ function App() {
     };
 
     useEffect(() => {
-        console.log(postits);
+        // console.log(postits);
     }, [postits]);
 
     const handleDragStart = (e, id) => {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
         // console.log(postit.id);
-        const validId = localStorage.getItem('id');
-        console.log(postit.id);
-        console.log(validId);
+        const validId = localStorage.getItem('user_id');
+        // console.log(postit.user_id);
+        // console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
-        if (postit.id == validId) {
+        if (postit.user_id == validId) {
             const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
             const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
@@ -186,12 +234,15 @@ function App() {
                 postit.x = newPosX;
                 postit.y = newPosY;
                 setPostits([...postits]);
-                handleSubmit();
+                // handleSubmit(postits[0]);
+                // handleDragSubmit(newPosX, newPosY);
             };
 
             const onDragEnd = () => {
             window.removeEventListener('mousemove', onDrag);
             window.removeEventListener('mouseup', onDragEnd);
+            handleDragSubmit(postit.x, postit.y);
+            //handleSubmit();
             };
 
             window.addEventListener('mousemove', onDrag);
@@ -214,7 +265,7 @@ function App() {
         const sendDeleteRequest = () => {
             axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                console.log('포스트잇 삭제 성공:', response.data);
+                // console.log('포스트잇 삭제 성공:', response.data);
                 // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
                 const updatedPostits = postits.filter(postit => postit.id !== id);
                 setPostits(updatedPostits);
@@ -222,7 +273,7 @@ function App() {
             .catch(error => {
                 console.error('포스트잇 삭제 실패:', error);
                 handleRefresh();
-                handleDeletePostit();
+               // handleDeletePostit();
             });
         };
     
@@ -269,18 +320,75 @@ function App() {
       };
 
     const handleLogout = () => {
-        const endpoint = '/api/auth/logout';
+        // const endpoint = '/api/auth/logout';
 
-        axios.get(url + endpoint)
-            .then(response => {
-                console.log(response);
-                localStorage.clear();
-                Navigate('/');
-            })
-            .catch(error => {
-                console.error('로그아웃에 실패했습니다:', error);
-            });
+
+        // axios.get(url + endpoint)
+        //     .then(response => {
+        //         console.log(response);
+        //         localStorage.clear();
+        //         Navigate('/');
+        //     })
+        //     .catch(error => {
+        //         console.error('로그아웃에 실패했습니다:', error);
+        //     });
+        localStorage.clear();
+        navigate('/');
     };
+
+    // adding
+    let scrollIntervalRight;
+    let scrollIntervalLeft;
+    
+    useEffect(() => {
+        const marginElementRight = document.querySelector('.scroll-RightMargin');
+        const marginElementLeft = document.querySelector('.scroll-LeftMargin');
+    
+        const handleMouseOverRight = (e) => {
+            const isCursorOverMargin = e.clientX > window.innerWidth - 20;
+            // console.log('Mouse Over Right Margin:', isCursorOverMargin);
+    
+            scrollIntervalRight = setInterval(() => {
+                window.scrollBy(10, 0);
+            }, 20);
+        };
+    
+        const handleMouseOverLeft = (e) => {
+            const isCursorOverMargin = e.clientX < 20;
+            // console.log('Mouse Over Left Margin:', isCursorOverMargin);
+    
+            scrollIntervalLeft = setInterval(() => {
+                window.scrollBy(-10, 0);
+            }, 20);
+        };
+    
+        const handleMouseOutRight = (e) => {
+            const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
+            // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
+    
+            clearInterval(scrollIntervalRight);
+        };
+    
+        const handleMouseOutLeft = (e) => {
+            const isCursorOutsideMargin = e.clientX >= 20;
+            // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
+    
+            clearInterval(scrollIntervalLeft);
+        };
+    
+        marginElementRight.addEventListener('mouseover', handleMouseOverRight);
+        marginElementRight.addEventListener('mouseout', handleMouseOutRight);
+        marginElementLeft.addEventListener('mouseover', handleMouseOverLeft);
+        marginElementLeft.addEventListener('mouseout', handleMouseOutLeft);
+    
+        return () => {
+            marginElementRight.removeEventListener('mouseover', handleMouseOverRight);
+            marginElementRight.removeEventListener('mouseout', handleMouseOutRight);
+            marginElementLeft.removeEventListener('mouseover', handleMouseOverLeft);
+            marginElementLeft.removeEventListener('mouseout', handleMouseOutLeft);
+        };
+    }, []);
+  
 
     return (
         <div className="App">
@@ -293,15 +401,20 @@ function App() {
         {postits.map(postit => (
             <div 
             key={postit.id} 
-            // className="rgyPostIt" 
             className = {`rgyPostIt ${postit.sex}`}
             style={{ left: postit.x, top: postit.y}}
             onMouseDown={e => handleDragStart(e, postit.id)}
             >
                 <button className="close-button" onClick={() => handleDeletePostit(postit.id)}>X</button>
-                {postit.content_mbti}<br/>
-                {postit.content_hobby}<br/>
-                {postit.content_insta}<br/>
+                {postit.content_hobby && postit.content_insta ? (
+                    <>
+                    {`MBTI : ` + postit.content_mbti}<br/>
+                    {`Hobby : ` + postit.content_hobby}<br/>
+                    {`Insta ID : ` + postit.content_insta}<br/>
+                    </>
+                ) : (
+                    postit.content_mbti
+                )}
             </div>
         ))}
         <button className="logout-button" onClick={handleLogout}>로그아웃</button>
@@ -310,6 +423,32 @@ function App() {
             {renderPostitPoints()}
             <div style={{ position: 'absolute', left: `${viewport.x}%`, top: `${viewport.y}%`, width: `${viewport.width}%`, height: `${viewport.height}%`, border: '2px solid red' }}></div>
         </div>
+        <div
+                className="scroll-RightMargin"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '40px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                    cursor: 'ew-resize',
+                    zIndex: 1000
+                }}
+            ></div>
+        <div
+                className="scroll-LeftMargin"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    width: '40px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                    cursor: 'ew-resize',
+                    zIndex: 1000
+                }}
+            ></div>
         </div>
     );
 }

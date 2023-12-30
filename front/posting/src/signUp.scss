@@ -207,12 +207,13 @@ form.signUp {
   to { @include transform(rotate(360deg)); }
 }
 
-a {
-  text-decoration: none;
-  color: rgba(white, 0.6);
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 12px;
-}
 
+/* 체크박스 대신 표시할 라벨 스타일 */
+input[type="checkbox"] {
+  display: inline-block;
+  width: 20px; /* 체크박스 크기 */
+  height: 20px; /* 체크박스 크기 */
+  background: white;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}

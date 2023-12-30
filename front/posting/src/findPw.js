@@ -11,7 +11,7 @@ function FindPwPage() {
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
     const navigate = useNavigate();
-    const url = 'http://127.0.0.1:8000' 
+    const url = 'http://localhost:8000' 
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = newPassword.length >= 8;
@@ -34,11 +34,12 @@ function FindPwPage() {
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                console.log(response);
+                //console.log(response);
                 navigate('/');
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('비밀번호 변경에 실패했습니다.');
             });
     };
 
@@ -50,11 +51,12 @@ function FindPwPage() {
 
       axios.post(url + endpoint, payload)
           .then(response => {
-              console.log(response);
+              //console.log(response);
               setEmailSent(true);
           })
           .catch(error => {
               console.error("Error fetching data:", error);
+              //console.log(payload);
           });
     };
 
@@ -66,7 +68,7 @@ function FindPwPage() {
 
       axios.post(url + endpoint, payload)
           .then(response => {
-              console.log(response);
+              //console.log(response);
               setIsVerified(true);
               alert('인증되었습니다!');
           })
@@ -82,7 +84,7 @@ function FindPwPage() {
             <button className='back-button' onClick={handleBackButton}>
                 {'<'}
             </button>
-            <h2>Find Password</h2>
+            <h2>비밀번호 재설정</h2>
             <div>
               <label>
                   아이디
@@ -105,7 +107,7 @@ function FindPwPage() {
             <br/>
             <div>
                 <label>
-                    비밀번호
+                    새 비밀번호
                     <input
                         type="password"
                         value={newPassword}
@@ -116,7 +118,7 @@ function FindPwPage() {
             </div>
             <div>
                 <label>
-                    비밀번호 확인
+                    새 비밀번호 확인
                     <input
                         type="password"
                         value={passwordConfirm}

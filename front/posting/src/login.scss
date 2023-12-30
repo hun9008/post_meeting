@@ -122,6 +122,28 @@ form.login {
       background-color: darken($blueQueen, 5%);
     }
   }
+  > div > button {
+    font-family: $fontAsap;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    width: 40px;
+    border: 0;
+    padding: 10px 0;
+    margin-top: 10px;
+    // margin-left: -5px;
+    right: 10px;
+    top: 0;
+    position: absolute;
+    border-radius: 50px;
+    background-color: $blueQueen;
+    @include transition(background-color 300ms);
+    
+    &:hover {
+      background-color: darken($blueQueen, 5%);
+    }
+  }
 }
 
 @include keyframes (wawes) {
@@ -129,12 +151,12 @@ form.login {
   to { @include transform(rotate(360deg)); }
 }
 
-a {
-  text-decoration: none;
-  color: rgba(white, 0.6);
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 12px;
-}
+// a {
+//   text-decoration: none;
+//   color: rgba(white, 0.6);
+//   position: absolute;
+//   right: 10px;
+//   bottom: 10px;
+//   font-size: 12px;
+// }
 
