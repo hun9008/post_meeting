@@ -22,8 +22,6 @@ services:
       - mongo:/data/db
     ports:
       - '6000:27017'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
   postmeeting-api:
     image: sehyunsix/postmeeting:0.1.1
     env_file:
@@ -31,8 +29,7 @@ services:
     container_name: postmeeting-api
     ports:
       - '8000:8000'
-    extra_hosts:
-        - "host.docker.internal:host-gateway"
+
 
 volumes:
   mongo:
