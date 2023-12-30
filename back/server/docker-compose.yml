@@ -1,14 +1,11 @@
 version: '3'
 services:
   nginx:
-    container_name: nginx
     image: nginx
-    restart: always
-    #외부와 소통하는 경우에는 ports로 포트 설정.
     ports:
-      - "80:80"
-    environment:
-      - TZ=Asia/Seoul
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - postmeeting-api
       - mongo
@@ -39,5 +36,4 @@ services:
 
 volumes:
   mongo:
-  nginx:
 
