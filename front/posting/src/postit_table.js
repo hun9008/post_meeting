@@ -96,28 +96,22 @@ function App() {
         const endpoint = '/api/postit/make'
         const access_token = localStorage.getItem('token');
         const payload = {
-            // name: 'hun9008', //이게 필요한가?
-            // email: 'younghune135@ajou.ac.kr', // 암호화 필요?
-            // role: 'student', //이게 필요한가?
-            // postit: {postits},
             postit: newPostit,
-            // created_at: "2023-11-04T16:36:44.295Z", //이게 필요한가?
-            // updated_at: "2023-11-04T16:36:44.295Z" //이게 필요한가?
         };
-        console.log(newPostit);
+        // console.log(newPostit);
         //포스트잇 생성 요청.
         const headers = {
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
         };
 
         if (access_token) {
-            console.log("submit!!!");
+            // console.log("submit!!!");
             axios.post(url + endpoint, payload, { headers })
                  .then(response => {
-                     console.log(response);
+                     // console.log(response);
                  })
                  .catch(error => {
-                    console.log(payload);
+                    // console.log(payload);
                      console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
                     handleRefresh();
                     
@@ -140,12 +134,11 @@ function App() {
 
         axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
             })
             .catch(error => {
                 console.error('move Fail:', error);
-                console.log(payload);
-                //handleRefresh();
+                // console.log(payload);
                 
             });
         
@@ -164,7 +157,7 @@ function App() {
 
         axios.get(url + endpoint, { headers })
         .then(response => {
-            console.log(response);
+            // console.log(response);
             localStorage.setItem('token', response.data.access_token);
         })
         .catch(error => {
@@ -178,13 +171,13 @@ function App() {
     };
 
     const handleAddPostitFromSubpage = (text) => {
-        console.log('text : ' + text);
+        // console.log('text : ' + text);
         const textArray = text.split('\n');
-        console.log(textArray);
+        // console.log(textArray);
         const [mbtiValue, hobbyValue, instaIdValue] = textArray;
         const freeFormValue = textArray.slice(3).join('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
-        console.log(sex);
+        // console.log(sex);
 
         const randomX = Math.random() * 2700 - 1500; // 포스트잇 너비를 고려
         const randomY = Math.random() * 2700; // 포스트잇 높이를 고려
@@ -208,7 +201,7 @@ function App() {
             handleSubmit(newPostit); // 새로 추가된 포스트잇을 인자로 전달
             return updatedPostits;
         });
-        console.log(postits);
+        // console.log(postits);
         setShowSubpage(false);
 
         window.scrollTo({
@@ -219,7 +212,7 @@ function App() {
     };
 
     useEffect(() => {
-        console.log(postits);
+        // console.log(postits);
     }, [postits]);
 
     const handleDragStart = (e, id) => {
@@ -227,8 +220,8 @@ function App() {
         const postit = postits.find(p => p.id === id);
         // console.log(postit.id);
         const validId = localStorage.getItem('user_id');
-        console.log(postit.user_id);
-        console.log(validId);
+        // console.log(postit.user_id);
+        // console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
         if (postit.user_id == validId) {
@@ -242,12 +235,13 @@ function App() {
                 postit.y = newPosY;
                 setPostits([...postits]);
                 // handleSubmit(postits[0]);
-                handleDragSubmit(newPosX, newPosY);
+                // handleDragSubmit(newPosX, newPosY);
             };
 
             const onDragEnd = () => {
             window.removeEventListener('mousemove', onDrag);
             window.removeEventListener('mouseup', onDragEnd);
+            handleDragSubmit(postit.x, postit.y);
             //handleSubmit();
             };
 
@@ -271,7 +265,7 @@ function App() {
         const sendDeleteRequest = () => {
             axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                console.log('포스트잇 삭제 성공:', response.data);
+                // console.log('포스트잇 삭제 성공:', response.data);
                 // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
                 const updatedPostits = postits.filter(postit => postit.id !== id);
                 setPostits(updatedPostits);
@@ -352,7 +346,7 @@ function App() {
     
         const handleMouseOverRight = (e) => {
             const isCursorOverMargin = e.clientX > window.innerWidth - 20;
-            console.log('Mouse Over Right Margin:', isCursorOverMargin);
+            // console.log('Mouse Over Right Margin:', isCursorOverMargin);
     
             scrollIntervalRight = setInterval(() => {
                 window.scrollBy(10, 0);
@@ -361,7 +355,7 @@ function App() {
     
         const handleMouseOverLeft = (e) => {
             const isCursorOverMargin = e.clientX < 20;
-            console.log('Mouse Over Left Margin:', isCursorOverMargin);
+            // console.log('Mouse Over Left Margin:', isCursorOverMargin);
     
             scrollIntervalLeft = setInterval(() => {
                 window.scrollBy(-10, 0);
@@ -370,14 +364,14 @@ function App() {
     
         const handleMouseOutRight = (e) => {
             const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
-            console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
+            // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
     
             clearInterval(scrollIntervalRight);
         };
     
         const handleMouseOutLeft = (e) => {
             const isCursorOutsideMargin = e.clientX >= 20;
-            console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
+            // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
     
             clearInterval(scrollIntervalLeft);
         };

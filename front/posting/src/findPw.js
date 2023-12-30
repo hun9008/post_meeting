@@ -34,7 +34,7 @@ function FindPwPage() {
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                console.log(response);
+                //console.log(response);
                 navigate('/');
             })
             .catch(error => {
@@ -51,12 +51,12 @@ function FindPwPage() {
 
       axios.post(url + endpoint, payload)
           .then(response => {
-              console.log(response);
+              //console.log(response);
               setEmailSent(true);
           })
           .catch(error => {
               console.error("Error fetching data:", error);
-              console.log(payload);
+              //console.log(payload);
           });
     };
 
@@ -68,7 +68,7 @@ function FindPwPage() {
 
       axios.post(url + endpoint, payload)
           .then(response => {
-              console.log(response);
+              //console.log(response);
               setIsVerified(true);
               alert('인증되었습니다!');
           })
