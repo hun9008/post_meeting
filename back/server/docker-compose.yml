@@ -23,7 +23,7 @@ services:
     ports:
       - '6000:27017'
   postmeeting-api:
-    image: sehyunsix/postmeeting:0.1.1
+    image: sehyunsix/postmeeting-api:0.1.2
     env_file:
       - ./.env
     container_name: postmeeting-api
