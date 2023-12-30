@@ -4,7 +4,7 @@ import './howToUse.scss';
 function HowToUse({onClose}) {
 
     return (
-        <div className='container'>
+        <div className='h_container'>
             <button className='back-button' onClick={onClose}>
                 {'<'}
             </button>

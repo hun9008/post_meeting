@@ -84,7 +84,7 @@ function FindPwPage() {
             <button className='back-button' onClick={handleBackButton}>
                 {'<'}
             </button>
-            <h2>Find Password</h2>
+            <h2>비밀번호 재설정</h2>
             <div>
               <label>
                   아이디

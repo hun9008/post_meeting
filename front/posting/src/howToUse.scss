@@ -42,14 +42,14 @@ $redFire: rgba(244, 91, 105, 1);
 
 $fontAsap: 'Asap', sans-serif;
 
-.container {
+.h_container {
     position: fixed;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     // width: 400px;
     // height: 400px;
     overflow: hidden;
-    background-color: rgb(209, 242, 249);
+    background-color: rgb(216, 234, 250);
     padding: 40px 30px 30px 30px;
     box-sizing: border-box;
     transform: translate(-50%, -50%);
@@ -94,7 +94,8 @@ $fontAsap: 'Asap', sans-serif;
         background-color: transparent;
         border: none;
         font-size: 24px; 
-        cursor: pointer; 
+        cursor: pointer;
+        color: grey; 
       }
 
       > button {
@@ -156,31 +157,6 @@ $fontAsap: 'Asap', sans-serif;
         -webkit-transition: .4s;
         transition: .4s;
       }
-      
-      input:checked + .slider {
-        background-color: rgb(99, 153, 186);
-      }
-      
-      input:focus + .slider {
-        box-shadow: 0 0 1px rgb(99, 153, 186);
-      }
-      
-      input:checked + .slider:before {
-        content: "🫵";
-        -webkit-transform: translateX(46px);
-        -ms-transform: translateX(46px);
-        transform: translateX(46px);
-      }
-      
-      /* 슬라이더를 둥글게 만들기 */
-      .slider {
-        border-radius: 34px;
-      }
-      
-      .slider:before {
-        border-radius: 50%;
-      }
-
 
 
   }
@@ -196,7 +172,7 @@ $fontAsap: 'Asap', sans-serif;
   height: auto;
   object-fit: cover;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  //border: 1px solid #ddd;
   padding: 5px;
   box-sizing: border-box;
   @include transition(box-shadow 300ms);
