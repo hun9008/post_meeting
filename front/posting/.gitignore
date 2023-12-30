@@ -11,6 +11,13 @@
 # production
 /build
 
+
+#back
+/fast-api
+/my-rest-api
+/server/.env
+
+
 # misc
 .DS_Store
 .env.local
