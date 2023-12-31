@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(www.postmeeting.com postmeeting.site)
+domains=(www.postmeeting.site postmeeting.site)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="sdfg8931@gmail.com" # Adding a valid address is strongly recommended
