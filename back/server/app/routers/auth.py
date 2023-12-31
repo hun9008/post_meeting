@@ -12,7 +12,7 @@ from app.serializers.userSerializers import userEntity
 from .. import schemas, utils
 from app.oauth2 import AuthJWT
 from ..config import settings
-from jinja2 import Environment, select_autoescape, PackageLoader, templates
+from jinja2 import Environment, select_autoescape, PackageLoader
 
 
 env = Environment(
