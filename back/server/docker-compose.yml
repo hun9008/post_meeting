@@ -12,8 +12,8 @@ services:
     depends_on:
       - postmeeting-api
       - mongo
-  cerbot:
-    image: cerbot/cerbot
+  certbot:
+    image: certbot/certbot
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
