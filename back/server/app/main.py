@@ -5,7 +5,7 @@ from app.config import settings
 from app.routers import auth, user, postit
 
 app = FastAPI()
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 origins = [
     settings.CLIENT_ORIGIN,
 ]
