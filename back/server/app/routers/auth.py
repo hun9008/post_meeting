@@ -12,6 +12,13 @@ from app.serializers.userSerializers import userEntity
 from .. import schemas, utils
 from app.oauth2 import AuthJWT
 from ..config import settings
+from jinja2 import Environment, select_autoescape, PackageLoader, templates
+
+
+env = Environment(
+    loader=PackageLoader('app', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 
 router = APIRouter()
@@ -186,6 +193,8 @@ def reset_password():
 
 @router.get('/verifyemail/{token}')
 def verify_me(token: str):
+    template ='success'
+    template = env.get_template(f'{template}.html')
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
@@ -194,7 +203,5 @@ def verify_me(token: str):
     if not result:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Invalid verification code or account already verified')
-    return {
-        "status": "success",
-        "message": "Account verified successfully"
-    }
+    return template.TemplateResponse("success.html")
+
