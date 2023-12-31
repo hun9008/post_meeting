@@ -13,7 +13,7 @@ from .. import schemas, utils
 from app.oauth2 import AuthJWT
 from ..config import settings
 from jinja2 import Environment, select_autoescape, PackageLoader
-
+from fastapi.templating import Jinja2Templates
 
 env = Environment(
     loader=PackageLoader('app', 'templates'),
@@ -192,9 +192,8 @@ def reset_password():
 
 
 @router.get('/verifyemail/{token}')
-def verify_me(token: str):
-    template ='success'
-    template = env.get_template(f'{template}.html')
+def verify_me(token: str ,request:Request ):
+    templates = Jinja2Templates(directory='../templates')
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
@@ -203,5 +202,5 @@ def verify_me(token: str):
     if not result:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Invalid verification code or account already verified')
-    return template.TemplateResponse("success.html")
+    return templates.TemplateResponse('success.html',context = {'request':request}  )
 
