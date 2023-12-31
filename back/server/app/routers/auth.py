@@ -40,8 +40,8 @@ async def send_email(emailmodel:schemas.EmailSchema, request: Request):
     insert_result = User.insert_one(new_user.dict())
     User.find_one_and_update({"_id": insert_result.inserted_id}, {
     "$set": {"verification_code": verification_code, "verified":False,"updated_at": datetime.utcnow()}})
-    url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
-    # url =f"{settings.SERERVER_URL}/api/auth/verifyemail/{token.hex()}"
+    # url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
+    url =f"http://{settings.SERERVER_URL}/api/auth/verifyemail/{token.hex()}"
     try:
         await Email({'name':email}, url, [EmailStr(email)]).sendVerificationCode()
     except Exception as error:
