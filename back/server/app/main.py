@@ -20,7 +20,6 @@ app.add_middleware(
 
 )
 
-app.mount("/docs", StaticFiles(directory="/usr/share/nginx/html/docs"), name="docs")
 app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
 app.include_router(user.router, tags=['Users'], prefix='/api/users')
 app.include_router(postit.router, tags=['Postit'], prefix='/api/postit')
