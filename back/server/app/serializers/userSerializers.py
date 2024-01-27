@@ -26,6 +26,24 @@ def userResponseEntity(user) -> dict:
     }
 
 
+def ChatRomeResponseEntity(chatroom) -> dict:
+    return {
+        "room_id": str(chatroom["room_id"]),
+        "user_ids": chatroom["user_ids"],
+        "chat_list": chatroom["chat_list"],
+        "created_at": chatroom["created_at"],
+        "updated_at": chatroom["updated_at"]
+    }
+
+def ChatResponseEntity(chat) -> dict:
+    return {
+        "chat_id": str(chat["chat_id"]),
+        "sender_id": chat["sender_id"],
+        "content": chat["content"],
+        "created_at": str(chat["created_at"])
+    }
+
+
 def embeddedUserResponse(user) -> dict:
     return {
         "id": str(user["_id"]),

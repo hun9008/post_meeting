@@ -2,13 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.config import settings
-from app.routers import auth, user, postit
+from app.routers import auth, user, postit , chat
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 origins = [
     settings.CLIENT_ORIGIN,
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +25,7 @@ app.add_middleware(
 app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
 app.include_router(user.router, tags=['Users'], prefix='/api/users')
 app.include_router(postit.router, tags=['Postit'], prefix='/api/postit')
+app.include_router(chat.router, tags=['Chat'], prefix='/api/chat')
 
 @app.get("/api/healthchecker")
 def root():
