@@ -25,7 +25,22 @@
 .add-button {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: calc(48%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  background-color: rgba(69, 105, 144, 1);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  /* right: 80px; */
+  right: calc(52%);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -46,7 +61,7 @@
   padding: 10px 0;
   position: fixed;
   top: 20px;
-  right: 20px;
+  left: 20px;
   border-radius: 5px;
   background-color: rgba(69, 105, 144, 1);
   /* @include transition(background-color 300ms); */

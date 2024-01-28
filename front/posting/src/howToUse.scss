@@ -47,8 +47,9 @@ $fontAsap: 'Asap', sans-serif;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     // width: 400px;
-    // height: 400px;
-    overflow: hidden;
+    height: 95vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: rgb(216, 234, 250);
     padding: 40px 30px 30px 30px;
     box-sizing: border-box;
@@ -63,6 +64,7 @@ $fontAsap: 'Asap', sans-serif;
     &::before, &::after {
         content: '';
         position: absolute;
+        overflow: hidden;
         width: 2000px;
         height: 2000px;
         border-top-left-radius: 40%;
@@ -168,7 +170,7 @@ $fontAsap: 'Asap', sans-serif;
   }
 
 .img {
-  width: 200px;
+  width: 250px;
   height: auto;
   object-fit: cover;
   border-radius: 10px;
@@ -185,6 +187,6 @@ $fontAsap: 'Asap', sans-serif;
   color: rgba(rgb(0, 0, 0), 0.9);
   position: absolute;
   right: 10px;
-  bottom: 0px;
+  top: 0px;
   font-size: 12px;
 }

@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Subpage from './sub_page'; 
 import './sub_page.scss';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './snow.scss';
+import Menual from './howToUse';
+import Chat from './chat';
 
 function App() {
     const [postits, setPostits] = useState([]);
     const [showSubpage, setShowSubpage] = useState(false);
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
-    const url = 'http://localhost:8000'; 
+    // const url = 'https://3.27.141.88';
+    // const url = 'https://p7219.site' 
+    const url = 'https://ed18-118-34-163-168.ngrok-free.app'
     const navigate = useNavigate();
+    const [showMenual, setShowMenual] = useState(true);
+    const [showChat, setShowChat] = useState(false);
 
     //dummy data
     // useEffect(() => {
@@ -260,26 +267,29 @@ function App() {
         const payload = {
             id: id,
         }
+        const postit = postits.find(p => p.id === id);
+        const validId = localStorage.getItem('user_id');
 
-        // 서버에 삭제 요청을 보내는 함수
-        const sendDeleteRequest = () => {
-            axios.post(url + endpoint, payload, {headers})
-            .then(response => {
-                // console.log('포스트잇 삭제 성공:', response.data);
-                // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
-                const updatedPostits = postits.filter(postit => postit.id !== id);
-                setPostits(updatedPostits);
-            })
-            .catch(error => {
-                console.error('포스트잇 삭제 실패:', error);
-                handleRefresh();
-               // handleDeletePostit();
-            });
-        };
-    
-        // 서버에 삭제 요청을 보내는 함수 호출
-        sendDeleteRequest();
-
+        if(postit.user_id == validId) {
+            // 서버에 삭제 요청을 보내는 함수
+            const sendDeleteRequest = () => {
+                axios.post(url + endpoint, payload, {headers})
+                .then(response => {
+                    // console.log('포스트잇 삭제 성공:', response.data);
+                    // 서버에서 삭제가 성공적으로 이루어지면, 프론트엔드 상태도 업데이트
+                    const updatedPostits = postits.filter(postit => postit.id !== id);
+                    setPostits(updatedPostits);
+                })
+                .catch(error => {
+                    console.error('포스트잇 삭제 실패:', error);
+                    handleRefresh();
+                // handleDeletePostit();
+                });
+            };
+        
+            // 서버에 삭제 요청을 보내는 함수 호출
+            sendDeleteRequest();
+        }
         //임시 삭제 구현
         // const updatedPostits = postits.filter(postit => postit.id !== id);
         // setPostits(updatedPostits);
@@ -345,7 +355,7 @@ function App() {
         const marginElementLeft = document.querySelector('.scroll-LeftMargin');
     
         const handleMouseOverRight = (e) => {
-            const isCursorOverMargin = e.clientX > window.innerWidth - 20;
+            //const isCursorOverMargin = e.clientX > window.innerWidth - 20;
             // console.log('Mouse Over Right Margin:', isCursorOverMargin);
     
             scrollIntervalRight = setInterval(() => {
@@ -354,7 +364,7 @@ function App() {
         };
     
         const handleMouseOverLeft = (e) => {
-            const isCursorOverMargin = e.clientX < 20;
+            //const isCursorOverMargin = e.clientX < 20;
             // console.log('Mouse Over Left Margin:', isCursorOverMargin);
     
             scrollIntervalLeft = setInterval(() => {
@@ -363,14 +373,14 @@ function App() {
         };
     
         const handleMouseOutRight = (e) => {
-            const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
+            //const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
             // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
     
             clearInterval(scrollIntervalRight);
         };
     
         const handleMouseOutLeft = (e) => {
-            const isCursorOutsideMargin = e.clientX >= 20;
+            //const isCursorOutsideMargin = e.clientX >= 20;
             // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
     
             clearInterval(scrollIntervalLeft);
@@ -388,16 +398,33 @@ function App() {
             marginElementLeft.removeEventListener('mouseout', handleMouseOutLeft);
         };
     }, []);
-  
+
+    const handleMenualClose = () => {
+        setShowMenual(false);
+    }
+
+    const handleChatButtonClick = () => {
+        setShowChat(prevShowChat => !prevShowChat);
+      };
 
     return (
         <div className="App">
+           {Array.from({ length: 400 }).map((_, index) => (
+                <div key={index} className="snow"></div>
+            ))}
+
         {showSubpage && 
             <Subpage 
             onAdd={handleAddPostitFromSubpage} 
             onCancel={() => setShowSubpage(false)}
             />
         } 
+        {/* {showChat &&
+            <Chat 
+            
+            onClose={() => setShowChat(false)} />
+        } */}
+        <Chat showChat={showChat} onClose={() => setShowChat(false)} />
         {postits.map(postit => (
             <div 
             key={postit.id} 
@@ -419,6 +446,7 @@ function App() {
         ))}
         <button className="logout-button" onClick={handleLogout}>로그아웃</button>
         <button className="add-button" onClick={handleOpenSubpage}>+</button>
+        <button className="chat-button" onClick={handleChatButtonClick}>💬</button>
         <div className="minimap" style={{ position: 'fixed', bottom: 0, left: 0, width: '150px', height: '150px', backgroundColor: 'rgba(0, 0, 0, 0.3)', overflow: 'hidden' }}>
             {renderPostitPoints()}
             <div style={{ position: 'absolute', left: `${viewport.x}%`, top: `${viewport.y}%`, width: `${viewport.width}%`, height: `${viewport.height}%`, border: '2px solid red' }}></div>
@@ -449,6 +477,9 @@ function App() {
                     zIndex: 1000
                 }}
             ></div>
+            <div>
+                {showMenual && <Menual onClose={handleMenualClose} />}
+            </div>
         </div>
     );
 }
