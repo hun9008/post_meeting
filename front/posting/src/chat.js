@@ -41,6 +41,7 @@ const ChatApp = ({showChat}) => {
     };
   }, []);
 
+  
   const sendMessage = () => {
     // console.log({userId, message});
     socketRef.current.send(JSON.stringify({ type: 'message', userId: userId, text: message }));
