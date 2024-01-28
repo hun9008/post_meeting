@@ -12,6 +12,14 @@ from app.serializers.userSerializers import userEntity
 from .. import schemas, utils
 from app.oauth2 import AuthJWT
 from ..config import settings
+from jinja2 import Environment, select_autoescape, PackageLoader
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
+env = Environment(
+    loader=PackageLoader('app', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
 
 
 router = APIRouter()
@@ -40,8 +48,8 @@ async def send_email(emailmodel:schemas.EmailSchema, request: Request):
     insert_result = User.insert_one(new_user.dict())
     User.find_one_and_update({"_id": insert_result.inserted_id}, {
     "$set": {"verification_code": verification_code, "verified":False,"updated_at": datetime.utcnow()}})
-    url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
-    # url =f"{settings.SERERVER_URL}/api/auth/verifyemail/{token.hex()}"
+    # url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
+    url =f"{settings.SERERVER_URL}/api/auth/verifyemail/{token.hex()}"
     try:
         await Email({'name':email}, url, [EmailStr(email)]).sendVerificationCode()
     except Exception as error:
@@ -183,9 +191,18 @@ def reset_password():
     pass
 
 
+@router.get('/test',response_class=HTMLResponse)
+def test_html(request:Request ):
+    templateEnv = Environment( loader=PackageLoader('app', 'templates'))
+    template = templateEnv.get_template( 'success.html' )
+    template = template.render()
+    return template
 
-@router.get('/verifyemail/{token}')
-def verify_me(token: str):
+@router.get('/verifyemail/{token}',response_class=HTMLResponse)
+def verify_me(token: str ,request:Request ):
+    templateEnv = Environment( loader=PackageLoader('app', 'templates'))
+    template = templateEnv.get_template( 'success.html' )
+    template = template.render()
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
@@ -194,7 +211,5 @@ def verify_me(token: str):
     if not result:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Invalid verification code or account already verified')
-    return {
-        "status": "success",
-        "message": "Account verified successfully"
-    }
+    return template
+

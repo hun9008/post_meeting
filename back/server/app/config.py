@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
 
     CLIENT_ORIGIN: str
-    SERERVER_URL = 'https://ec2-3-27-141-88.ap-southeast-2.compute.amazonaws.com'
+    SERERVER_URL: str
     EMAIL_HOST: str
     EMAIL_PORT: int
     EMAIL_USERNAME: str
