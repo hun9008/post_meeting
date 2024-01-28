@@ -28,7 +28,7 @@ class ChatSchema(BaseModel):
 
 class ChatRoomSchema(BaseModel):
     room_id: int
-    user_ids: str
+    room_name: str
     chat_list: List[Optional[ChatSchema]]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
@@ -42,9 +42,9 @@ class UserBaseSchema(BaseModel):
     role :Optional[str]
     sex: Optional[str]
     postit:Optional[PostitSchema]
+    chatRoom: Optional[List[str]]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-
     class Config:
         from_contribute = True
 
