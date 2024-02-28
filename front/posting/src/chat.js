@@ -9,8 +9,8 @@ const ChatApp = ({showChat}) => {
   const user2 = '65a387fbdb1394c635141785';
   //user1과 user2중 큰 값이 앞에 오도록 두 문자열을 합침.
 //   const room = user1 > user2 ? user1 + user2 : user2 + user1;
-    const room = '65a387fbdb1394c63514178565a38768db1394c635141784';
-  const url = 'wss://ed18-118-34-163-168.ngrok-free.app/api/chat/chatroom/' + room;
+    const room = '65a387fbdb8db1394c635141784';
+  const url = process.env.REACT_APP_SOCKET_API + room;
   const socketRef = useRef(null);
     // console.log('room : ', room);
   useEffect(() => {

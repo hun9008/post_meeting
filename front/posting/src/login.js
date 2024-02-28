@@ -12,7 +12,7 @@ function LoginPage() {
     const navigate = useNavigate();
     // const url = 'https://3.27.141.88' 
     // const url = 'https://p7219.site'
-    const url = 'https://ed18-118-34-163-168.ngrok-free.app'
+    const url = process.env.REACT_APP_SERVER_API;
 
     useEffect(() => {  // 컴포넌트가 마운트될 때 화면을 최상단 최좌측으로 이동시킵니다.
       window.scrollTo(0, 0);

@@ -14,7 +14,7 @@ function App() {
     const [viewport, setViewport] = useState({ x: 0, y: 0, width: 100, height: 100 });
     // const url = 'https://3.27.141.88';
     // const url = 'https://p7219.site' 
-    const url = 'https://ed18-118-34-163-168.ngrok-free.app'
+    const url = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
     const [showMenual, setShowMenual] = useState(true);
     const [showChat, setShowChat] = useState(false);

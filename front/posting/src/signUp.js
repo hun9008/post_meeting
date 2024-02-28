@@ -16,9 +16,10 @@ function SignUp() {
     const navigate = useNavigate();
     const [showPolicy, setShowPolicy] = useState(false);  // 개인정보처리방침 보여주기
     const [emailButtonClicked, setEmailButtonClicked] = useState(false);
+    const [emoji, setEmoji] = useState('');  // 알파벳순으로 1~11까지.
     // const url = 'https://3.27.141.88';
     // const url = 'https://p7219.site'
-    const url = 'https://ed18-118-34-163-168.ngrok-free.app'    
+    const url = process.env.REACT_APP_SERVER_API;    
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;
