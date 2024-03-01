@@ -20,15 +20,31 @@ class EmailSchema(BaseModel):
 
 
 
+class ChatSchema(BaseModel):
+    chat_id: int
+    sender_id: str
+    content: str
+    created_at: Optional[datetime]
+
+class ChatRoomSchema(BaseModel):
+    room_id: int
+    room_name: str
+    chat_list: List[Optional[ChatSchema]]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+    class Config:
+        from_contribute = True
+
+
 class UserBaseSchema(BaseModel):
     name: Optional[str]
     email: str
     role :Optional[str]
     sex: Optional[str]
     postit:Optional[PostitSchema]
+    chatRoom: Optional[List[str]]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
-
     class Config:
         from_contribute = True
 
