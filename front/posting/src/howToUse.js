@@ -27,10 +27,12 @@ function HowToUse({onClose}) {
                     <img src={"img/postits_100.png"} alt="exampleImage" className="img" />
                 </div>
                 <div>
-                    <h3>4. 화면 왼쪽, 오른쪽 끝에 커서를 올려두면 좌우로 움직여요.</h3>
+                    <h3>4. 화면 왼쪽, 오른쪽 끝에 커서를 올려두면 </h3>
+                    <h3>좌우로 움직여요.</h3>
                 </div>
                 <div>
-                    <h3>5. 왼쪽 아래에 현재 포스트잇의 위치를 보여주는 미니맵이 있어요.</h3>
+                    <h3>5. 왼쪽 아래에 현재 포스트잇의 위치를</h3>
+                    <h3>보여주는 미니맵이 있어요.</h3>
                     <img src={"img/minimap.png"} alt="exampleImage" className="img" />
                 </div>
                 <div className="info">

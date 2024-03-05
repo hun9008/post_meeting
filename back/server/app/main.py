@@ -24,10 +24,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-<<<<<<< HEAD
-=======
     allow_origins=["*"],
->>>>>>> 1374e2124d4bdbf0334e5cf7b6d29c1617b9eba3
 )
 
 manager = ConnectionManager()

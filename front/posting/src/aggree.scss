@@ -43,8 +43,13 @@ $redFire: rgba(244, 91, 105, 1);
 $fontAsap: 'Asap', sans-serif;
 
 .container {
-    position: fixed;
+    position: absolute;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
+
+    @media (max-height: 600px) { // 600px 미만의 높이를 가진 화면에서만 이 스타일을 적용
+      top: 100%; // 화면의 높이가 작은 경우
+      width: 90%;
+    }
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     // width: 400px;
     // height: 400px;

@@ -59,8 +59,16 @@ form.login {
   border-radius: 10px;
   position: absolute;
   top: 50%;
+
+  @media (max-height: 600px) { // 600px 미만의 높이를 가진 화면에서만 이 스타일을 적용
+    top: 100%; // 화면의 높이가 작은 경우
+  }
   left: 50%;
-  width: 400px;
+  width: 300px;
+
+  @media (min-width: 768px) { // 768px 이상의 너비를 가진 화면에서만 이 스타일을 적용
+    width: 400px; // PC 화면에서의 너비
+  }
   @include transform(translate(-50%, -50%));
   @include transition(transform 300ms, box-shadow 300ms);
   box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);

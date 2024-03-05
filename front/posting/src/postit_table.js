@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './snow.scss';
 import Menual from './howToUse';
 import Chat from './chat';
+import AdComponent from './AdComponent';
 
 function App() {
     const [postits, setPostits] = useState([]);
@@ -19,59 +20,93 @@ function App() {
     const [showMenual, setShowMenual] = useState(true);
     const [showChat, setShowChat] = useState(false);
 
+    // emogi가 1이면 cat, 2면 dog, 3이면 fox, 4 : hamster, 5 : horse, 6: lion, 7: monkey, 8: panda, 9: rabbit, 10: t-rex, 11: tiger 
+    // emogi숫자가 들어오면 해당하는 문자를 반환하는 함수
+    const getEmogi = (emogi) => {
+        if (emogi === 1) {
+            return 'cat';
+        } else if (emogi === 2) {
+            return 'dog';
+        } else if (emogi === 3) {
+            return 'fox';
+        } else if (emogi === 4) {
+            return 'hamster';
+        } else if (emogi === 5) {
+            return 'horse';
+        } else if (emogi === 6) {
+            return 'lion';
+        } else if (emogi === 7) {
+            return 'monkey';
+        } else if (emogi === 8) {
+            return 'panda';
+        } else if (emogi === 9) {
+            return 'rabbit';
+        } else if (emogi === 10) {
+            return 't-rex';
+        } else if (emogi === 11) {
+            return 'tiger';
+        }
+    }
+
     //dummy data
-    // useEffect(() => {
-    //     const generateDummyData = (count) => {
-    //         const dummyData = [];
+    useEffect(() => {
+        const generateDummyData = (count) => {
+            const dummyData = [];
           
-    //         for (let i = 1; i <= count; i++) {
-    //           const data = {
-    //             id: i,
-    //             x: getRandomCoordinate(),
-    //             y: getRandomCoordinateY(),
-    //             content_mbti: generateRandomMbti(),
-    //             content_hobby: generateRandomHobby(),
-    //             content_insta: `@example${i}`,
-    //             sex: generateRandomSex(),
-    //           };
+            for (let i = 1; i <= count; i++) {
+              const data = {
+                id: i,
+                x: getRandomCoordinate(),
+                y: getRandomCoordinateY(),
+                content_mbti: generateRandomMbti(),
+                content_hobby: [generateRandomHobby(), generateRandomHobby()],
+                sex: generateRandomSex(),
+                emogi: getEmogi(generateRandomEmogi()),
+              };
           
-    //           dummyData.push(data);
-    //         }
+              dummyData.push(data);
+            }
           
-    //         return dummyData;
-    //       };
+            return dummyData;
+          };
           
-    //       const getRandomCoordinate = () => {
-    //         return Math.floor(Math.random() * 3001) - 1500; // -1500 to 1500
-    //       };
+          const getRandomCoordinate = () => {
+            return Math.floor(Math.random() * 3001) + 200 ; // -1500 to 1500
+          };
 
-    //       const getRandomCoordinateY = () => {
-    //         return Math.floor(Math.random() * 3001); // 0 to 3000
-    //       }
+          const getRandomCoordinateY = () => {
+            return Math.floor(Math.random() * 3001) + 50; // 0 to 3000
+          }
 
-    //       const generateRandomMbti = () => {
-    //         const mbtiOptions = ["INTJ", "ENFP", "ISTP", /* Add more MBTI types as needed */];
-    //         const randomIndex = Math.floor(Math.random() * mbtiOptions.length);
-    //         return mbtiOptions[randomIndex];
-    //       };
+          const generateRandomMbti = () => {
+            const mbtiOptions = ["INTJ", "ENFP", "ISTP", /* Add more MBTI types as needed */];
+            const randomIndex = Math.floor(Math.random() * mbtiOptions.length);
+            return mbtiOptions[randomIndex];
+          };
           
-    //       const generateRandomHobby = () => {
-    //         const hobbyOptions = ["독서", "여행", "요리", /* Add more hobbies as needed */];
-    //         const randomIndex = Math.floor(Math.random() * hobbyOptions.length);
-    //         return hobbyOptions[randomIndex];
-    //       };
+          const generateRandomHobby = () => {
+            const hobbyOptions = ["독서", "여행", "요리", /* Add more hobbies as needed */];
+            const randomIndex = Math.floor(Math.random() * hobbyOptions.length);
+            return hobbyOptions[randomIndex];
+          };
           
-    //       const generateRandomSex = () => {
-    //         const sexOptions = ["male", "female"];
-    //         const randomIndex = Math.floor(Math.random() * sexOptions.length);
-    //         return sexOptions[randomIndex];
-    //       };
+          const generateRandomSex = () => {
+            const sexOptions = ["male", "female"];
+            const randomIndex = Math.floor(Math.random() * sexOptions.length);
+            return sexOptions[randomIndex];
+          };
+
+          const generateRandomEmogi = () => {
+            //1~11까지 랜덤 숫자 생성
+            const randomIndex = Math.floor(Math.random() * 11) + 1;
+            return randomIndex;
+          }
           
-    //       const count = 100;
-    //       const dummyData = generateDummyData(count);
+          const count = 10;
+          const dummyData = generateDummyData(count);
         
-    //     setPostits(dummyData);
-    // }, []);
+        setPostits(dummyData);
+    }, []);
     
 
     useEffect(() => {
@@ -173,9 +208,10 @@ function App() {
         });
     };
 
-    const handleOpenSubpage = () => {
-        setShowSubpage(true);
-    };
+    // + 버튼을 누렀을 때 포스트잇 입력 페이지 로드
+    // const handleOpenSubpage = () => {
+    //     setShowSubpage(true);
+    // };
 
     const handleAddPostitFromSubpage = (text) => {
         // console.log('text : ' + text);
@@ -218,15 +254,16 @@ function App() {
         });
     };
 
-    useEffect(() => {
-        // console.log(postits);
-    }, [postits]);
+    // useEffect(() => {
+    //     console.log(postits);
+    // }, [postits]);
 
     const handleDragStart = (e, id) => {
         e.preventDefault();
         const postit = postits.find(p => p.id === id);
         // console.log(postit.id);
         const validId = localStorage.getItem('user_id');
+        console.log(postit.x, postit.y);
         // console.log(postit.user_id);
         // console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
@@ -236,8 +273,14 @@ function App() {
             const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
 
             const onDrag = (event) => {
-                const newPosX = (event.clientX - offsetX) / window.innerWidth * 3000;
-                const newPosY = (event.clientY - offsetY) / window.innerHeight * 3000;
+                let newPosX = (event.clientX - offsetX) / window.innerWidth * 3000;
+                let newPosY = (event.clientY - offsetY) / window.innerHeight * 3000;
+
+                if (newPosX < 200) newPosX = 200;
+                if (newPosX > 3200) newPosX = 3200;
+                if (newPosY < 50) newPosY = 50;
+                if (newPosY > 3050) newPosY = 3050;
+
                 postit.x = newPosX;
                 postit.y = newPosY;
                 setPostits([...postits]);
@@ -318,8 +361,8 @@ function App() {
         return postits.map((postit) => {
           const style = {
             position: 'absolute',
-            left: `${(postit.x / 3000) * 100 + 50}%`,
-            top: `${(postit.y / 3000) * 100}%`,
+            left: `${(postit.x / 3300) * 100}%`,
+            top: `${(postit.y / 3300) * 100}%`,
             width: '5px',
             height: '5px',
             borderRadius: '50%',
@@ -409,10 +452,10 @@ function App() {
 
     return (
         <div className="App">
-           {Array.from({ length: 400 }).map((_, index) => (
+            
+           {/* {Array.from({ length: 400 }).map((_, index) => (
                 <div key={index} className="snow"></div>
-            ))}
-
+            ))} */}
         {showSubpage && 
             <Subpage 
             onAdd={handleAddPostitFromSubpage} 
@@ -433,21 +476,26 @@ function App() {
             onMouseDown={e => handleDragStart(e, postit.id)}
             >
                 <button className="close-button" onClick={() => handleDeletePostit(postit.id)}>X</button>
-                {postit.content_hobby && postit.content_insta ? (
-                    <>
-                    {`MBTI : ` + postit.content_mbti}<br/>
-                    {`Hobby : ` + postit.content_hobby}<br/>
-                    {`Insta ID : ` + postit.content_insta}<br/>
-                    </>
-                ) : (
-                    postit.content_mbti
-                )}
+
+                    {/* emogi가 1이면 cat, 2면 dog, ... (public에 이미지 순서대로 사용) */}
+                    <div>
+                        <img src={process.env.PUBLIC_URL + `/emoji_png/${postit.emogi}.png`} alt="Emogi" style={{ width: '60px', height: '60px' }} />    
+                    </div>
+                    <br/>
+                    <div>
+                        MBTI  : {postit.content_mbti}
+                    </div>
+                    <br/>
+                    <div>
+                        Hobby : {postit.content_hobby}
+                    </div>
+                    {/* {`Insta ID : ` + postit.content_insta}<br/> */}
             </div>
         ))}
         <button className="logout-button" onClick={handleLogout}>로그아웃</button>
-        <button className="add-button" onClick={handleOpenSubpage}>+</button>
+        {/* <button className="add-button" onClick={handleOpenSubpage}>+</button> */}
         <button className="chat-button" onClick={handleChatButtonClick}>💬</button>
-        <div className="minimap" style={{ position: 'fixed', bottom: 0, left: 0, width: '150px', height: '150px', backgroundColor: 'rgba(0, 0, 0, 0.3)', overflow: 'hidden' }}>
+        <div className="minimap" style={{ position: 'fixed', bottom: 0, left: 0, width: '200px', height: '200px', backgroundColor: 'rgba(0, 0, 0, 0.3)', overflow: 'hidden' ,zIndex: '100'}}>
             {renderPostitPoints()}
             <div style={{ position: 'absolute', left: `${viewport.x}%`, top: `${viewport.y}%`, width: `${viewport.width}%`, height: `${viewport.height}%`, border: '2px solid red' }}></div>
         </div>
@@ -480,6 +528,10 @@ function App() {
             <div>
                 {showMenual && <Menual onClose={handleMenualClose} />}
             </div>
+            <AdComponent style={{ position: 'absolute', left: '0px', top: '100px' }}/>
+            <AdComponent style={{ position: 'absolute', left: '0px', top: '1700px' }}/>
+            <AdComponent style={{ position: 'absolute', right: '-2267px', top: '100px' }}/>
+            <AdComponent style={{ position: 'absolute', right: '-2267px', top: '1700px' }}/>
         </div>
     );
 }

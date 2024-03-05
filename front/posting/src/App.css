@@ -1,8 +1,9 @@
 .App {
   text-align: center;
-  width:3000px;
-  height: 3000px;
+  width:3400px;
+  height: 3100px;
   overflow:hidden;
+  padding: 140px;
 }
 
 .App-small {
@@ -40,7 +41,7 @@
   position: fixed;
   bottom: 20px;
   /* right: 80px; */
-  right: calc(52%);
+  right: calc(50%);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -65,7 +66,7 @@
   border-radius: 5px;
   background-color: rgba(69, 105, 144, 1);
   /* @include transition(background-color 300ms); */
-  
+  z-index: 100;
   &:hover {
     background-color: darken(rgba(69, 105, 144, 1), 5%);
   }
@@ -159,7 +160,9 @@ div.rgyPostIt > p > a {
 div.rgyPostIt.male {
   /* 남성용 색상 */
   user-select: none;
-  position: relative;
+  position: absolute;
+  width: 200px;
+  height: 170px;
   display: inline-block;
   padding: 20px 45px 20px 15px;
   margin: 5px 0;
@@ -167,19 +170,22 @@ div.rgyPostIt.male {
   border-left: 30px solid hwb(200 38% 3%);
   border-bottom-right-radius: 60px 10px;
   font-family: 'Nanum Pen Script';
-  font-size: 27px;
+  font-size: 20px;
   color: #555;
   word-break: break-all;
   background: -webkit-linear-gradient(-45deg, #88cdff 81%, #88cdff 82%, #88cdff 82%, #88b6ff 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#88cdff', endColorstr='#88b6ff', GradientType=1); 
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
+  text-align: left;
 }
 
 div.rgyPostIt.female {
   /* 여성용 색상 */
   user-select: none;
-  position: relative;
+  position: absolute;
+  width: 200px;
+  height: 170px;
   display: inline-block;
   padding: 20px 45px 20px 15px;
   margin: 5px 0;
@@ -187,13 +193,14 @@ div.rgyPostIt.female {
   border-left: 30px solid #f86189;
   border-bottom-right-radius: 60px 10px;
   font-family: 'Nanum Pen Script';
-  font-size: 27px;
+  font-size: 20px;
   color: #555;
   word-break: break-all;
   background: -webkit-linear-gradient(-45deg, #ff889e 81%, #ff889e 82%, #ff889e 82%, rgb(255, 198, 205) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff889e', endColorstr='#ff889e', GradientType=1); 
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
+  text-align: left;
 }
 
 .close-button {
@@ -208,5 +215,4 @@ div.rgyPostIt.female {
   padding: 0;
   line-height: 1;
 }
-
 
