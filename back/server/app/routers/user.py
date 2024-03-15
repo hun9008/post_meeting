@@ -5,7 +5,9 @@ from fastapi import APIRouter, Request, Response, status, Depends, HTTPException
 from app.database import User
 from datetime import datetime, timedelta
 from .. import schemas, oauth2
-
+from bson.objectid import ObjectId
+import logging
+logger = logging.getLogger("main")
 router = APIRouter()
 
 
@@ -19,6 +21,7 @@ def get_me(user_id: str = Depends(oauth2.require_user)):
 @router.get('/all')
 def get_all():
     users =User.find({})
+    logging.warning(f"=====================++{users}")
     user_list = [ userResponseEntity(user) for user in users ]
     return {"status": "success", "user": user_list}
 

@@ -2,7 +2,7 @@ import { useLocation, BrowserRouter as Router, Route, Routes } from 'react-route
 import './App.css';
 import PostitTable from './postit_table';
 import LoginPage from './login';
-import SignUp from './signUp';
+import SignUp from './signUp_main';
 import FindPw from './findPW';
 
 function Main() {

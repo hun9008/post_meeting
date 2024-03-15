@@ -47,8 +47,9 @@ $fontAsap: 'Asap', sans-serif;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     // width: 400px;
-    // height: 400px;
-    overflow: hidden;
+    height: 95vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: rgb(216, 234, 250);
     padding: 40px 30px 30px 30px;
     box-sizing: border-box;
@@ -58,11 +59,18 @@ $fontAsap: 'Asap', sans-serif;
     @include transition(transform 300ms, box-shadow 300ms);
     box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
     z-index: 10;
+    
+    @media (max-width: 768px) {
+      font-size: 12px;
+      width: 80%;
+      height: 90vh;
+    }
 
 
     &::before, &::after {
         content: '';
         position: absolute;
+        overflow: hidden;
         width: 2000px;
         height: 2000px;
         border-top-left-radius: 40%;
@@ -168,7 +176,11 @@ $fontAsap: 'Asap', sans-serif;
   }
 
 .img {
-  width: 200px;
+  // media 쿼리를 사용해 모바일화면의 경우 width가 화면의 45%가 되도록 width를 설정
+  width:250px;
+  @media (max-width: 768px) {
+    width: 85%;
+  }  
   height: auto;
   object-fit: cover;
   border-radius: 10px;
@@ -185,6 +197,6 @@ $fontAsap: 'Asap', sans-serif;
   color: rgba(rgb(0, 0, 0), 0.9);
   position: absolute;
   right: 10px;
-  bottom: 0px;
+  top: 0px;
   font-size: 12px;
 }
