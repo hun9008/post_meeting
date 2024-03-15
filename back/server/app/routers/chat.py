@@ -125,10 +125,10 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-@router.websocket('/chatroom/{client_ids}')
-async def websocket_endpoint(websocket: WebSocket, client_ids: str):
+@router.websocket('/chatroom/{user_id}')
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
     await manager.connect(websocket)
-    user = User.find_one({"_id": ObjectId(client_ids)})
+    user = User.find_one({"_id": ObjectId(user_id)})
     chat_room = user["chatRoom"]
     chat_room_data = [ChatRoom.find_one({"room_name": key}) for key in chat_room]
     data =chat_room_data
