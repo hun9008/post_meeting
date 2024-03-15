@@ -1,43 +1,42 @@
 version: '3.3'
 services:
-  # nginx:
-  #   image: nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-  #     # - ./data/certbot/conf:/etc/letsencrypt
-  #     # - ./data/certbot/www:/var/www/certbot
-  #   depends_on:
-  #     - postmeeting-api
-  #     - mongo
-  # certbot:
-  #   imotage: certbot/certbot
-  #   volumes:
-  #     - ./data/certbot/conf:/etc/letsencrypt
-  #     - ./data/certbot/www:/var/www/certb
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    env_file:
-      - ./.env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-    volumes:
-      - mongo:/data/db
-    ports:
-      - '6000:27017'
-
-  postmeeting-api:
-    image: sehyunsix/postmeeting-api:0.1.5
-    env_file:
-      - ./.env
-    container_name: postmeeting-api
-    ports:
-      - '8000:8000'
+    nginx:
+      image: nginx
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        - ./data/certbot/conf:/etc/letsencrypt
+        - ./data/certbot/www:/var/www/certbot
+      depends_on:
+        - postmeeting-api
+        - mongo
+    certbot:
+      image: certbot/certbot
+      volumes:
+        - ./data/certbot/conf:/etc/letsencrypt
+        - ./data/certbot/www:/var/www/certb
+    mongo:
+      image: mongo:latest
+      container_name: mongo
+      env_file:
+        - ./.env
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      volumes:
+        - mongo:/data/db
+      ports:
+        - '6000:27017'
+    postmeeting-api:
+      image: sehyunsix/postmeeting-api:0.2.6
+      env_file:
+        - ./.env
+      container_name: postmeeting-api
+      ports:
+        - '8000:8000'
 
 
 volumes:
