@@ -155,7 +155,7 @@ $fontAsap: 'Asap', sans-serif;
       }
       
       input:checked + .slider:before {
-        content: "🫵";
+        content: "✔";
         -webkit-transform: translateX(46px);
         -ms-transform: translateX(46px);
         transform: translateX(46px);

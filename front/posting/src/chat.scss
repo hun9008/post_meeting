@@ -1,0 +1,166 @@
+
+$greenSeaweed: rgb(176, 255, 226);
+$blueQueen: rgba(69, 105, 144, 1);
+$redFire: rgba(244, 91, 105, 1);
+
+$fontAsap: 'Asap', sans-serif;
+
+.chat-wrapper {
+    display:flex;
+    flex-direction: column;
+    height: auto;
+
+    .chat-container {
+        position: fixed;
+        top: 50%; /* 화면의 수직 중앙으로 이동 */
+        left: 50%; /* 화면의 수평 중앙으로 이동 */
+        width: 400px;
+        height: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        flex-grow: 1;
+        background-color: rgb(175, 210, 237);
+        padding: 40px 30px 30px 30px;
+        box-sizing: border-box;
+        transform: translate(-50%, -50%);
+        border-radius: 10px;
+        box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
+        z-index: 10;
+        .chat-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            // overflow-y: scroll;
+            height: auto;
+        }
+
+        
+        .me {
+            margin:5px;
+            text-align: right;
+
+        }
+
+        .notMe {
+            margin:5px;
+            text-align: left;
+
+        }
+    }
+
+    .input-box {
+        position:fixed;
+        top: calc(50% + 90px + 10px); 
+        left: 50%; 
+        transform: translate(-50%);
+        width: 430px;
+        height: 40px;
+        input {
+            width: 70%; // input 요소의 너비를 조정
+            height: 80%;
+            border: 1px solid #ccc; // input 요소의 테두리를 조정
+            background-color: #fff; // input 요소의 배경색을 조정
+        }
+        button {
+            font-family: $fontAsap;
+            cursor: pointer;
+            color: #fff;
+            text-transform: uppercase;
+            width: 20%;
+            height:90%;
+            border: 0;
+            // margin-top: 10px;
+            // margin-left: -5px;
+            border-radius: 5px;
+            background-color: $blueQueen;
+          }
+    }
+}
+
+.chat-list {
+    // display:flex;
+    // flex-direction: column;
+    // height: auto;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 17%;
+    height: 100%;
+    background-color: rgb(175, 210, 237);
+    // padding: 40px 30px 30px 30px;
+    box-sizing: border-box;
+    // transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
+
+    .chat-list-header {
+        text-align: left;
+        margin-left:10%;
+        height: 10%;
+    }
+
+    .chat-list-container {
+        position: absolute;
+        top: 10%;
+        width: 100%;
+        height: 90%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        flex-grow: 1;
+        z-index: 10;
+
+        .userBox {
+            &:hover {
+                background-color: rgb(147, 202, 245);
+            }
+            display: flex;
+            flex-direction: row;
+        }
+        .userBox-content {
+            width:100%;
+            .chat-list-user {
+                text-align: left;
+                /* 굵게 */
+                font-weight: bold;
+                margin-left:10%;
+                margin-top:5%;
+            }
+            .chat-list-userContent {
+                text-align: left;
+                margin-left:10%;
+            }
+        }
+        .userBox-alert {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            .time {
+                bottom: 0;
+                text-align: left;
+                margin-right: 10%; 
+                font-weight:lighter;
+                font-size:small;
+                white-space: nowrap;
+            }
+            .bell {
+                width: 20px;
+                height: 20px;
+                /*좌우 중 가운데 정렬*/
+                margin: 0 auto;
+                border-radius: 50%;
+                background-color: $redFire;
+            }
+        }
+
+        .chat-list-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            // overflow-y: scroll;
+            height: auto;
+        }
+    }
+
+    
+}

@@ -15,7 +15,11 @@ function SignUp() {
     const [isAggreed, setIsAggreed] = useState(false);  // [TODO] 개인정보처리방침 동의
     const navigate = useNavigate();
     const [showPolicy, setShowPolicy] = useState(false);  // 개인정보처리방침 보여주기
-    const url = 'http://localhost:8000';
+    const [emailButtonClicked, setEmailButtonClicked] = useState(false);
+    const [emoji, setEmoji] = useState('');  // 알파벳순으로 1~11까지.
+    // const url = 'https://3.27.141.88';
+    // const url = 'https://p7219.site'
+    const url = process.env.REACT_APP_SERVER_API;    
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
     const isPasswordValid = password.length >= 8;
@@ -48,6 +52,12 @@ function SignUp() {
     };
 
     const handleEmailSend = () => {
+        
+        if (!userId.endsWith('@ajou.ac.kr')) {
+            alert('이메일 형식이 올바르지 않습니다. @ajou.ac.kr를 이메일을 사용해주세요.');
+            return;
+        }
+        setEmailButtonClicked(true);
         const endpoint = '/api/auth/register/email'
         const payload = {
             email: userId
@@ -57,6 +67,7 @@ function SignUp() {
             .then(response => {
                 console.log(response);
                 setEmailSent(true);
+                alert('메일이 전송되었습니다! 인증을 완료해주세요.');
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -111,17 +122,22 @@ function SignUp() {
                         />
                     </label>
                 </div>
-                <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
-                    메일전송
-                </button>
+                {!emailButtonClicked && !emailSent && (
+                    <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
+                        메일전송
+                    </button>
+                )}
+                {emailButtonClicked && !emailSent && (
+                    <div style={{marginTop: 0, marginBotton : 10}}>
+                        전송중입니다...
+                    </div>
+                )}
                 {emailSent && (
+                    
                     <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
                         인증확인
                     </button>
                 )}
-                {/* <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-10}}>
-                    인증확인
-                </button> */}
                 <div>
                     <label>
                         비밀번호
@@ -173,7 +189,7 @@ function SignUp() {
                 </div>
                 <br/>
                 {/* 개인정보처리방침 동의 */}
-                <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center', overflow: 'hidden'}}>
+                {/* <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center', overflow: 'hidden'}}>
                     <input
                         type="checkbox"
                         checked={isAggreed}
@@ -184,10 +200,10 @@ function SignUp() {
                          style={{background: 'none', border: 'none', color: 'black', textDecoration: 'underline'}}
                         >개인정보처리방침 동의</button> 
                     </div>
-                </div>
-                <button type="submit" disabled={!isFormValid}>
+                </div> */}
+                {/* <button type="submit" disabled={!isFormValid}>
                     제출
-                </button>
+                </button> */}
             </form>
             <div>
                 {showPolicy && <Policy onClose={handleCloseAggree}/>}

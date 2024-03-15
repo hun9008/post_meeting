@@ -57,9 +57,17 @@ form.signUp {
   padding: 40px 30px 30px 30px;
   border-radius: 10px;
   position: absolute;
-  top: 50%;
+  top: 50%; // 기본값
+
+  @media (max-height: 600px) { // 600px 미만의 높이를 가진 화면에서만 이 스타일을 적용
+    top: 100%; // 화면의 높이가 작은 경우
+  }
   left: 50%;
-  width: 400px;
+  width: 300px; // 모바일 화면에서의 기본 너비
+
+  @media (min-width: 768px) { // 768px 이상의 너비를 가진 화면에서만 이 스타일을 적용
+    width: 400px; // PC 화면에서의 너비
+  }
   @include transform(translate(-50%, -50%));
   @include transition(transform 300ms, box-shadow 300ms);
   box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
@@ -133,6 +141,88 @@ form.signUp {
     }
   }
 
+  .chooseButton {
+    font-family: $fontAsap;
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 60px;
+    height: 40px;
+    border: 0;
+    padding: 10px 0;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    border-radius: 5px;
+    background-color: rgb(197, 235, 254);
+    @include transition(background-color 300ms);
+    
+    &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+    &.selected, &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+  }
+
+  .chooseButtonH {
+    font-family: $fontAsap;
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+    font-size: 12px;
+    text-transform: uppercase;
+    width: 60px;
+    height: auto;
+    border: 0;
+    padding: 10px 0;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    border-radius: 5px;
+    background-color: #a9def9;
+    @include transition(background-color 300ms);
+    
+    &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+    &.selected, &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+  }
+
+  .chooseButtonE {
+    font-family: $fontAsap;
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+    font-size: 12px;
+    text-transform: uppercase;
+    width: 70px;
+    height: 60px;
+    border: 0;
+    padding: 10px 0;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    border-radius: 5px;
+    background-color: #a9def9;
+    @include transition(background-color 300ms);
+    
+    &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+    &.selected, &:hover {
+      background-color: darken($blueQueen, 5%);
+      color:white;
+    }
+  }
+
+  // sex toggle switch
   .toggle-switch {
     position: relative;
     display: inline-block;
@@ -197,7 +287,139 @@ form.signUp {
     border-radius: 50%;
   }
   
+  // military toggle switch
+  .toggle-switch-military {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+  }
+  
+  .toggle-switch-military input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider-military {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(169, 169, 169);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider-military:before {
+    position: absolute;
+    content: "미필";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider-military {
+    background-color: $blueQueen;
+  }
+  
+  input:focus + .slider-military {
+    box-shadow: 0 0 1px $blueQueen;
+  }
+  
+  input:checked + .slider-military:before {
+    content: "군필";
+    -webkit-transform: translateX(46px);
+    -ms-transform: translateX(46px);
+    transform: translateX(46px);
+  }
+  
+  /* 슬라이더를 둥글게 만들기 */
+  .slider-military {
+    border-radius: 34px;
+  }
+  
+  .slider-military:before {
+    border-radius: 50%;
+  }
 
+  // eyeType toggle switch
+  .toggle-switch-eyeType {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+  }
+  
+  .toggle-switch-eyeType input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider-eyeType {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(169, 169, 169);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider-eyeType:before {
+    position: absolute;
+    content: "무쌍";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider-eyeType {
+    background-color: $blueQueen;
+  }
+  
+  input:focus + .slider-eyeType {
+    box-shadow: 0 0 1px $blueQueen;
+  }
+  
+  input:checked + .slider-eyeType:before {
+    content: "유쌍";
+    -webkit-transform: translateX(46px);
+    -ms-transform: translateX(46px);
+    transform: translateX(46px);
+  }
+  
+  /* 슬라이더를 둥글게 만들기 */
+  .slider-eyeType {
+    border-radius: 34px;
+  }
+  
+  .slider-eyeType:before {
+    border-radius: 50%;
+  }
 
 }
 
