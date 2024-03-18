@@ -1,9 +1,64 @@
+@import "bourbon";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+@mixin transform($transformation) {
+  -webkit-transform: $transformation;
+  -ms-transform: $transformation;
+  transform: $transformation;
+}
+
+@mixin transition($transitions...) {
+  -webkit-transition: $transitions;
+  -moz-transition: $transitions;
+  -o-transition: $transitions;
+  transition: $transitions;
+}
+
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+      @content;
+  }
+  @-moz-keyframes #{$name} {
+      @content;
+  }
+  @-ms-keyframes #{$name} {
+      @content;
+  }
+  @keyframes #{$name} {
+      @content;
+  }
+}
+
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -o-animation: $animation;
+  animation: $animation;
+}
+
+$greenSeaweed: rgb(176, 255, 226);
+$blueQueen: rgba(69, 105, 144, 1);
+$redFire: rgba(244, 91, 105, 1);
+
+$fontAsap: 'Asap', sans-serif;
+
+
+// body {
+//   width:3400px;
+//   height: 3100px;
+// }
+
 .App {
   text-align: center;
-  width:3400px;
+  width:3600px; //3560px
   height: 3100px;
-  overflow:hidden;
-  padding: 140px;
+  // overflow:hidden;
+  overflow-y: visible;
+  // overflow-x: visible;
+  // padding: 140px;
+  padding-top: 140px;
+  position: relative;
 }
 
 .App-small {
@@ -14,8 +69,8 @@
 }
 
 .postit {
-  width: 200px;
-  height: 170px;
+  width: auto;
+  height: auto;
   background-color: yellow;
   display: flex;
   justify-content: center;
@@ -38,21 +93,64 @@
 }
 
 .chat-button {
-  position: fixed;
-  bottom: 20px;
+  /* position: fixed; */
+  /* bottom: 20px; */
   /* right: 80px; */
   right: calc(50%);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 24px;
+  width: 40px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  &.male{
+    background-color: $blueQueen;
+  }
+  &.female {
+    background-color: rgb(243, 48, 64);
+  }
+
   background-color: rgba(69, 105, 144, 1);
   color: white;
   border: none;
   cursor: pointer;
+  top: 5px;
+  right: 10px;
+  position: absolute;
 }
 
-.logout-button {
+.mypage-button{
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  width: 85px;
+  border: 0;
+  padding: 10px 0;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  border-radius: 5px;
+  background-color: white;
+  &.male{
+    background-color: $blueQueen;
+  }
+  &.female {
+    background-color: rgb(243, 48, 64);
+  }
+  /* @include transition(background-color 300ms); */
+  z-index: 100;
+  &:hover {
+    background-color: darken($blueQueen, 20%);
+    &.male{
+      background-color: darken($blueQueen, 20%);
+    }
+    &.female{
+      background-color: darken(rgb(243, 48, 64), 20%);
+    }
+  }
+  
+}
+
+.likelist-button{
   cursor: pointer;
   color: #fff;
   font-size: 16px;
@@ -62,13 +160,25 @@
   padding: 10px 0;
   position: fixed;
   top: 20px;
-  left: 20px;
+  left: 120px;
   border-radius: 5px;
-  background-color: rgba(69, 105, 144, 1);
+  background-color: white;
+  &.male{
+    background-color: $blueQueen;
+  }
+  &.female {
+    background-color: rgb(243, 48, 64);
+  }
   /* @include transition(background-color 300ms); */
   z-index: 100;
   &:hover {
-    background-color: darken(rgba(69, 105, 144, 1), 5%);
+    background-color: darken($blueQueen, 20%);
+    &.male{
+      background-color: darken($blueQueen, 20%);
+    }
+    &.female{
+      background-color: darken(rgb(243, 48, 64), 20%);
+    }
   }
   
 }
@@ -161,10 +271,11 @@ div.rgyPostIt.male {
   /* 남성용 색상 */
   user-select: none;
   position: absolute;
-  width: 200px;
-  height: 170px;
+  // width: 400px;
+  width: auto;
+  height: auto;
   display: inline-block;
-  padding: 20px 45px 20px 15px;
+  padding: 20px 25px 20px 15px;
   margin: 5px 0;
   border: 1px solid rgb(97, 180, 248);
   border-left: 30px solid hwb(200 38% 3%);
@@ -184,8 +295,9 @@ div.rgyPostIt.female {
   /* 여성용 색상 */
   user-select: none;
   position: absolute;
-  width: 200px;
-  height: 170px;
+  // width: 200px;
+  width: auto;
+  height: auto;
   display: inline-block;
   padding: 20px 45px 20px 15px;
   margin: 5px 0;
@@ -216,3 +328,83 @@ div.rgyPostIt.female {
   line-height: 1;
 }
 
+.myHeader {
+  text-align: left;
+  //요소들을 가로로 배치
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 20px;
+  font-family: $fontAsap;
+  .edit-button {
+      margin-left: 10px;
+      font-family: $fontAsap;
+      cursor: pointer;
+      border-radius: 5px;
+      //배경색 투명
+      background-color: rgba(0, 0, 0, 0);
+      @include transition(background-color 300ms);
+      
+      &:hover {
+          &.male{
+              background-color: darken($blueQueen, 20%);
+            }
+          &.female{
+            background-color: darken(rgb(243, 48, 64), 20%);
+          }
+      }
+  }
+
+}
+
+.myBody {
+  text-align: left;
+  font-size: 18px;
+
+
+  .infoTitle {
+      width: 80px;
+      //가운데 정렬
+      text-align: left;
+      //상하 가운데 정렬
+      display: flex;
+      justify-content: left;
+      align-items: center;
+  }
+  .infoBox {
+      display: flex;
+      justify-content: left;
+      margin-bottom: 10px;
+  }
+
+  .infoContent {
+      display: flex;
+      justify-content: left;
+      // width: auto;
+      // font-size: 12px;
+      .infoItem {
+        font-family: $fontAsap;
+        cursor: pointer;
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        width: auto;
+        
+        border: 0;
+        padding: 10px 10px;
+        // margin-top: 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        &.male {
+            background-color: rgb(67, 130, 196);
+        }
+        &.female {
+            background-color: $redFire;
+        }
+  
+        @include transition(background-color 300ms);
+  
+    }
+  }
+}

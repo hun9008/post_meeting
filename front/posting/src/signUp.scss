@@ -58,6 +58,7 @@ form.signUp {
   border-radius: 10px;
   position: absolute;
   top: 50%; // 기본값
+  z-index: 1000;
 
   @media (max-height: 600px) { // 600px 미만의 높이를 가진 화면에서만 이 스타일을 적용
     top: 100%; // 화면의 높이가 작은 경우

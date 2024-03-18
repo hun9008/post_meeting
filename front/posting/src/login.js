@@ -30,6 +30,7 @@ function LoginPage() {
 
     const handleSubmitClick = (e) => {
         const endpoint = '/api/auth/login';
+
         const payload = {
             email: user_id,  // Using the studentNumber state
             password: password
@@ -47,9 +48,17 @@ function LoginPage() {
                 localStorage.setItem('user_id', response.data.user_id);
                 navigate('/PostitTable');
             })
+            //400인 error만 catch
             .catch(error => {
                 console.error("Error fetching data:", error);
-                alert('로그인에 실패했습니다.');
+                if (error.response.status === 400) {
+                    alert(`${error.response.data.detail}`);
+                } else if (error.response.status === 500) {
+                  alert('500 Error');
+                }
+                else {
+                    alert('로그인에 실패했습니다.(undefined error)');
+                }
             });
     };
 

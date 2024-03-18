@@ -42,15 +42,16 @@ $redFire: rgba(244, 91, 105, 1);
 
 $fontAsap: 'Asap', sans-serif;
 
-.subpage-container {
+.mypage-container {
     position: fixed;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
     width: 400px;
     height: auto;
     // overflow: hidden;
+    // background-color: rgb(246, 155, 163);
     &.male {
-      background-color: rgb(175, 210, 237);
+        background-color: rgb(175, 210, 237);
     }
     &.female {
         background-color: rgb(246, 155, 163);
@@ -61,14 +62,14 @@ $fontAsap: 'Asap', sans-serif;
     border-radius: 10px;
     @include transform(translate(-50%, -50%));
     @include transition(transform 300ms, box-shadow 300ms);
-    box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
+    box-shadow: 5px 10px 10px rgba($redFire, 0.2);
     &.male {
-      box-shadow: 5px 10px 10px rgba($blueQueen, 0.2);
+        box-shadow: 5px 10px 10px rgba($blueQueen, 0.2);
     }
     &.female {
         box-shadow: 5px 10px 10px rgba($redFire, 0.2);
     }
-    z-index: 1010;
+    z-index: 10;
     // 스크롤 가능하도록
     overflow: hidden;
     // 화면 사이즈가 520px 이하이면 overflow-y: auto;
@@ -93,7 +94,7 @@ $fontAsap: 'Asap', sans-serif;
         left: 40%;
         bottom: -130%;
         &.male {
-          background-color: rgba($blueQueen, 0.15);
+            background-color: rgba($blueQueen, 0.15);
         }
         &.female {
             background-color: rgba($redFire, 0.15);
@@ -108,7 +109,7 @@ $fontAsap: 'Asap', sans-serif;
         @include animation(wawes 7s infinite);
       }
 
-      > button {
+      > div > button {
         font-family: $fontAsap;
         cursor: pointer;
         color: #fff;
@@ -120,9 +121,8 @@ $fontAsap: 'Asap', sans-serif;
         // margin-top: 10px;
         // margin-left: -5px;
         border-radius: 5px;
-        background-color: $blueQueen;
         &.male {
-          background-color: rgb(67, 130, 196);
+            background-color: $blueQueen;
         }
         &.female {
             background-color: $redFire;
@@ -130,12 +130,12 @@ $fontAsap: 'Asap', sans-serif;
         @include transition(background-color 300ms);
         
         &:hover {
-          &.male{
-            background-color: darken($blueQueen, 20%);
-          }
-          &.female{
-            background-color: darken(rgb(243, 48, 64), 20%);
-          }
+            &.male {
+                background-color: darken($blueQueen, 5%);
+            }
+            &.female {
+                background-color: darken($redFire, 20%);
+            }
         }
       }
 
@@ -152,91 +152,43 @@ $fontAsap: 'Asap', sans-serif;
         height: 0;
       }
       
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: $blueQueen;
-        -webkit-transition: .4s;
-        transition: .4s;
-      }
-      
-      .slider:before {
-        position: absolute;
-        content: "✔";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        -webkit-transition: .4s;
-        transition: .4s;
-      }
-      
-      input:checked + .slider {
-        background-color: rgb(99, 153, 186);
-      }
-      
-      input:focus + .slider {
-        box-shadow: 0 0 1px rgb(99, 153, 186);
-      }
-      
-      input:checked + .slider:before {
-        content: "✔";
-        -webkit-transform: translateX(46px);
-        -ms-transform: translateX(46px);
-        transform: translateX(46px);
-      }
-      
-      /* 슬라이더를 둥글게 만들기 */
-      .slider {
-        border-radius: 34px;
-      }
-      
-      .slider:before {
-        border-radius: 50%;
-      }
 
   }
-
 
   @include keyframes (wawes) {
     from { @include transform(rotate(0)); }
     to { @include transform(rotate(360deg)); }
   }
 
-  .postit-input {
-    font-family: $fontAsap;
-    display: block;
-    border-radius: 5px;
-    font-size: 18px;
-    background: white;
-    width: 100%;
-    border: 0;
-    padding: 10px 10px;
-    margin: 15px -10px;
-  }
+  .myHeader {
+    text-align: left;
+    //요소들을 가로로 배치
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 20px;
+    .edit-button {
+        margin-left: 10px;
+        font-family: $fontAsap;
+        cursor: pointer;
+        border-radius: 5px;
+        //배경색 투명
+        background-color: rgba(0, 0, 0, 0);
+        @include transition(background-color 300ms);
+        
+        &:hover {
+            &.male{
+                background-color: darken($blueQueen, 20%);
+              }
+            &.female{
+              background-color: darken(rgb(243, 48, 64), 20%);
+            }
+        }
+    }
 
-  .postit-input-free {
-    font-family: $fontAsap;
-    display: block;
-    border-radius: 5px;
-    font-size: 18px;
-    background: white;
-    width: 100%;
-    height: 200px;
-    border: 0;
-    padding: 10px 10px;
-    margin: 15px -10px;
-  }
+ }
 
-  .myBody {
+ .myBody {
     text-align: left;
     font-size: 18px;
 

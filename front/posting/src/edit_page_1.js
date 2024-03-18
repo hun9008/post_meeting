@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './signUp.scss';
 
-function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
+function Edit_page_1({sex, handleNextPage, onSubmit, onCancel}) {
     const navigate = useNavigate();
     const [militaryService, setMilitaryService] = useState(false);
     const [height, setHeight] = useState('');
     const [bodyType, setBodyType] = useState('');
     const [eyelid, setEyelid] = useState(false);
     const [fashion, setFashion] = useState([]);
+    const [nickname, setNickname] = useState('');
     const isFormValid = bodyType && fashion;
 
     const handleToggleMilitary = () => {
@@ -29,7 +29,8 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
     };
 
     const handleSubmit = (e) => {
-        const page2_data = {
+        const page1_data = {
+            name: nickname,
             militaryService: militaryService,
             height: height,
             bodyType: bodyType,
@@ -37,22 +38,28 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
             fashion: fashion
         };
         e.preventDefault();
-        onSubmit(page2_data);
+        onSubmit(page1_data);
         handleNextPage();
     };
-
-
-    const handleBackButton = () => {
-        navigate('/');
-    }
 
     return (
         <div>
             <form className='signUp' onSubmit={handleSubmit}>
-                <button className='back-button' onClick={handleBackButton}>
+                <button className='back-button' onClick={onCancel}>
                     {'<'}
                 </button>
-                <h2>Page 2</h2>
+                <h2>Page 1</h2>
+                <div>
+                    <label>
+                        닉네임
+                        <input
+                            type="text"
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
+                            placeholder="닉네임을 입력해주세요."
+                        />
+                    </label>
+                </div>
                 <div>
                     {sex === 'male' && (
                         <label>
@@ -202,10 +209,6 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
                     </div>
                 </div>
                 
-
-                <button type="onClick" onClick={handlePreviousPage} style={{marginRight:5}}>
-                    이전
-                </button>
                 <button type="submit"     
                     onClick={(e) => {
                     if (!isFormValid) {
@@ -220,4 +223,4 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
     );
 }
 
-export default SignUp_page2;
+export default Edit_page_1;

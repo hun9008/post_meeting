@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './chat.scss';
 
-const ChatApp = ({showChat}) => {
+const ChatApp = ({showChat, postit_id}) => {
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState('');
   const [userId, setUserId] = useState(localStorage.getItem('user_id'));
-  const user1 = localStorage.getItem('user_id');
-  const user2 = '65a387fbdb1394c635141785';
+  const [chatRoomList, setChatRoomList] = useState([]);
+//   const user1 = localStorage.getItem('user_id');
+  const receiver_id = postit_id;
   //user1과 user2중 큰 값이 앞에 오도록 두 문자열을 합침.
-//   const room = user1 > user2 ? user1 + user2 : user2 + user1;
-    const room = '65a387fbdb8db1394c635141784';
-  const url = process.env.REACT_APP_SOCKET_API + room;
+    //   const room = user1 > user2 ? user1 + user2 : user2 + user1;
+    // const room = '65a387fbdb8db1394c635141784';
+  const url = process.env.REACT_APP_SOCKET_API + userId;
   const socketRef = useRef(null);
     // console.log('room : ', room);
   useEffect(() => {
     socketRef.current = new WebSocket(url);
     const socket = socketRef.current;
 
+    // 보낼때 sender_id, receiver_id, text
     socket.onopen = () => {
       console.log('WebSocket connection opened');
       const userId = localStorage.getItem('user_id');
@@ -26,13 +28,38 @@ const ChatApp = ({showChat}) => {
 
     socket.onmessage = (event) => {
         const msg = JSON.parse(event.data);
-        console.log(msg);
-        const transformedData = msg.value.map(msg => ({
-          userId: msg.sender_id,
-          text: msg.content
-        }));
+        console.log('msg.value : ', msg.value);
+        // const transformedData = msg.value.map(msg => ({
+        //   userId: msg.sender_id,
+        //   text: msg.content
+        // }));
+        const transformedData = {
+            userId: null,
+            text: null
+        };
+        if (Array.isArray(msg.value)) {
+        // if (typeof msg.value === 'object') {
+            // const transformedData = msg.value.map(msg => ({
+            // // const transformedData = msg.map(msg => ({
+            //     userId: msg.value.sender_id,
+            //     text: msg.value.content
+            // }));
+            // setResponse(transformedData);
+        } else {
+            // setResponse({});
+            // const transformedData = msg.value.map(msg => ({
+            //     // const transformedData = msg.map(msg => ({
+            //         userId: msg.value.sender_id,
+            //         text: msg.value.content
+            //     }));
+            transformedData.userId = msg.value.sender_id;
+            transformedData.text = msg.value.content;
+            setResponse(transformedData);
+            console.log('type : ', typeof msg.value);
+            // console.log('받은게 array가 아님');
+        }
         console.log('onmessage : ', transformedData);
-        setResponse(transformedData);
+        // setResponse(transformedData);
     };
 
     return () => {
@@ -44,7 +71,7 @@ const ChatApp = ({showChat}) => {
   
   const sendMessage = () => {
     // console.log({userId, message});
-    socketRef.current.send(JSON.stringify({ type: 'message', userId: userId, text: message }));
+    socketRef.current.send(JSON.stringify({ type: 'message', sender: userId, receiver: receiver_id, text: message }));
     console.log('message sent');
   };
 
