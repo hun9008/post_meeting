@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import './myPage.scss';
 import {EditOutlined} from '@ant-design/icons';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Mypage({postit, onCancel, onLogout, onShowEdit}) {
+
+    const url = process.env.REACT_APP_SERVER_API;
+    const navigate = useNavigate();
 
     const getEmogi = (emogi) => {
         if (emogi === 1) {
@@ -31,6 +36,31 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
     }
 
     const isMale = postit.sex === "male" ? true : false;
+
+    const onDelete = () => {
+        const endpoint = '/api/auth/deleteuser';
+        const access_token = localStorage.getItem('token');
+        const headers = {
+           Authorization: `Bearer ${access_token}`
+        };
+        const payload = {
+            
+        };
+
+        axios.post(url + endpoint, payload, {headers})
+            .then(response => {
+                console.log(response);
+                if (response.status === 200) {
+                    console.log("post 삭제 성공");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        
+        localStorage.empty();
+        navigate('/');
+    }
 
     return (
         <div className={`mypage-container ${postit.sex}`}>
@@ -135,7 +165,7 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
             <div>
                 <button className={`my_button ${postit.sex}`} onClick={onCancel} style={{marginRight: 5}}>Back</button>
                 <button className={`my_button ${postit.sex}`} onClick={onLogout}>Logout</button>
-                <button className={`my_button ${postit.sex}`} style={{marginLeft: 5}}>Delete</button>
+                <button className={`my_button ${postit.sex}`} onClick={onDelete} style={{marginLeft: 5}}>Delete</button>
             </div>
         </div>
     );

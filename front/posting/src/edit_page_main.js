@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './signUp.scss';
+import './edit.scss';
 import Page1 from './edit_page_1';
 import Page2 from './edit_page_2';
 import Page3 from './edit_page_3';
@@ -46,7 +46,7 @@ function Edit({sex, onCancel}) {
     }
 
     const handleAllSubmit = (e) => {
-        const endpoint = '/api/auth/register/final';
+        const endpoint = '/api/auth/revise/info';
         const payload = {
             name: page1Data.nickname,
             militaryService: page1Data.militaryService,
@@ -76,7 +76,7 @@ function Edit({sex, onCancel}) {
     }, [currentPage]);
 
     return (
-        <div>
+        <div className='edit-container'>
             {currentPage === 1 ? (
                 <Page1 sex={sex} handleNextPage={handleNextPage} onSubmit={handlePage1Submit} onCancel={onCancel}/>
             ) : currentPage === 2 ? (

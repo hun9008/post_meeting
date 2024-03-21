@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './signUp.scss';
+import './edit.scss';
 import Policy from './aggree';
 
 function SignUp_page3({onSubmit, handlePreviousPage, onAllSubmit, onCancel}) {

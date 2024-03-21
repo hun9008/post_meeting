@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './signUp.scss';
+import './edit.scss';
 
 function SignUp_page2({handleNextPage, onSubmit, handlePreviousPage, onCancel}) {
 

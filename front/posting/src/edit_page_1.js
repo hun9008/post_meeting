@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './signUp.scss';
+import './edit.scss';
 
 function Edit_page_1({sex, handleNextPage, onSubmit, onCancel}) {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ function Edit_page_1({sex, handleNextPage, onSubmit, onCancel}) {
 
     return (
         <div>
-            <form className='signUp' onSubmit={handleSubmit}>
+            <form className={`signUp ${sex}`} onSubmit={handleSubmit}>
                 <button className='back-button' onClick={onCancel}>
                     {'<'}
                 </button>

@@ -69,7 +69,7 @@ $fontAsap: 'Asap', sans-serif;
     &.female {
         box-shadow: 5px 10px 10px rgba($redFire, 0.2);
     }
-    z-index: 10;
+    z-index: 1000;
     // 스크롤 가능하도록
     overflow: hidden;
     // 화면 사이즈가 520px 이하이면 overflow-y: auto;

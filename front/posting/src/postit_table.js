@@ -33,7 +33,7 @@ function App() {
     const [showLikeList, setShowLikeList] = useState(false);
     // emogi가 1이면 cat, 2면 dog, 3이면 fox, 4 : hamster, 5 : horse, 6: lion, 7: monkey, 8: panda, 9: rabbit, 10: t-rex, 11: tiger 
     // emogi숫자가 들어오면 해당하는 문자를 반환하는 함수
-    const [userMe, setUserMe] = useState({sex: 'none'});
+    const [userMe, setUserMe] = useState({postit :{sex: 'none'}});
     const [receiver_id, setReceiver_id] = useState(''); // 채팅 상대방 id
     const getEmogi = (emogi) => {
         if (emogi === 1) {
@@ -64,8 +64,7 @@ function App() {
     // dummy data
     // useEffect(() => {
     //     const generateDummyData = (count) => {
-    //         const dummyData = [];
-          
+    //         const dummyData = [];      
     //         for (let i = 1; i <= count; i++) {
     //           const data = {
     //             id: i,
@@ -437,20 +436,23 @@ function App() {
       };
 
     const handleLogout = () => {
-        // const endpoint = '/api/auth/logout';
+        const endpoint = '/api/auth/logout';
+        const access_token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${access_token}`
+         };
 
-
-        // axios.get(url + endpoint)
-        //     .then(response => {
-        //         console.log(response);
-        //         localStorage.clear();
-        //         Navigate('/');
-        //     })
-        //     .catch(error => {
-        //         console.error('로그아웃에 실패했습니다:', error);
-        //     });
+        axios.get(url + endpoint, {headers})
+            .then(response => {
+                console.log(response);
+                localStorage.clear();
+                navigate('/');
+            })
+            .catch(error => {
+                console.error('로그아웃에 실패했습니다:', error);
+            });
         localStorage.clear();
-        navigate('/');
+        // navigate('/');
     };
 
     // adding
@@ -511,8 +513,15 @@ function App() {
     }
 
     const handleChatButtonClick = (id) => {
-        setShowChat(prevShowChat => !prevShowChat);
-        setReceiver_id(id);
+        // id가 내 아이디와 같다면 채팅을 할 수 없음
+        const myId = localStorage.getItem('user_id');
+        if (id === myId) {
+            alert('자신과는 채팅을 할 수 없습니다.');
+        } else {
+            console.log(`setting receiver_id : ${id}`);
+            setReceiver_id(id);
+            setShowChat(prevShowChat => !prevShowChat);
+        }
       };
 
 
@@ -639,6 +648,7 @@ function App() {
         axios.get(url + endpoint, {headers})
             .then(response => {
                 console.log('user me : ',response);
+                console.log('user : ', response.data.user);
                 setUserMe(response.data.user);
             })
             .catch(error => {
@@ -648,7 +658,7 @@ function App() {
 
     //postits를 돌면서 userMe.send_like에 있는 user_id와 같은 user_id를 가진 postit의 liked를 true로 바꿔줌
     useEffect(() => {
-        if (userMe) {
+        if (userMe && postits.length !== 0) {
             const myId = localStorage.getItem('user_id');
             const myLike = userMe.send_like;
             console.log('myLike : ', myLike);
@@ -658,6 +668,11 @@ function App() {
             setPostits(updatedPostits);
         }
     }, [userMe]);
+
+    // if (userMe.postit == undefined) {
+    //     console.log('loading');
+    //     await(5000);
+    // } 
 
     return (
         <div className="App">
@@ -682,24 +697,24 @@ function App() {
         {showEditPage &&
             <EditPage
             onCancel={() => setShowEditPage(false)}
-            sex={userMe.sex}
+            sex={userMe.postit.sex}
             />
         }
         {showLikeList &&
             <LikeList
             onCancel={() => setShowLikeList(false)}
             postits={postits}
-            sex={userMe.sex}
+            sex={userMe.postit.sex}
             onShowSubpage={(id) => handleSubpage(id)}
             />
         }
-        
+
         {/* {showChat &&
             <Chat 
             
             onClose={() => setShowChat(false)} />
         } */}
-        <Chat showChat={showChat} onClose={() => setShowChat(false)} postit_id = {receiver_id}/>
+        <Chat showChat={showChat} onClose={() => setShowChat(false)} postit_id = {receiver_id} postits={postits}/>
         {postits.map(postit => (
             <div 
             key={postit.user_id} 
@@ -734,11 +749,17 @@ function App() {
                             HOBBY
                         </div>
                         <div className="infoContent">
-                            {postit.hobby.map((item, index) => (
+                            {/* postit.hobby가 null이 아니면 */}
+                            {postit.hobby && postit.hobby.map((item, index) => (
                                 <div key={index} className={`infoItem ${postit.sex}`}>
                                     {item}
                                 </div>
                             ))}
+                            {/* {postit.hobby.map((item, index) => (
+                                <div key={index} className={`infoItem ${postit.sex}`}>
+                                    {item}
+                                </div>
+                            ))} */}
                         </div>
                     </div>
                 </div>
@@ -751,8 +772,9 @@ function App() {
             <button className={`chat-button ${postit.sex}`} onClick={() => handleChatButtonClick(postit.user_id)}><MessageOutlined style={{fontSize: '20px'}}/></button>
             </div>
         ))}
-        <button className={`mypage-button ${userMe.sex}`} onClick={() => {setShowMypage(true); handleMyPostit();}} >MY PAGE</button>
-        <button className={`likelist-button ${userMe.sex}`} onClick={() => {setShowLikeList(true)}}>My Like</button>
+
+        <button className={`mypage-button ${userMe.postit.sex}`} onClick={() => {setShowMypage(true); handleMyPostit();}} >MY PAGE</button>
+        <button className={`likelist-button ${userMe.postit.sex}`} onClick={() => {setShowLikeList(true)}}>My Like</button>
         {/* <button className="add-button" onClick={handleOpenSubpage}>+</button> */}
         <div className="minimap" style={{ position: 'fixed', bottom: 0, left: 0, width: '200px', height: '200px', backgroundColor: 'rgba(0, 0, 0, 0.3)', overflow: 'hidden' ,zIndex: '100'}}>
             {renderPostitPoints()}
