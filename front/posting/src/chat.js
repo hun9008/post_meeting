@@ -13,6 +13,7 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
       //   const room = user1 > user2 ? user1 + user2 : user2 + user1;
       // const room = '65a387fbdb8db1394c635141784';
     const url = process.env.REACT_APP_SOCKET_API + userId;
+    const shouldRender = window.innerWidth > 768 ? true : false;
     const socketRef = useRef(null);
 
     // console.log(`initial receiver_id : ${receiver_id}`);
@@ -49,10 +50,12 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                 //     }));
                 const transformedData = {
                     sender_id: null,
-                    content: null
+                    content: null,
+                    created_at: null,
                 };
                 transformedData.sender_id = msg.value.sender_id;
                 transformedData.content = msg.value.content;
+                transformedData.created_at = msg.value.created_at;
                 console.log('transformedData : ', transformedData);
                 // setResponse(transformedData);
                 //response에 transformedData를 추가
@@ -60,18 +63,19 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                 // setResponse(newResponse);
                 // setResponse((prev) => [...prev, {user_id: msg.value.sender_id, content: msg.value.text}]);
                 setResponse((prev) => [...prev, transformedData]);
+                console.log('response : ', response);
                 console.log('type : ', typeof msg.value);
                 console.log('받은게 array가 아님');
             }
             console.log('onmessage : ', response);
-            // setResponse(transformedData);
+            
         };
 
         return () => {
         socket.close();
         console.log('WebSocket connection closed');
         };
-    }, []);
+    }, []); ///
 
   
     const sendMessage = () => {
@@ -88,14 +92,21 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
         if (chatRoomList.length === 0){
             console.log('chatRoomList is empty');
         } else {
-            const chatRoom = chatRoomList.find(room => room.room_name.includes(receiver_id));
-            console.log('chatRoom : ', chatRoom);
-            if(chatRoom === undefined){
-                console.log('chatRoom is undefined');
-                alert('chatRoom is undefined');
-                setResponse([]);
-            } else {
-                setResponse(chatRoom.chat_list);  
+            console.log('check response : ', response);
+            if(response.length == 0){
+                console.log(`find Id in chatroom : ${receiver_id}`);
+                const chatRoom = chatRoomList.find(room => room.room_name.includes(receiver_id));
+                console.log('chatRoom : ', chatRoom);
+                if(chatRoom === undefined){
+                    console.log('chatRoomList : chatRoom is undefined');
+                    // alert('chatRoom is undefined');
+                    setResponse([]);
+                } else {
+                    setResponse(chatRoom.chat_list);
+                    // const newChatRoomList = [...chatRoomList];
+                    // newChatRoomList.chat_list = Array.isArray(newChatRoomList.chat_list) ? [...newChatRoomList.chat_list, response] : [response];
+                    // setChatRoomList(newChatRoomList);  
+                }
             }
         }
         // setShowWrapper(true);
@@ -106,7 +117,12 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
 
     useEffect(() => {
         console.log('chatRoomList : ', chatRoomList);
-    }, [chatRoomList]);
+        console.log('response change detected : ', response);
+        // const newChatRoomList = [...chatRoomList];
+        // newChatRoomList.chat_list = Array.isArray(newChatRoomList.chat_list) ? [...newChatRoomList.chat_list, response] : [response];
+        // setChatRoomList(newChatRoomList);
+        // console.log('chatRoomList go : ', chatRoomList);
+    }, [response]);
 
     // useEffect (() => {
     //     handleChatList();
@@ -117,7 +133,9 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
     // }, [showChat]);
 
     useEffect(() => {
-        // setReceiverId(postit_id);
+        // setReceiver_id(postit_id);
+        // setReceiver_id(receiver_id);
+        console.log('first receiver_id : ', receiver_id);
         handleChatList();
         // setShowWrapper(true);
     });
@@ -133,15 +151,39 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
             return receiverName;
         }
     }
-    const handleWrapper = () => {
-        setShowWrapper(!showWrapper);
-    }
+    // const handleWrapper = () => {
+    //     setShowWrapper(!showWrapper);
+    // }
 
     const changeReceiverId = (room_name) => {
         const receiver = room_name.replace(userId, '');
         console.log('Changed receiver_id : ', receiver);
+                // 지금까지 response를 chatRoomList에 반영
+        // const room = receiver > receiver_id ? receiver + receiver_id : receiver_id + receiver;
+        // setChatRoomList((prev) => [...prev, {room_name: room, chat_list: response}]);
+        const newChatRoomList = [...chatRoomList];
+        newChatRoomList.chat_list = Array.isArray(newChatRoomList.chat_list) ? [...newChatRoomList.chat_list, response] : [response];
+        setChatRoomList(newChatRoomList);
         setReceiver_id(receiver);
-        handleChatList();
+        console.log('!!receiver_id : ', receiver_id);
+        if (chatRoomList.length === 0){
+            console.log('chatRoomList is empty');
+        } else {
+            console.log('check response : ', response);
+
+            console.log(`find Id in chatroom : ${receiver_id}`);
+            const chatRoom = chatRoomList.find(room => room.room_name.includes(receiver));
+            console.log('chatRoom : ', chatRoom);
+            if(chatRoom === undefined){
+                console.log('chatRoom is undefined');
+                alert('chatRoom is undefined');
+                setResponse([]);
+            } else {
+                setResponse(chatRoom.chat_list);  
+            }
+        
+        }
+        setMessage('');
     }
 
 
@@ -179,7 +221,7 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                                 <div className="time">8:59 PM</div>
                             </div>
                         </div> */}
-                        {chatRoomList.map((room, index) => (
+                        {shouldRender && chatRoomList.map((room, index) => (
                             <div key={index} className="userBox">
                                 <button onClick={() => changeReceiverId(room.room_name)} className="userBox-content">
                                     <div className="chat-list-user">{getReceiverName(room.room_name)}</div>
@@ -226,7 +268,7 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                                 {msg.sender_id === userId ? (
                                     <>{msg.content} <strong>:Me</strong> </>
                                 ) : (
-                                    <><strong>User :</strong> {msg.content}</>
+                                    <><strong>{getReceiverName(msg.sender_id)} :</strong> {msg.content}</>
                                 )}
                             </div>
                         ))}

@@ -49,6 +49,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('메일 전송에 실패했습니다. 다시 시도해주세요.');
             });
     };
 
@@ -66,6 +67,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert('인증에 실패했습니다. 다시 시도해주세요.');
             });
     };
 

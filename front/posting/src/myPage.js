@@ -70,7 +70,7 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
                     <h2 style={{marginLeft: "10px"}}>{postit.name}'s INFO</h2>
                 </div>
                 <div>
-                    <button className={`edit-button ${postit.sex}`} onClick={onShowEdit}><EditOutlined/></button> 
+                    <button className={`edit-button ${postit.sex}`} onClick={onShowEdit}><EditOutlined style={{fontSize: '14px', color: 'black'}}/></button> 
                 </div>
             </div>
             <div className="myBody">

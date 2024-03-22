@@ -82,9 +82,9 @@ function LikeList({onCancel, postits, sex, onShowSubpage}) {
                                     style={{ width: '60px', height: '60px' }}
                                 />
                                 <div>
-                                    <h4 style={{ marginLeft: '10px' }}>{postit.name}가 like를 눌렀어요.</h4>
+                                    <h4 style={{ marginLeft: '10px' }}>{postit.name}님이 like를 눌렀어요.</h4>
                                 </div>
-                                <button className={`more-button ${postit.sex}`} onClick={() => onShowSubpage(postit.user_id)}><SearchOutlined/></button> 
+                                <button className={`more-button ${postit.sex}`} onClick={() => onShowSubpage(postit.user_id)}><SearchOutlined  style={{fontSize: '14px', color: 'black'}}/></button> 
                             </div>
                         </div>
                     );

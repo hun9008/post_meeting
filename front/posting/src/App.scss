@@ -115,6 +115,9 @@ $fontAsap: 'Asap', sans-serif;
   top: 5px;
   right: 10px;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mypage-button{

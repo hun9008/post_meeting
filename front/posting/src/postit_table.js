@@ -35,6 +35,7 @@ function App() {
     // emogi숫자가 들어오면 해당하는 문자를 반환하는 함수
     const [userMe, setUserMe] = useState({postit :{sex: 'none'}});
     const [receiver_id, setReceiver_id] = useState(''); // 채팅 상대방 id
+    const shouldRenderMargins = window.innerWidth > 768 ? true : false; // Adjust the width threshold as needed
     const getEmogi = (emogi) => {
         if (emogi === 1) {
             return 'cat';
@@ -329,6 +330,9 @@ function App() {
         // console.log(validId);
         // const documentWidth = document.documentElement.scrollWidth;
         // const documentHeight = document.documentElement.scrollHeight;
+
+        e.target.style.zIndex = parseInt(e.target.style.zIndex || 0) + 1;
+
         if (postit.user_id == validId) {
             const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
             const offsetY = e.clientY - (postit.y / 3000) * window.innerHeight;
@@ -460,52 +464,54 @@ function App() {
     let scrollIntervalLeft;
     
     useEffect(() => {
-        const marginElementRight = document.querySelector('.scroll-RightMargin');
-        const marginElementLeft = document.querySelector('.scroll-LeftMargin');
-    
-        const handleMouseOverRight = (e) => {
-            //const isCursorOverMargin = e.clientX > window.innerWidth - 20;
-            // console.log('Mouse Over Right Margin:', isCursorOverMargin);
-    
-            scrollIntervalRight = setInterval(() => {
-                window.scrollBy(10, 0);
-            }, 20);
-        };
-    
-        const handleMouseOverLeft = (e) => {
-            //const isCursorOverMargin = e.clientX < 20;
-            // console.log('Mouse Over Left Margin:', isCursorOverMargin);
-    
-            scrollIntervalLeft = setInterval(() => {
-                window.scrollBy(-10, 0);
-            }, 20);
-        };
-    
-        const handleMouseOutRight = (e) => {
-            //const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
-            // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
-    
-            clearInterval(scrollIntervalRight);
-        };
-    
-        const handleMouseOutLeft = (e) => {
-            //const isCursorOutsideMargin = e.clientX >= 20;
-            // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
-    
-            clearInterval(scrollIntervalLeft);
-        };
-    
-        marginElementRight.addEventListener('mouseover', handleMouseOverRight);
-        marginElementRight.addEventListener('mouseout', handleMouseOutRight);
-        marginElementLeft.addEventListener('mouseover', handleMouseOverLeft);
-        marginElementLeft.addEventListener('mouseout', handleMouseOutLeft);
-    
-        return () => {
-            marginElementRight.removeEventListener('mouseover', handleMouseOverRight);
-            marginElementRight.removeEventListener('mouseout', handleMouseOutRight);
-            marginElementLeft.removeEventListener('mouseover', handleMouseOverLeft);
-            marginElementLeft.removeEventListener('mouseout', handleMouseOutLeft);
-        };
+        if(shouldRenderMargins) {
+            const marginElementRight = document.querySelector('.scroll-RightMargin');
+            const marginElementLeft = document.querySelector('.scroll-LeftMargin');
+        
+            const handleMouseOverRight = (e) => {
+                //const isCursorOverMargin = e.clientX > window.innerWidth - 20;
+                // console.log('Mouse Over Right Margin:', isCursorOverMargin);
+        
+                scrollIntervalRight = setInterval(() => {
+                    window.scrollBy(10, 0);
+                }, 20);
+            };
+        
+            const handleMouseOverLeft = (e) => {
+                //const isCursorOverMargin = e.clientX < 20;
+                // console.log('Mouse Over Left Margin:', isCursorOverMargin);
+        
+                scrollIntervalLeft = setInterval(() => {
+                    window.scrollBy(-10, 0);
+                }, 20);
+            };
+        
+            const handleMouseOutRight = (e) => {
+                //const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
+                // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
+        
+                clearInterval(scrollIntervalRight);
+            };
+        
+            const handleMouseOutLeft = (e) => {
+                //const isCursorOutsideMargin = e.clientX >= 20;
+                // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
+        
+                clearInterval(scrollIntervalLeft);
+            };
+        
+            marginElementRight.addEventListener('mouseover', handleMouseOverRight);
+            marginElementRight.addEventListener('mouseout', handleMouseOutRight);
+            marginElementLeft.addEventListener('mouseover', handleMouseOverLeft);
+            marginElementLeft.addEventListener('mouseout', handleMouseOutLeft);
+        
+            return () => {
+                marginElementRight.removeEventListener('mouseover', handleMouseOverRight);
+                marginElementRight.removeEventListener('mouseout', handleMouseOutRight);
+                marginElementLeft.removeEventListener('mouseover', handleMouseOverLeft);
+                marginElementLeft.removeEventListener('mouseout', handleMouseOutLeft);
+            };
+        }
     }, []);
 
     const handleMenualClose = () => {
@@ -714,7 +720,10 @@ function App() {
             
             onClose={() => setShowChat(false)} />
         } */}
-        <Chat showChat={showChat} onClose={() => setShowChat(false)} postit_id = {receiver_id} postits={postits}/>
+        {showChat &&
+            <Chat showChat={showChat} onClose={() => setShowChat(false)} postit_id = {receiver_id} postits={postits}/>
+        }
+        {/* <Chat showChat={showChat} onClose={() => setShowChat(false)} postit_id = {receiver_id} postits={postits}/> */}
         {postits.map(postit => (
             <div 
             key={postit.user_id} 
@@ -780,6 +789,8 @@ function App() {
             {renderPostitPoints()}
             <div style={{ position: 'absolute', left: `${viewport.x}%`, top: `${viewport.y}%`, width: `${viewport.width}%`, height: `${viewport.height}%`, border: '2px solid red' }}></div>
         </div>
+        {/* 아래 scroll-RightMargin과 scroll-LeftMargin은 모바일 화면이면 표시 안함. */}
+        {shouldRenderMargins && 
         <div
                 className="scroll-RightMargin"
                 style={{
@@ -792,7 +803,8 @@ function App() {
                     cursor: 'ew-resize',
                     zIndex: 1000
                 }}
-            ></div>
+        ></div>}
+        {shouldRenderMargins && 
         <div
                 className="scroll-LeftMargin"
                 style={{
@@ -805,7 +817,7 @@ function App() {
                     cursor: 'ew-resize',
                     zIndex: 1000
                 }}
-            ></div>
+        ></div>}
             <div>
                 {showMenual && <Menual onClose={handleMenualClose} />}
             </div>

@@ -56,7 +56,7 @@ function SignUp() {
         const payload = {
             email: page1Data.email,  // Using the studentNumber state
             password: page1Data.password,
-            name: page1Data.nickname,
+            name: page1Data.name,
             sex: page1Data.sex,
             militaryService: page2Data.militaryService,
             height: page2Data.height,
@@ -65,9 +65,9 @@ function SignUp() {
             fashion: page2Data.fashion,
             mbti: page3Data.mbti,
             hobby: page3Data.hobby,
-            socialID: page4Data.socialID,
             emogi: page4Data.emogi
         };
+        console.log(payload);
         e.preventDefault();
 
         axios.post(url + endpoint, payload)

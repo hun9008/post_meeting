@@ -193,7 +193,11 @@ $fontAsap: 'Asap', sans-serif;
                 //배경색 투명
                 background-color: rgba(0, 0, 0, 0);
                 @include transition(background-color 300ms);
-                
+                width: 24px;
+                height: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 &:hover {
                     &.male{
                         background-color: darken($blueQueen, 20%);
