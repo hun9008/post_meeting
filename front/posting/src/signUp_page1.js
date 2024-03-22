@@ -19,8 +19,8 @@ function SignUp_page1({handleNextPage, onSubmit}) {
     const isPasswordValid = password.length >= 8;
     const isPasswordConfirmValid = password === passwordConfirm;
     const isNicknameValid = nickname.trim() !== '';
-    // const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
-    const isFormValid = isPasswordValid && isPasswordConfirmValid && isNicknameValid; // test version
+    const isFormValid = isUserIdValid && isPasswordValid && isPasswordConfirmValid && isNicknameValid && isVerified;
+    // const isFormValid = isPasswordValid && isPasswordConfirmValid && isNicknameValid;
     const handleToggleSex = () => {
         setSex(sex === 'male' ? 'female' : 'male');
     };
@@ -36,6 +36,10 @@ function SignUp_page1({handleNextPage, onSubmit}) {
         const payload = {
             email: userId
         };
+        const headers = {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+        }
 
         axios.post(url + endpoint, payload)
             .then(response => {
@@ -89,7 +93,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
                     {'<'}
                 </button>
                 <h2>회원가입</h2>
-                {/* <div>
+                <div>
                     <label>
                         아이디
                         <input
@@ -115,7 +119,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
                     <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
                         인증확인
                     </button>
-                )} */}
+                )}
                 <div>
                     <label>
                         비밀번호

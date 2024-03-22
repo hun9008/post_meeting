@@ -51,13 +51,20 @@ body {
   font-family: $fontAsap;
 }
 
+.edit-container {
+    position:fixed;
+    top:50%;
+    left:50%;
+    z-index:2000;
+}
+
 form.signUp {
   overflow: hidden;
   background-color: rgb(175, 210, 237);
   padding: 40px 30px 30px 30px;
   border-radius: 10px;
-  position: absolute;
-  top: 50%; // 기본값
+  position: fixed;
+//   top: 50%; // 기본값
   z-index: 2000;
 
   @media (max-height: 600px) { // 600px 미만의 높이를 가진 화면에서만 이 스타일을 적용

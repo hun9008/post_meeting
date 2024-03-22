@@ -1,5 +1,5 @@
 import { useLocation, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
+import './App.scss';
 import PostitTable from './postit_table';
 import LoginPage from './login';
 import SignUp from './signUp_main';

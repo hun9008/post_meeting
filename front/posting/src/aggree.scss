@@ -62,7 +62,7 @@ $fontAsap: 'Asap', sans-serif;
     @include transform(translate(-50%, -50%));
     @include transition(transform 300ms, box-shadow 300ms);
     box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
-    z-index: 10;
+    z-index: 2000;
 
 
     &::before, &::after {
