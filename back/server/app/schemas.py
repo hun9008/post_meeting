@@ -4,21 +4,21 @@ from typing import Optional, Union, List
 
 
 class PostitSchema(BaseModel):
-    id: Optional[int]
-    x: Optional[int]
-    y: Optional[int]
-    user_id: Optional[str]
-    name: Optional[str]
-    mbti: Optional[str]
-    hobby: Optional[List[str]]
-    socialID: Optional[str]
-    emogi: Optional[int]
+    x: int
+    y: int
+    user_id: str
+    name: str
+    mbti: str
+    hobby: List[str]
+    socialID: str
+    emogi: int
     height: Optional[str]
     militaryService: Optional[bool]
-    bodyType: Optional[str]
-    eyelid: Optional[bool]
-    fashion: Optional[List[str]]
-    sex: Optional[str]
+    bodyType: str
+    eyelid: bool
+    fashion: List[str]
+    role: str
+    sex: str
 
 
 class PostitDeleteSchema(BaseModel):
@@ -27,6 +27,14 @@ class PostitDeleteSchema(BaseModel):
 
 class EmailSchema(BaseModel):
     email: str
+
+
+class EmailRegisterSchema(EmailSchema):
+    verified: bool = False
+    verification_code: str = ""
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
+
 
 class ChatSchema(BaseModel):
     chat_id: int
@@ -46,18 +54,12 @@ class ChatRoomSchema(BaseModel):
         from_contribute = True
 
 
-class UserBaseSchema(BaseModel):
-    name: Optional[str]
-    email: str
-    role: Optional[str]
-    sex: Optional[str]
+class UserBaseSchema(EmailRegisterSchema):
     password: str
-    postit: Optional[PostitSchema]
-    chatRoom: Optional[List[str]]
-    created_at: Optional[datetime]
-    updated_at: Optional[datetime]
-    send_like: Optional[List[Optional[str]]]
-    recive_like: Optional[List[Optional[str]]]
+    postit: PostitSchema
+    chatRoom: List[Optional[str]] = []
+    send_like: List[Optional[str]] = []
+    recive_like: List[Optional[str]] = []
 
     class Config:
         from_contribute = True
@@ -87,18 +89,32 @@ class PostitListSchema(BaseModel):
     postits: List[Optional[PostitSchema]]
 
 
-class CreateUserSchema(UserBaseSchema):
-    password: constr(min_length=8)
-    hobby: Optional[List[str]]
-    fashion: Optional[List[str]]
-    mbti: Optional[str]
-    socialID: Optional[str]
-    emogi: Optional[int]
+class ReviseUserSchema(BaseModel):
+    email: Optional[str]
+    hobby: List[str] = []
+    fashion: List[str] = []
+    mbti: str
+    socialID: str
+    emogi: int
     height: Optional[str]
     militaryService: Optional[bool]
-    bodyType: Optional[str]
-    eyelid: Optional[bool]
+    bodyType: str
+    eyelid: bool
+
+
+class CreateUserSchema(UserBaseSchema):
+    password: constr(min_length=8)
     verified: bool = False
+
+
+class RegisterUserSchema(UserBaseSchema):
+    email: str
+    password: str
+    postit: PostitSchema
+    verified: bool = True
+    chatRoom: List[Optional[str]] = ["string"]
+    send_like: List[Optional[str]] = ["string"]
+    recive_like: List[Optional[str]] = ["string"]
 
 
 class LoginUserSchema(BaseModel):

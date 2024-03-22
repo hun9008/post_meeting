@@ -1,11 +1,8 @@
 def userEntity(user) -> dict:
     return {
         "id": str(user["_id"]),
-        "name": user["name"],
         "email": user["email"],
-        "role": user["role"],
-        "sex": user["sex"],
-        "verified": user["verified"],
+        # "verified": user["verified"],
         "password": user["password"],
         "created_at": user["created_at"],
         "updated_at": user["updated_at"],
@@ -13,47 +10,18 @@ def userEntity(user) -> dict:
 
 
 def userResponseEntity(user) -> dict:
+    user["_id"] = str(user["_id"])
+    return user
     return {
-        "id": str(user["_id"]),
-        "name": user["name"],
-        "email": user["email"],
-        "role": user["role"],
-        "sex": user["sex"],
-        "postit": user["postit"],
-        "created_at": user["created_at"],
-        "updated_at": user["updated_at"],
-        "verified": user["verified"],
-        "chatRoom": user["chatRoom"],
-        "send_like": user["send_like"],
-        "recive_like": user["recive_like"],
-        # "mbti": user["mbti"],
-        # "hobby": user["hobby"],
-        # "socialID": user["socialID"],
-        # "emogi": user["emogi"],
-        # "height": user["height"],
-        # "militaryService": user["militaryService"],
-        # "bodyType": user["bodyType"],
-        # "eyelid": user["eyelid"],
-        # "fashion": user["fashion"],
-    }
-
-
-def ChatRomeResponseEntity(chatroom) -> dict:
-    return {
-        "room_id": str(chatroom["room_id"]),
-        "room_name": chatroom["room_name"],
-        "chat_list": chatroom["chat_list"],
-        "created_at": chatroom["created_at"],
-        "updated_at": chatroom["updated_at"],
-    }
-
-
-def ChatResponseEntity(chat) -> dict:
-    return {
-        "chat_id": str(chat["chat_id"]),
-        "sender_id": chat["sender_id"],
-        "content": chat["content"],
-        "created_at": str(chat["created_at"]),
+        # "id": str(user["_id"]),
+        # "email": user["email"],
+        # "postit": user["postit"],
+        # "created_at": user["created_at"],
+        # "updated_at": user["updated_at"],
+        # "verified": user["verified"],
+        # "chatRoom": user["chatRoom"],
+        # "send_like": user["send_like"],
+        # "recive_like": user["recive_like"],
     }
 
 

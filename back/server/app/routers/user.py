@@ -64,6 +64,36 @@ def add_column(col: str, value: str):
     return {"value": "success"}
 
 
+@router.post("/addrole/info")
+def add_column():
+
+    User.update_many(
+        {},
+        {
+            "$set": {
+                "postit": {"role": "user"},
+            }
+        },
+    )
+    return {"value": "success"}
+
+
+@router.post("/addpostit/info")
+def add_column():
+    users = User.find({})
+    for user in users:
+        print(user)
+        User.find_one_and_update(
+            {"email": str(user["email"])},
+            {
+                "$set": {
+                    "postit": make_random_post(user["_id"]),
+                }
+            },
+        )
+    return {"value": "success"}
+
+
 @router.post("/removeall/info")
 def remove_cloumn(col: str):
     users = User.find({})
@@ -78,50 +108,107 @@ def remove_cloumn(col: str):
     return {"value": "success"}
 
 
+@router.post("/remove/email")
+def revise_user(payload: schemas.EmailSchema):
+    User.delete_one({"email": payload.email.lower()})
+
+
+@router.post("/removeall/info")
+def remove_cloumn(col: str):
+    users = User.find({})
+    User.update_many(
+        {},
+        {
+            "$unset": {
+                col: True,
+            }
+        },
+    )
+    return {"value": "success"}
+
+
+def make_random_post(user_id: str):
+    mbti = utils.MBTI
+    sex = utils.SEX
+    hobby = utils.HOBBY
+    name = utils.NAME
+    postit = (
+        {
+            "user_id": str(user_id),
+            "x": (random.random() * 3001) + 200,
+            "y": (random.random() * 3001) + 50,
+            "name": random.choice(name),
+            "mbti": random.choice(mbti),
+            "hobby": random.sample(hobby, 3),
+            "socialID": f"usertestmember{int(random.random() * 100000) + 1}",
+            "emogi": int(random.random() * 10) + 1,
+            "height": 190,
+            "militaryService": True,
+            "bodyType": "thin",
+            "eyelid": True,
+            "fashion": ["street"],
+            "role": "students",
+            "sex": random.choice(sex),
+        },
+    )
+    return postit
+
+
 @router.post("/makeUser")
-def make_user(payload: schemas.CreateUserSchema):
-    new_user = schemas.UserBaseSchema(email=payload.email, password="@")
+def make_random_user(payload: schemas.CreateUserSchema):
+    new_user = payload.__dict__
+    new_user["password"] = utils.hash_password(payload.password)
+    new_user["created_at"] = datetime.utcnow()
+    new_user["updated_at"] = datetime.utcnow()
+    new_user["verified"] = True
+    new_user = schemas.UserBaseSchema(**new_user)
     insert_result = User.insert_one(new_user.dict())
     User.find_one_and_update(
         {"_id": insert_result.inserted_id},
         {
             "$set": {
-                "verified": True,
-                "updated_at": datetime.utcnow(),
+                "postit.user_id": str(insert_result.inserted_id),
+                "postit.x": (random.random() * 3001) + 200,
+                "postit.y": (random.random() * 3001) + 50,
             }
         },
     )
-    new_posit = schemas.PostitSchema(
-        x=(random.random() * 3001) + 200,
-        y=(random.random() * 3001) + 50,
-        user_id=str(insert_result.inserted_id),
-        sex=payload.sex,
-        hobby=payload.hobby,
-        mbti=payload.mbti,
-        name=payload.name,
-        socialID=payload.socialID,
-        emogi=payload.emogi,
-        height=payload.height,
-        militaryService=payload.militaryService,
-        bodyType=payload.bodyType,
-        eyelid=payload.eyelid,
-        fashion=payload.fashion,
-    )
-    User.find_one_and_update(
-        {"email": payload.email.lower()},
+
+    return {"status": "success"}
+
+
+def create_postit(payload: schemas.PostitSchema, user_id: str):
+    new_postit = payload
+    new_postit.x = (random.random() * 3001) + 200
+    new_postit.y = (random.random() * 3001) + 50
+    new_postit.user_id = user_id
+    return new_postit.__dict__
+
+
+def make_user(payload: schemas.RegisterUserSchema):
+    new_user = schemas.RegisterUserSchema(**(payload.__dict__))
+    new_user.password = utils.hash_password(new_user.password)
+    result = User.find_one({"email": new_user.email.lower()})
+    new_user.postit = create_postit(payload.postit, str(result["_id"]))
+
+    print(new_user.__dict__)
+    result = User.find_one_and_update(
+        {"_id": result["_id"]},
         {
             "$set": {
-                "password": utils.hash_password(payload.password),
-                "role": payload.role,
-                "name": payload.name,
-                "sex": payload.sex,
-                "postit": new_posit.__dict__,
-                "send_like": [],
-                "recive_like": [],
-                "chatRoom": [],
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
+                **(new_user.__dict__),
             }
         },
     )
-    return {"status": "success"}
+
+
+@router.post("/makepassword")
+def make_password():
+    User.update_many(
+        {},
+        {
+            "$set": {
+                "password": utils.hash_password("4321qwer"),
+            }
+        },
+    )

@@ -15,6 +15,7 @@ from ..config import settings
 from jinja2 import Environment, select_autoescape, PackageLoader
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from app.routers.user import make_user
 
 env = Environment(
     loader=PackageLoader("app", "templates"),
@@ -27,15 +28,6 @@ ACCESS_TOKEN_EXPIRES_IN = settings.ACCESS_TOKEN_EXPIRES_IN
 REFRESH_TOKEN_EXPIRES_IN = settings.REFRESH_TOKEN_EXPIRES_IN
 
 
-@router.post("/register/test", status_code=status.HTTP_201_CREATED)
-def add_user(user: schemas.CreateUserSchema):
-    User.insert_one(user.dict())
-    return {
-        "status": "success",
-        "message": "Verification token successfully sent to your email",
-    }
-
-
 @router.post("/register/email", status_code=status.HTTP_201_CREATED)
 async def send_email(emailmodel: schemas.EmailSchema, request: Request):
     email = emailmodel.email
@@ -46,7 +38,12 @@ async def send_email(emailmodel: schemas.EmailSchema, request: Request):
     hashedCode = hashlib.sha256()
     hashedCode.update(token)
     verification_code = hashedCode.hexdigest()
-    new_user = schemas.UserBaseSchema(email=email, password="@")
+    new_user = schemas.EmailRegisterSchema(
+        email=email,
+        verification_code=verification_code,
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow(),
+    )
     insert_result = User.insert_one(new_user.dict())
     User.find_one_and_update(
         {"_id": insert_result.inserted_id},
@@ -58,7 +55,6 @@ async def send_email(emailmodel: schemas.EmailSchema, request: Request):
             }
         },
     )
-    # url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
     url = f"{settings.SERERVER_URL}/api/auth/verifyemail/{token.hex()}"
     try:
         await Email({"name": email}, url, [EmailStr(email)]).sendVerificationCode()
@@ -90,53 +86,63 @@ def vaild_check(emailmodel: schemas.EmailSchema, request: Request):
 
 
 @router.post("/register/final", status_code=status.HTTP_201_CREATED)
-def create_user(payload: schemas.CreateUserSchema, request: Request):
+def create_user(payload: schemas.RegisterUserSchema, request: Request):
     user = User.find_one({"email": payload.email.lower()})
     # if payload.password != payload.passwordConfirm:
     #     raise HTTPException(
     #         status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
     # del payload.passwordConfirm
     #  Hash the password
-    new_posit = schemas.PostitSchema(
-        x=(random.random() * 3001) + 200,
-        y=(random.random() * 3001) + 50,
-        user_id=str(user["_id"]),
-        sex=payload.sex,
-        hobby=payload.hobby,
-        mbti=payload.mbti,
-        name=payload.name,
-        socialID=payload.socialID,
-        emogi=payload.emogi,
-        height=payload.height,
-        militaryService=payload.militaryService,
-        bodyType=payload.bodyType,
-        eyelid=payload.eyelid,
-        fashion=payload.fashion,
-    )
-    User.find_one_and_update(
-        {"email": payload.email.lower()},
-        {
-            "$set": {
-                "password": utils.hash_password(payload.password),
-                "role": payload.role,
-                "name": payload.name,
-                "sex": payload.sex,
-                "postit": new_posit.__dict__,
-                "send_like": [],
-                "recive_like": [],
-                "chatRoom": [],
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow(),
-            }
-        },
-    )
+    make_user(payload)
 
     return {"user": user["email"], "detail": "resgister success"}
 
 
-@router.post("/delete")
-def delete_user():
-    User.delete_many({})
+@router.post("/deleteuser")
+def delete_user(response: Response, Authorize: AuthJWT = Depends()):
+    try:
+        user_id = Authorize.get_jwt_subject()
+        if not user_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not refresh access token",
+            )
+        User.delete_one({"_id": ObjectId(str(user_id))})
+        return {"status": "success"}
+    except Exception as e:
+        error = e.__class__.__name__
+        if error == "MissingTokenError":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Please login first",
+            )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+
+
+@router.post("/reviseinfo")
+def revise_user(payload: schemas.ReviseUserSchema, Authorize: AuthJWT = Depends()):
+    user_id = Authorize.get_jwt_subject()
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not refresh access token",
+        )
+    User.find_one_and_update(
+        {"_id": ObjectId(str(user_id))},
+        {
+            "$set": {
+                "postit.name": payload.name,
+                "postit.militalyService": payload.militaryService,
+                "postit.height": payload.height,
+                "postit.body": payload.body,
+                "postiteyelid": payload.eyelid,
+                "postitfashion": payload.fashion,
+                "postithobby": payload.hobby,
+                "postitsocialID": payload.socialID,
+                "postitemogi": payload.emogi,
+            }
+        },
+    )
 
 
 @router.post("/login")
@@ -154,11 +160,11 @@ def login(
     user = userEntity(db_user)
 
     # Check if user verified his email
-    if not user["verified"]:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Please verify your email address",
-        )
+    # if not user["verified"]:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED,
+    #         detail="Please verify your email address",
+    #     )
 
     # Check if the password is valid
     if not user["password"]:
@@ -224,7 +230,6 @@ def login(
         "access_token": access_token,
         "refresh_token": refresh_token,
         "user_id": str(user["id"]),
-        "sex": user["sex"],
     }
 
 
@@ -308,7 +313,6 @@ def find_password(payload: schemas.LoginUserSchema, request: Request):
 def logout(
     response: Response,
     Authorize: AuthJWT = Depends(),
-    user_id: str = Depends(oauth2.require_user),
 ):
     Authorize.unset_jwt_cookies()
     response.set_cookie("logged_in", "", -1)
