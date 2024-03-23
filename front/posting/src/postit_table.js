@@ -61,109 +61,6 @@ function App() {
             return 'tiger';
         }
     }
-
-    // dummy data
-    // useEffect(() => {
-    //     const generateDummyData = (count) => {
-    //         const dummyData = [];      
-    //         for (let i = 1; i <= count; i++) {
-    //           const data = {
-    //             id: i,
-    //             x: getRandomCoordinate(),
-    //             y: getRandomCoordinateY(),
-    //             content_mbti: generateRandomMbti(),
-    //             content_hobby: [generateRandomHobby(), generateRandomHobby()],
-    //             sex: generateRandomSex(),
-    //             emogi: getEmogi(generateRandomEmogi()),
-    //             fashion: generateFashion(),
-    //             socialID: generateSocailID(),
-    //             eyelid: generateEyeLid(),
-    //             bodyType: generateBodyType(),
-    //             name: 'Woo',
-    //             // 성별이 male이면 militaryService, height를 가짐/ female이면 안가짐
-    //             militaryService: generateRandomMilitaryService(),
-    //             height: generateHeight(),
-    //           };
-          
-    //           dummyData.push(data);
-    //         }
-          
-    //         return dummyData;
-    //       };
-          
-    //       const getRandomCoordinate = () => {
-    //         return Math.floor(Math.random() * 3001) + 200 ; // -1500 to 1500
-    //       };
-
-    //       const getRandomCoordinateY = () => {
-    //         return Math.floor(Math.random() * 3001) + 50; // 0 to 3000
-    //       }
-
-    //       const generateRandomMbti = () => {
-    //         const mbtiOptions = ["INTJ", "ENFP", "ISTP", /* Add more MBTI types as needed */];
-    //         const randomIndex = Math.floor(Math.random() * mbtiOptions.length);
-    //         return mbtiOptions[randomIndex];
-    //       };
-          
-    //       const generateRandomHobby = () => {
-    //         const hobbyOptions = ["독서", "여행", "요리", /* Add more hobbies as needed */];
-    //         const randomIndex = Math.floor(Math.random() * hobbyOptions.length);
-    //         return hobbyOptions[randomIndex];
-    //       };
-          
-    //       const generateRandomSex = () => {
-    //         const sexOptions = ["male", "female"];
-    //         const randomIndex = Math.floor(Math.random() * sexOptions.length);
-    //         return sexOptions[randomIndex];
-    //       };
-
-    //       const generateRandomEmogi = () => {
-    //         //1~11까지 랜덤 숫자 생성
-    //         const randomIndex = Math.floor(Math.random() * 11) + 1;
-    //         return randomIndex;
-    //       }
-
-    //       const generateRandomMilitaryService = () => {
-    //         //true or false
-    //         const randomIndex = Math.floor(Math.random() * 2);
-    //         return randomIndex;
-    //       }
-
-    //       const generateHeight = () => {   
-    //         //150~200까지 랜덤 숫자 생성
-    //         const randomIndex = Math.floor(Math.random() * 51) + 150;
-    //         return randomIndex;
-    //       }
-
-    //       const generateBodyType = () => {
-    //         const bodyTypeOptions = ["마른", "보통", "근육", "통통"];
-    //         const randomIndex = Math.floor(Math.random() * bodyTypeOptions.length);
-    //         return bodyTypeOptions[randomIndex];
-    //       }          
-
-    //       const generateFashion = () => {
-    //         const fashionOptions = ["캐주얼", "모던", "스트릿", "클래식"];
-    //         const randomIndex = Math.floor(Math.random() * fashionOptions.length);
-    //         return fashionOptions[randomIndex];
-    //         }
-          
-    //     const generateSocailID = () => {
-    //         const socialIDOptions = ["qwer1234", "mwwwee3", "yykkei42", "#include"];
-    //         const randomIndex = Math.floor(Math.random() * socialIDOptions.length);
-    //         return socialIDOptions[randomIndex];
-    //     }
-
-    //     const generateEyeLid = () => {
-    //         //true or false
-    //         const randomIndex = Math.floor(Math.random() * 2);
-    //         return randomIndex;
-    //     }
-
-    //       const count = 10;
-    //       const dummyData = generateDummyData(count);
-        
-    //     setPostits(dummyData);
-    // }, []);
     
 
     useEffect(() => {
@@ -171,8 +68,6 @@ function App() {
         const access_token = localStorage.getItem('token');
 
         const headers = {
-            // 'Content-Type': `application/json`,
-            // 'ngrok-skip-browser-warning': '69420',
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
         };
 
@@ -185,7 +80,7 @@ function App() {
                         postit.liked = false;
                     });
                     setPostits(response.data.postits);
-                    console.log(response.data.postits);
+                    // console.log(response.data.postits);
                 } else {
                     console.error('받아온 데이터가 배열이 아닙니다:', response.data);
                     // 추가적인 에러 핸들링 로직
@@ -202,20 +97,15 @@ function App() {
         const payload = {
             postit: newPostit,
         };
-        // console.log(newPostit);
-        //포스트잇 생성 요청.
         const headers = {
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
         };
 
         if (access_token) {
-            // console.log("submit!!!");
             axios.post(url + endpoint, payload, { headers })
                  .then(response => {
-                     // console.log(response);
                  })
                  .catch(error => {
-                    // console.log(payload);
                      console.error('서버에 포스트잇 상태를 저장하는 데 실패했습니다:', error);
                     handleRefresh();
                     
@@ -238,11 +128,9 @@ function App() {
 
         axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                // console.log(response);
             })
             .catch(error => {
                 console.error('move Fail:', error);
-                // console.log(payload);
                 
             });
         
@@ -261,7 +149,6 @@ function App() {
 
         axios.get(url + endpoint, { headers })
         .then(response => {
-            // console.log(response);
             localStorage.setItem('token', response.data.access_token);
         })
         .catch(error => {
@@ -270,19 +157,11 @@ function App() {
         });
     };
 
-    // + 버튼을 누렀을 때 포스트잇 입력 페이지 로드
-    // const handleOpenSubpage = () => {
-    //     setShowSubpage(true);
-    // };
-
     const handleAddPostitFromSubpage = (text) => {
-        // console.log('text : ' + text);
         const textArray = text.split('\n');
-        // console.log(textArray);
         const [mbtiValue, hobbyValue, instaIdValue] = textArray;
         const freeFormValue = textArray.slice(3).join('\n');
         const sex = localStorage.getItem('sex'); // 성별 가져오기
-        // console.log(sex);
 
         const randomX = Math.random() * 2700 - 1500; // 포스트잇 너비를 고려
         const randomY = Math.random() * 2700; // 포스트잇 높이를 고려
@@ -294,19 +173,15 @@ function App() {
             content_mbti: freeFormValue ? freeFormValue : mbtiValue,
             content_hobby: freeFormValue ? '' : hobbyValue,
             content_insta: freeFormValue ? '' : instaIdValue,
-            // content_free_form: freeFormValue,
             sex: sex,
             user_id: localStorage.getItem('user_id'),
         };
-        //localStorage.setItem('id', newPostit.id);
         handleSubmit(newPostit); 
         setPostits(prevPostits => {
             const updatedPostits = [...prevPostits, newPostit];
-            //localStorage.setItem('id', newPostit.id);
             handleSubmit(newPostit); // 새로 추가된 포스트잇을 인자로 전달
             return updatedPostits;
         });
-        // console.log(postits);
         setShowSubpage(false);
 
         window.scrollTo({
@@ -316,22 +191,13 @@ function App() {
         });
     };
 
-    // useEffect(() => {
-    //     console.log(postits);
-    // }, [postits]);
 
     const handleDragStart = (e, user_id) => {
         e.preventDefault();
         const postit = postits.find(p => p.user_id === user_id);
-        // console.log(postit.id);
         const validId = localStorage.getItem('user_id');
-        // console.log(postit);
-        // console.log(postit.user_id);
-        // console.log(validId);
-        // const documentWidth = document.documentElement.scrollWidth;
-        // const documentHeight = document.documentElement.scrollHeight;
-
         e.target.style.zIndex = parseInt(e.target.style.zIndex || 0) + 1;
+        
 
         if (postit.user_id == validId) {
             const offsetX = e.clientX - (postit.x / 3000) * window.innerWidth;
@@ -349,15 +215,12 @@ function App() {
                 postit.x = newPosX;
                 postit.y = newPosY;
                 setPostits([...postits]);
-                // handleSubmit(postits[0]);
-                // handleDragSubmit(newPosX, newPosY);
             };
 
             const onDragEnd = () => {
             window.removeEventListener('mousemove', onDrag);
             window.removeEventListener('mouseup', onDragEnd);
             handleDragSubmit(postit.x, postit.y);
-            //handleSubmit();
             };
 
             window.addEventListener('mousemove', onDrag);
@@ -392,16 +255,12 @@ function App() {
                 .catch(error => {
                     console.error('포스트잇 삭제 실패:', error);
                     handleRefresh();
-                // handleDeletePostit();
                 });
             };
         
             // 서버에 삭제 요청을 보내는 함수 호출
             sendDeleteRequest();
         }
-        //임시 삭제 구현
-        // const updatedPostits = postits.filter(postit => postit.id !== id);
-        // setPostits(updatedPostits);
     };
 
     useEffect(() => {
@@ -426,18 +285,19 @@ function App() {
     const renderPostitPoints = () => {
         const padding = 140;
         return postits.map((postit) => {
+          const isCurrentUser = postit.user_id === localStorage.getItem('user_id');
           const style = {
             position: 'absolute',
             left: `${(postit.x / 3300) * 100}%`,
             top: `${((postit.y + padding) / 3300) * 100}%`,
-            width: '5px',
-            height: '5px',
+            width: isCurrentUser ? '10px' : '5px',
+            height: isCurrentUser ? '10px' : '5px',
             borderRadius: '50%',
-            backgroundColor: 'red'
+            backgroundColor: isCurrentUser ? 'yellow' : 'red',
           };
           return <div key={postit.id} style={style}></div>;
         });
-      };
+    };
 
     const handleLogout = () => {
         const endpoint = '/api/auth/logout';
@@ -448,7 +308,7 @@ function App() {
 
         axios.get(url + endpoint, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 localStorage.clear();
                 navigate('/');
             })
@@ -456,7 +316,6 @@ function App() {
                 console.error('로그아웃에 실패했습니다:', error);
             });
         localStorage.clear();
-        // navigate('/');
     };
 
     // adding
@@ -469,34 +328,22 @@ function App() {
             const marginElementLeft = document.querySelector('.scroll-LeftMargin');
         
             const handleMouseOverRight = (e) => {
-                //const isCursorOverMargin = e.clientX > window.innerWidth - 20;
-                // console.log('Mouse Over Right Margin:', isCursorOverMargin);
-        
                 scrollIntervalRight = setInterval(() => {
                     window.scrollBy(10, 0);
                 }, 20);
             };
         
             const handleMouseOverLeft = (e) => {
-                //const isCursorOverMargin = e.clientX < 20;
-                // console.log('Mouse Over Left Margin:', isCursorOverMargin);
-        
                 scrollIntervalLeft = setInterval(() => {
                     window.scrollBy(-10, 0);
                 }, 20);
             };
         
             const handleMouseOutRight = (e) => {
-                //const isCursorOutsideMargin = e.clientX <= window.innerWidth - 20;
-                // console.log('Mouse Out of Right Margin:', !isCursorOutsideMargin);
-        
                 clearInterval(scrollIntervalRight);
             };
         
             const handleMouseOutLeft = (e) => {
-                //const isCursorOutsideMargin = e.clientX >= 20;
-                // console.log('Mouse Out of Left Margin:', !isCursorOutsideMargin);
-        
                 clearInterval(scrollIntervalLeft);
             };
         
@@ -524,7 +371,7 @@ function App() {
         if (id === myId) {
             alert('자신과는 채팅을 할 수 없습니다.');
         } else {
-            console.log(`setting receiver_id : ${id}`);
+            // console.log(`setting receiver_id : ${id}`);
             setReceiver_id(id);
             setShowChat(prevShowChat => !prevShowChat);
         }
@@ -534,7 +381,7 @@ function App() {
     // postit을 더블클릭하면 postit의 정보를 console.log로 출력
     const handlePostitDoubleClick = (e, id) => {
         const postit = postits.find(p => p.user_id === id);
-        console.log(postit);
+        // console.log(postit);
         // subPage를 로드
         setShowSubpage(true);
         setSelectedPostit(postit);
@@ -570,13 +417,13 @@ function App() {
                 };
                 axios.post(url + endpoint, payload, {headers})
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         //id에 해당하는 postit의 liked를 true로 바꿔줌
                         const updatedPostits = postits.map(postit => 
                             postit.user_id === id ? { ...postit, liked: true } : postit);
                         setPostits(updatedPostits);
-                        console.log(postits);
-                        console.log('좋아요 요청 성공');
+                        // console.log(postits);
+                        // console.log('좋아요 요청 성공');
                     })
                     .catch(error => {
                         console.error('좋아요 요청 실패:', error);
@@ -596,13 +443,13 @@ function App() {
                 };
                 axios.post(url + endpoint, payload, {headers})
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         //id에 해당하는 postit의 liked를 false로 바꿔줌
                         const updatedPostits = postits.map(postit =>
                             postit.user_id === id ? { ...postit, liked: false } : postit);
                         setPostits(updatedPostits);
-                        console.log(postits);
-                        console.log('좋아요 취소 요청 성공');
+                        // console.log(postits);
+                        // console.log('좋아요 취소 요청 성공');
                     })
                     .catch(error => {
                         console.error('좋아요 취소 요청 실패:', error);
@@ -614,8 +461,7 @@ function App() {
 
 
 
-        console.log('like button clicked');
-        // setIsLike(!isLike);
+        // console.log('like button clicked');
     }
 
     const getLike = () => {
@@ -625,14 +471,12 @@ function App() {
         const access_token = localStorage.getItem('token');
 
         const headers = {
-            // 'Content-Type': `application/json`,
-            // 'ngrok-skip-browser-warning': '69420',
             Authorization: `Bearer ${access_token}` 
         };
 
         axios.get(url + endpoint, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setReceivedLike(response.data.receivedLike);
             })
             .catch(error => {
@@ -646,15 +490,13 @@ function App() {
         const access_token = localStorage.getItem('token');
 
         const headers = {
-            // 'Content-Type': `application/json`,
-            // 'ngrok-skip-browser-warning': '69420',
             Authorization: `Bearer ${access_token}`
         };
 
         axios.get(url + endpoint, {headers})
             .then(response => {
-                console.log('user me : ',response);
-                console.log('user : ', response.data.user);
+                // console.log('user me : ',response);
+                // console.log('user : ', response.data.user);
                 setUserMe(response.data.user);
             })
             .catch(error => {
@@ -667,8 +509,8 @@ function App() {
         if (userMe && postits.length !== 0) {
             const myId = localStorage.getItem('user_id');
             const myLike = userMe.send_like;
-            console.log('myLike : ', myLike);
-            console.log('postits : ', postits);
+            // console.log('myLike : ', myLike);
+            // console.log('postits : ', postits);
             const updatedPostits = postits.map(postit => 
                 myLike.includes(postit.user_id) ? { ...postit, liked: true } : postit);
             setPostits(updatedPostits);

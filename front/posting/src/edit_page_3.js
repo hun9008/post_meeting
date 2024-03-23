@@ -5,21 +5,21 @@ import Policy from './aggree';
 
 function SignUp_page3({onSubmit, handlePreviousPage, onAllSubmit, onCancel}) {
     const navigate = useNavigate();
-    const [socialID, setSocialID] = useState('');
     const [emogi, setEmogi] = useState(0);
     const [isAggreed, setIsAggreed] = useState(false);
     const [showPolicy, setShowPolicy] = useState(false);
-    const isFormValid = socialID && emogi && isAggreed;
+    const isFormValid = emogi && isAggreed;
 
 
     const handleSubmit = (e) => {
         const page3_data = {
-            socialID: socialID,
             emogi: emogi
         };
         e.preventDefault();
-        onSubmit(page3_data);
-        onAllSubmit(e);
+        if (page3_data && e) {
+            onSubmit && onSubmit(page3_data);
+            onAllSubmit && onAllSubmit(e);
+        }
     };
 
     const handleOpenPolicy = () => {
@@ -38,17 +38,6 @@ function SignUp_page3({onSubmit, handlePreviousPage, onAllSubmit, onCancel}) {
                     {'<'}
                 </button>
                 <h2>Page 3</h2>
-                <div>
-                    <label>
-                        인스타 ID or 카카오톡 ID
-                        <input
-                            type="text"
-                            value={socialID}
-                            onChange={(e) => setSocialID(e.target.value)}
-                            placeholder="인스타 또는 카카오 ID를 입력해주세요."
-                        />
-                    </label>
-                </div>
                 
                 <div>
                     이모지 선택

@@ -16,9 +16,11 @@ function SignUp_page4({onSubmit, handlePreviousPage, onAllSubmit}) {
         const page4_data = {
             emogi: emogi
         };
-        // e.preventDefault();
-        onSubmit(page4_data);
-        onAllSubmit(e);
+        e.preventDefault();
+        if (page4_data && e) {
+            onSubmit && onSubmit(page4_data);
+            onAllSubmit && onAllSubmit(e);
+        }
     };
 
     const handleOpenPolicy = () => {

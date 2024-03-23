@@ -42,15 +42,19 @@ $redFire: rgba(244, 91, 105, 1);
 
 $fontAsap: 'Asap', sans-serif;
 
-.h_container {
+.subpage-container {
     position: fixed;
     top: 50%; /* 화면의 수직 중앙으로 이동 */
     left: 50%; /* 화면의 수평 중앙으로 이동 */
-    // width: 400px;
-    height: 95vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: rgb(216, 234, 250);
+    width: 400px;
+    height: auto;
+    // overflow: hidden;
+    &.male {
+      background-color: rgb(175, 210, 237);
+    }
+    &.female {
+        background-color: rgb(246, 155, 163);
+    }
     padding: 40px 30px 30px 30px;
     box-sizing: border-box;
     transform: translate(-50%, -50%);
@@ -58,21 +62,27 @@ $fontAsap: 'Asap', sans-serif;
     @include transform(translate(-50%, -50%));
     @include transition(transform 300ms, box-shadow 300ms);
     box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
-    z-index: 3000;
-    
-    @media (max-width: 768px) {
-      font-size: 10px;
-      width: 80%;
-      height: 90vh;
+    &.male {
+      box-shadow: 5px 10px 10px rgba($blueQueen, 0.2);
+    }
+    &.female {
+        box-shadow: 5px 10px 10px rgba($redFire, 0.2);
+    }
+    z-index: 1010;
+    // 스크롤 안되도록
+    // overflow: hidden;
+    overflow-y:hidden;
+    // 화면 사이즈가 520px 이하이면 overflow-y: auto;
+    @media (max-height: 520px) {
+        overflow-y: auto;
     }
 
 
     &::before, &::after {
         content: '';
         position: absolute;
-        overflow: hidden;
-        width: 2000px;
-        height: 2000px;
+        width: 600px;
+        height: 800px;
         border-top-left-radius: 40%;
         border-top-right-radius: 45%;
         border-bottom-left-radius: 35%;
@@ -83,7 +93,12 @@ $fontAsap: 'Asap', sans-serif;
       &::before {
         left: 40%;
         bottom: -130%;
-        background-color: rgba($blueQueen, 0.15);
+        &.male {
+          background-color: rgba($blueQueen, 0.15);
+        }
+        &.female {
+            background-color: rgba($redFire, 0.15);
+        }
         @include animation(wawes 6s infinite linear);
       }
       
@@ -92,18 +107,6 @@ $fontAsap: 'Asap', sans-serif;
         bottom: -125%;
         background-color: rgba($greenSeaweed, 0.2);
         @include animation(wawes 7s infinite);
-      }
-
-      .back-button {
-        position: absolute;
-        top: 10px; 
-        left: 10px; 
-        width:60px;
-        background-color: transparent;
-        border: none;
-        font-size: 16px; 
-        cursor: pointer;
-        color: grey; 
       }
 
       > button {
@@ -116,13 +119,25 @@ $fontAsap: 'Asap', sans-serif;
         border: 0;
         padding: 10px 0;
         // margin-top: 10px;
-        // margin-left: -5px;
+        margin-left: 5px;
+        margin-right: 5px;
         border-radius: 5px;
         background-color: $blueQueen;
+        &.male {
+          background-color: rgb(67, 130, 196);
+        }
+        &.female {
+            background-color: $redFire;
+        }
         @include transition(background-color 300ms);
         
         &:hover {
-          background-color: darken($blueQueen, 5%);
+          &.male{
+            background-color: darken($blueQueen, 20%);
+          }
+          &.female{
+            background-color: darken(rgb(243, 48, 64), 20%);
+          }
         }
       }
 
@@ -165,7 +180,30 @@ $fontAsap: 'Asap', sans-serif;
         -webkit-transition: .4s;
         transition: .4s;
       }
-
+      
+      input:checked + .slider {
+        background-color: rgb(99, 153, 186);
+      }
+      
+      input:focus + .slider {
+        box-shadow: 0 0 1px rgb(99, 153, 186);
+      }
+      
+      input:checked + .slider:before {
+        content: "✔";
+        -webkit-transform: translateX(46px);
+        -ms-transform: translateX(46px);
+        transform: translateX(46px);
+      }
+      
+      /* 슬라이더를 둥글게 만들기 */
+      .slider {
+        border-radius: 34px;
+      }
+      
+      .slider:before {
+        border-radius: 50%;
+      }
 
   }
 
@@ -175,44 +213,76 @@ $fontAsap: 'Asap', sans-serif;
     to { @include transform(rotate(360deg)); }
   }
 
-.img {
-  // media 쿼리를 사용해 모바일화면의 경우 width가 화면의 45%가 되도록 width를 설정
-  width:250px;
-  @media (max-width: 768px) {
-    width: 85%;
-  }  
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  //border: 1px solid #ddd;
-  padding: 5px;
-  box-sizing: border-box;
-  @include transition(box-shadow 300ms);
-  box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
-  z-index: 10;
-}
+  .postit-input {
+    font-family: $fontAsap;
+    display: block;
+    border-radius: 5px;
+    font-size: 18px;
+    background: white;
+    width: 100%;
+    border: 0;
+    padding: 10px 10px;
+    margin: 15px -10px;
+  }
 
-.imgChat {
-  width:450px;
-  @media (max-width: 768px) {
-    width: 95%;
-  }  
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  //border: 1px solid #ddd;
-  padding: 5px;
-  box-sizing: border-box;
-  @include transition(box-shadow 300ms);
-  box-shadow: 5px 10px 10px rgba($greenSeaweed, 0.2);
-  z-index: 10;
-}
+  .postit-input-free {
+    font-family: $fontAsap;
+    display: block;
+    border-radius: 5px;
+    font-size: 18px;
+    background: white;
+    width: 100%;
+    height: 200px;
+    border: 0;
+    padding: 10px 10px;
+    margin: 15px -10px;
+  }
 
-.info {
-  text-decoration: none;
-  color: rgba(rgb(0, 0, 0), 0.9);
-  position: absolute;
-  right: 10px;
-  top: 0px;
-  font-size: 12px;
-}
+  .myBody {
+    text-align: left;
+    font-size: 18px;
+
+
+    .infoTitle {
+        width: 100px;
+        //가운데 정렬
+        text-align: left;
+        //상하 가운데 정렬
+        display: flex;
+        justify-content: left;
+        align-items: center;
+    }
+    .infoBox {
+        display: flex;
+        justify-content: left;
+        margin-bottom: 10px;
+    }
+    .infoItem {
+        font-family: $fontAsap;
+        cursor: pointer;
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        width: auto;
+        
+        border: 0;
+        padding: 10px 10px;
+        // margin-top: 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        &.male {
+            background-color: rgb(67, 130, 196);
+        }
+        &.female {
+            background-color: $redFire;
+        }
+
+        @include transition(background-color 300ms);
+
+    }
+    .infoContent {
+        display: flex;
+        justify-content: left;
+    }
+ }

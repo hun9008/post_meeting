@@ -41,23 +41,21 @@ function LikeList({onCancel, postits, sex, onShowSubpage}) {
         const access_token = localStorage.getItem('token');
 
         const headers = {
-            // 'Content-Type': `application/json`,
-            // 'ngrok-skip-browser-warning': '69420',
             Authorization: `Bearer ${access_token}` 
         };
 
         axios.get(url + endpoint, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setReceivedLike(response.data.recive_like);
-                console.log(receivedLike);
+                // console.log(receivedLike);
             })
             .catch(error => {
                 console.error('좋아요 요청 실패:', error);
             });
 
     }
-    console.log(`likelist: ${postits}`);
+    // console.log(`likelist: ${postits}`);
 
     useEffect(() => {
         getLike();
@@ -70,6 +68,7 @@ function LikeList({onCancel, postits, sex, onShowSubpage}) {
             <button className={`back-button ${sex}`} onClick={onCancel}>
                 {'<'}
             </button>
+            <br/>
             <br/>
             {postits.map((postit, index) => {
                 if (receivedLike && receivedLike.includes(postit.user_id)) {
@@ -92,105 +91,7 @@ function LikeList({onCancel, postits, sex, onShowSubpage}) {
                     return null;
                 }
             })}
-            {/* {postits.map((postit, index) => (
-                <div key={index} className={`list-container ${postit.sex}`}>
-                    <div className="myHeader">
-                        <img src={process.env.PUBLIC_URL + `/emoji_png/${getEmogi(postit.emogi)}.png`} alt="Emogi" style={{ width: '60px', height: '60px' }} />    
-                        <div>
-                            <h2 style={{marginLeft: "10px"}}>{postit.name}'s INFO</h2>
-                        </div>
-                    </div>
-                </div>
-            ))} */}
         </div>
-        // {/* <div className="myBody">
-        //                 {postit.sex === "male" && (
-        //                     <div>
-        //                         <div className="infoBox">
-        //                             <div className="infoTitle" variant="ghost">
-        //                                 군필여부
-        //                             </div>
-        //                             <div className="infoContent">
-        //                                 <div className={`infoItem ${postit.sex}`}>
-        //                                     {postit.militaryService ? "군필" : "미필"}
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-
-        //                         <div className="infoBox">
-        //                             <div className="infoTitle" variant="ghost">
-        //                                 키
-        //                             </div>
-        //                             <div className="infoContent">
-        //                                 <div className={`infoItem ${postit.sex}`}>
-        //                                     {postit.height}cm
-        //                                 </div>
-        //                             </div>
-        //                         </div>
-        //                     </div>
-        //                 )}
-                        
-        //                 <div className="infoBox">    
-        //                     <div className="infoTitle" variant="ghost">
-        //                         MBTI
-        //                     </div>
-        //                     <div className="infoContent">
-        //                         <div className={`infoItem ${postit.sex}`}>
-        //                             {postit.mbti}
-        //                         </div>
-        //                     </div>
-        //                 </div>
-
-        //                 <div className="infoBox">    
-        //                     <div className="infoTitle" variant="ghost">
-        //                         취미
-        //                     </div>
-        //                     <div className="infoContent">
-
-        //                         {postit.hobby.map((item, index) => (
-        //                             <div key={index} className={`infoItem ${postit.sex}`}>
-        //                                 {item}
-        //                             </div>
-        //                         ))}
-        //                     </div>
-        //                 </div>
-
-        //                 <div className="infoBox">    
-        //                     <div className="infoTitle" variant="ghost">
-        //                         쌍꺼풀
-        //                     </div>
-        //                     <div className="infoContent">
-        //                         <div className={`infoItem ${postit.sex}`}>
-        //                             {postit.eyelid ? "유쌍" : "무쌍"}
-        //                         </div>
-        //                     </div>
-        //                 </div>
-
-        //                 <div className="infoBox">    
-        //                     <div className="infoTitle" variant="ghost">
-        //                         패션 스타일
-        //                     </div>
-        //                     <div className="infoContent">
-        //                         {postit.fashion.map((item, index) => (
-        //                             <div key={index} className={`infoItem ${postit.sex}`}>
-        //                                 {item}
-        //                             </div>
-        //                         ))}
-        //                     </div>
-        //                 </div>
-
-        //                 <div className="infoBox">
-        //                     <div className="infoTitle" variant="ghost">
-        //                         체형
-        //                     </div>
-        //                     <div className="infoContent">
-        //                         <div className={`infoItem ${postit.sex}`}>
-        //                             {postit.bodyType}
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //             <br/> */}
     );
 }
 

@@ -18,8 +18,8 @@ function Edit({sex, onCancel}) {
 
     const handleNextPage = () => {
         setCurrentPage(currentPage + 1); // Move to the next page
-        console.log("next");
-        console.log(currentPage);
+        // console.log("next");
+        // console.log(currentPage);
     };
 
     const handlePreviousPage = () => {
@@ -32,23 +32,25 @@ function Edit({sex, onCancel}) {
 
     const handlePage1Submit = (data) => {
         setPage1Data(data);
-        console.log(data);
+        // console.log(data);
     };
 
     const handlePage2Submit = (data) => {
         setPage2Data(data);
-        console.log(data);
+        // console.log(data);
     }
 
     const handlePage3Submit = (data) => {
         setPage3Data(data);
-        console.log(data);
+        // console.log(data);
     }
 
     const handleAllSubmit = (e) => {
-        const endpoint = '/api/auth/revise/info';
+        const endpoint = '/api/auth/reviseinfo';
+        const access_token = localStorage.getItem('token');
+        e.preventDefault();
         const payload = {
-            name: page1Data.nickname,
+            name: page1Data.name,
             militaryService: page1Data.militaryService,
             height: page1Data.height,
             bodyType: page1Data.bodyType,
@@ -56,14 +58,19 @@ function Edit({sex, onCancel}) {
             fashion: page1Data.fashion,
             mbti: page2Data.mbti,
             hobby: page2Data.hobby,
-            socialID: page3Data.socialID,
-            emogi: page3Data.emogi
+            emogi: page3Data?.emogi
         };
-        e.preventDefault();
+        // console.log(payload);
 
-        axios.post(url + endpoint, payload)
+
+        const headers = {
+            Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
+        };
+
+        axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
+                localStorage.clear();
                 navigate('/');
             })
             .catch(error => {
@@ -72,7 +79,7 @@ function Edit({sex, onCancel}) {
     };
 
     useEffect(() => {
-        console.log('change : ', currentPage);
+        // console.log('change : ', currentPage);
     }, [currentPage]);
 
     return (

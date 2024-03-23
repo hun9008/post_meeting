@@ -68,6 +68,7 @@ $fontAsap: 'Asap', sans-serif;
   height: 100vh;
 }
 
+
 .postit {
   width: auto;
   height: auto;
@@ -222,26 +223,25 @@ div.rgyPostIt {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff88', endColorstr='#ffffc6', GradientType=1); 
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
-}
-
-div.rgyPostIt::after {
-  content: " ";
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  bottom: 35px;
-  width: 85px;
-  height: 30px;
-  background-color: rgba(0, 0, 0, 0);
-  box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
-  transform: matrix(-1, -0.1, 0, 1, 0, 0);
-  -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
-  -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
-  -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
-  -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
-  transition: all 0.2s;
-  -webkit-transition: all 0.2s;
+  // &::after {
+  //   content: " ";
+  //   position: absolute;
+  //   z-index: -1;
+  //   right: 0;
+  //   bottom: 35px;
+  //   width: 85px;
+  //   height: 30px;
+  //   background-color: rgba(0, 0, 0, 0);
+  //   box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   // -webkit-box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   transition: all 0.2s;
+  //   -webkit-transition: all 0.2s;
+  // }
 }
 
 div.rgyPostIt:hover, div.rgyPostIt.male:hover, div.rgyPostIt.female:hover {
@@ -292,6 +292,26 @@ div.rgyPostIt.male {
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
   text-align: left;
+
+  // &::after {
+  //   content: " ";
+  //   position: absolute;
+  //   z-index: -1;
+  //   right: 0;
+  //   bottom: 35px;
+  //   width: 85px;
+  //   height: 30px;
+  //   background-color: rgba(0, 0, 0, 0);
+  //   box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   // -webkit-box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   transition: all 0.2s;
+  //   -webkit-transition: all 0.2s;
+  // }
 }
 
 div.rgyPostIt.female {
@@ -316,6 +336,26 @@ div.rgyPostIt.female {
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
   text-align: left;
+
+  // &::after {
+  //   content: " ";
+  //   position: absolute;
+  //   z-index: -1;
+  //   right: 0;
+  //   bottom: 35px;
+  //   width: 85px;
+  //   height: 30px;
+  //   background-color: rgba(0, 0, 0, 0);
+  //   box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   // -webkit-box-shadow: 2px 35px 5px rgba(0, 0, 0, 0.4);
+  //   transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -webkit-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -moz-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -ms-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   -o-transform: matrix(-1, -0.1, 0, 1, 0, 0);
+  //   transition: all 0.2s;
+  //   -webkit-transition: all 0.2s;
+  // }
 }
 
 .close-button {

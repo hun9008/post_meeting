@@ -58,7 +58,7 @@ function Subpage({ postit, onCancel }) {
                       </div>
                       <div className="infoContent">
                           <div className={`infoItem ${postit.sex}`}>
-                              {postit.height}cm
+                              {postit.height}
                           </div>
                       </div>
                   </div>

@@ -78,35 +78,35 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
                             <div>
                                 <button 
                                     type="button" 
-                                    onClick={() => setHeight('160이하')}
+                                    onClick={() => setHeight(height === '160이하' ? '' : '160이하')}
                                     className={height === '160이하' ? 'chooseButton selected' : 'chooseButton'}
                                 >
                                     160이하
                                 </button>
                                 <button 
                                     type="button" 
-                                    onClick={() => setHeight('160대')}
+                                    onClick={() => setHeight(height === '160대' ? '' : '160대')}
                                     className={height === '160대' ? 'chooseButton selected' : 'chooseButton'}
                                 >
                                     160대
                                 </button>
                                 <button 
                                     type="button" 
-                                    onClick={() => setHeight('170대')}
+                                    onClick={() => setHeight(height === '170대' ? '' : '170대')}
                                     className={height === '170대' ? 'chooseButton selected' : 'chooseButton'}
                                 >
                                     170대
                                 </button>
                                 <button 
                                     type="button" 
-                                    onClick={() => setHeight('180대')}
+                                    onClick={() => setHeight(height === '180대' ? '' : '180대')}
                                     className={height === '180대' ? 'chooseButton selected' : 'chooseButton'}
                                 >
                                     180대
                                 </button>
                                 <button 
                                     type="button" 
-                                    onClick={() => setHeight('180이상')}
+                                    onClick={() => setHeight(height === '180이상' ? '' : '180이상')}
                                     className={height === '180이상' ? 'chooseButton selected' : 'chooseButton'}
                                 >
                                     180이상
@@ -122,28 +122,28 @@ function SignUp_page2({sex, handleNextPage, onSubmit, handlePreviousPage}) {
                     <div>
                         <button 
                             type="button" 
-                            onClick={() => setBodyType('마름')}
+                            onClick={() => setBodyType(bodyType === '마름' ? '' : '마름')}
                             className={bodyType === '마름' ? 'chooseButton selected' : 'chooseButton'}
                         >
                             마름
                         </button>
                         <button 
                             type="button" 
-                            onClick={() => setBodyType('보통')}
+                            onClick={() => setBodyType(bodyType === '보통' ? '' : '보통')}
                             className={bodyType === '보통' ? 'chooseButton selected' : 'chooseButton'}
                         >
                             보통
                         </button>
                         <button 
                             type="button" 
-                            onClick={() => setBodyType('근육')}
+                            onClick={() => setBodyType(bodyType === '근육' ? '' : '근육')}
                             className={bodyType === '근육' ? 'chooseButton selected' : 'chooseButton'}
                         >
                             근육
                         </button>
                         <button 
                             type="button" 
-                            onClick={() => setBodyType('통통')}
+                            onClick={() => setBodyType(bodyType === '통통' ? '' : '통통')}
                             className={bodyType === '통통' ? 'chooseButton selected' : 'chooseButton'}
                         >
                             통통

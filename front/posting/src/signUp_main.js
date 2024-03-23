@@ -19,8 +19,8 @@ function SignUp() {
 
     const handleNextPage = () => {
         setCurrentPage(currentPage + 1); // Move to the next page
-        console.log("next");
-        console.log(currentPage);
+        // console.log("next");
+        // console.log(currentPage);
     };
 
     const handlePreviousPage = () => {
@@ -33,46 +33,49 @@ function SignUp() {
 
     const handlePage1Submit = (data) => {
         setPage1Data(data);
-        console.log(data);
+        // console.log(data);
     };
 
     const handlePage2Submit = (data) => {
         setPage2Data(data);
-        console.log(data);
+        // console.log(data);
     }
 
     const handlePage3Submit = (data) => {
         setPage3Data(data);
-        console.log(data);
+        // console.log(data);
     }
 
     const handlePage4Submit = (data) => {
         setPage4Data(data);
-        console.log(data);
+        // console.log(data);
     }
 
     const handleAllSubmit = (e) => {
         const endpoint = '/api/auth/register/final';
-        const payload = {
-            email: page1Data.email,  // Using the studentNumber state
-            password: page1Data.password,
+        e.preventDefault();
+        const payload_postit = {
             name: page1Data.name,
             sex: page1Data.sex,
             militaryService: page2Data.militaryService,
-            height: page2Data.height,
-            bodyType: page2Data.bodyType,
-            eyelid: page2Data.eyelid,
-            fashion: page2Data.fashion,
-            mbti: page3Data.mbti,
-            hobby: page3Data.hobby,
-            emogi: page4Data.emogi
+            height : page2Data.height,
+            bodyType : page2Data.bodyType,
+            eyelid : page2Data.eyelid,
+            fashion : page2Data.fashion,
+            mbti : page3Data.mbti,
+            hobby : page3Data.hobby,
+            emogi : page4Data?.emogi,
         };
-        console.log(payload);
-        e.preventDefault();
+        const payload = {
+            email: page1Data.email,  // Using the studentNumber state
+            password: page1Data.password,
+            postit: payload_postit
+        };
+        // console.log(payload);
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 navigate('/');
             })
             .catch(error => {
@@ -81,7 +84,7 @@ function SignUp() {
     };
 
     useEffect(() => {
-        console.log('change : ', currentPage);
+        // console.log('change : ', currentPage);
     }, [currentPage]);
 
     return (

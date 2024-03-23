@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './signUp.scss';
+import './findPW.scss';
 
 function FindPwPage() {
     const [userId, setUserId] = useState('');
@@ -10,9 +10,8 @@ function FindPwPage() {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [emailSent, setEmailSent] = useState(false); 
     const [isVerified, setIsVerified] = useState(false); 
-    const navigate = useNavigate();
-    // const url = 'https://3.27.141.88'
-    // const url = 'https://p7219.site' 
+    const [emailButtonClicked, setEmailButtonClicked] = useState(false);
+    const navigate = useNavigate(); 
     const url = process.env.REACT_APP_SERVER_API;
 
     const isUserIdValid = userId.endsWith('@ajou.ac.kr');
@@ -26,7 +25,7 @@ function FindPwPage() {
 
     //should be changed
     const handleSubmitClick = (e) => {
-        const endpoint = '/api/auth/find_password';
+        const endpoint = '/api/auth/change_password';
         const payload = {
             email: userId,  // Using the studentNumber state
             password: newPassword
@@ -36,7 +35,7 @@ function FindPwPage() {
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                //console.log(response);
+                alert('비밀번호가 변경되었습니다!');
                 navigate('/');
             })
             .catch(error => {
@@ -46,20 +45,31 @@ function FindPwPage() {
     };
 
     const handleEmailSend = () => {
-      const endpoint = '/api/auth/register/email'
-      const payload = {
-          email: userId
-      };
+        
+        if (!userId.endsWith('@ajou.ac.kr')) {
+            alert('이메일 형식이 올바르지 않습니다. @ajou.ac.kr를 이메일을 사용해주세요.');
+            return;
+        }
+        setEmailButtonClicked(true);
+        const endpoint = '/api/auth/change_password/email'
+        const payload = {
+            email: userId
+        };
+        const headers = {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+        }
 
-      axios.post(url + endpoint, payload)
-          .then(response => {
-              //console.log(response);
-              setEmailSent(true);
-          })
-          .catch(error => {
-              console.error("Error fetching data:", error);
-              //console.log(payload);
-          });
+        axios.post(url + endpoint, payload)
+            .then(response => {
+                // console.log(response);
+                setEmailSent(true);
+                alert('메일이 전송되었습니다! 인증을 완료해주세요.');
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                alert('메일 전송에 실패했습니다. 다시 시도해주세요.');
+            });
     };
 
     const handleEmailCheck = () => {
@@ -76,13 +86,13 @@ function FindPwPage() {
           })
           .catch(error => {
               console.error("Error fetching data:", error);
+              alert('인증에 실패했습니다. 다시 시도해주세요.');
           });
     };
 
     return (
       <div>
-        {/* <h2>Login</h2> */}
-        <form className="login" onSubmit={handleSubmitClick}>
+        <form className="signUp" onSubmit={handleSubmitClick}>
             <button className='back-button' onClick={handleBackButton}>
                 {'<'}
             </button>
@@ -98,14 +108,22 @@ function FindPwPage() {
                   />
               </label>
             </div>
-            <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
-                메일전송
-            </button>
-            {emailSent && (
-                <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
-                    인증확인
-                </button>
-            )}
+            {!emailButtonClicked && !emailSent && (
+                    <button type="button" onClick={handleEmailSend} style={{marginTop:0, marginBottom:10}}>
+                        메일전송
+                    </button>
+                )}
+                {emailButtonClicked && !emailSent && (
+                    <div style={{marginTop: 0, marginBotton : 10}}>
+                        전송중입니다...
+                    </div>
+                )}
+                {emailSent && (
+                    
+                    <button type="button" onClick={handleEmailCheck} style={{marginTop:0, marginBottom:10, marginLeft:-5}}>
+                        인증확인
+                    </button>
+                )}
             <br/>
             <div>
                 <label>

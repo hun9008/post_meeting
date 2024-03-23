@@ -43,7 +43,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setEmailSent(true);
                 alert('메일이 전송되었습니다! 인증을 완료해주세요.');
             })
@@ -61,7 +61,7 @@ function SignUp_page1({handleNextPage, onSubmit}) {
 
         axios.post(url + endpoint, payload)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 setIsVerified(true);
                 alert('인증되었습니다!');
             })

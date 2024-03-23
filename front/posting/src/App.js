@@ -4,6 +4,8 @@ import PostitTable from './postit_table';
 import LoginPage from './login';
 import SignUp from './signUp_main';
 import FindPw from './findPW';
+import ErrorBoundary from './errorBoundary'; 
+import Error from './error';
 
 function Main() {
 
@@ -18,6 +20,7 @@ function Main() {
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/PostitTable' element={<PostitTable />} />
           <Route path='/FindPw' element={<FindPw />} />
+          <Route path='/error' element={<Error />} />
         </Routes>
       
     </div>
@@ -27,7 +30,9 @@ function Main() {
 function App() {
   return (
     <Router>
-      <Main />
+      <ErrorBoundary>
+        <Main />
+      </ErrorBoundary>
     </Router>
   );
 }

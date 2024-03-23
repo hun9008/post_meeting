@@ -3,11 +3,13 @@ import './myPage.scss';
 import {EditOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Delete from './myDeleteCheck';
 
 function Mypage({postit, onCancel, onLogout, onShowEdit}) {
 
     const url = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
+    const [showDelete, setShowDelete] = useState(false);
 
     const getEmogi = (emogi) => {
         if (emogi === 1) {
@@ -49,9 +51,9 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
 
         axios.post(url + endpoint, payload, {headers})
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 if (response.status === 200) {
-                    console.log("post 삭제 성공");
+                    // console.log("post 삭제 성공");
                 }
             })
             .catch(error => {
@@ -64,6 +66,9 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
 
     return (
         <div className={`mypage-container ${postit.sex}`}>
+            {showDelete &&
+                <Delete onCancel={() => setShowDelete(false)} onDelete={onDelete} sex={postit.sex}/>
+            }
             <div className="myHeader">
                 <img src={process.env.PUBLIC_URL + `/emoji_png/${getEmogi(postit.emogi)}.png`} alt="Emogi" style={{ width: '60px', height: '60px' }} />    
                 <div>
@@ -93,7 +98,7 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
                             </div>
                             <div className="infoContent">
                                 <div className={`infoItem ${postit.sex}`}>
-                                    {postit.height}cm
+                                    {postit.height}
                                 </div>
                             </div>
                         </div>
@@ -165,7 +170,7 @@ function Mypage({postit, onCancel, onLogout, onShowEdit}) {
             <div>
                 <button className={`my_button ${postit.sex}`} onClick={onCancel} style={{marginRight: 5}}>Back</button>
                 <button className={`my_button ${postit.sex}`} onClick={onLogout}>Logout</button>
-                <button className={`my_button ${postit.sex}`} onClick={onDelete} style={{marginLeft: 5}}>Delete</button>
+                <button className={`my_button ${postit.sex}`} onClick={() => setShowDelete(true)} style={{marginLeft: 5}}>Delete</button>
             </div>
         </div>
     );
