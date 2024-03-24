@@ -6,6 +6,7 @@ import SignUp from './signUp_main';
 import FindPw from './findPW';
 import ErrorBoundary from './errorBoundary'; 
 import Error from './error';
+import Monitor from './monitor';
 
 function Main() {
 
@@ -21,6 +22,7 @@ function Main() {
           <Route path='/PostitTable' element={<PostitTable />} />
           <Route path='/FindPw' element={<FindPw />} />
           <Route path='/error' element={<Error />} />
+          <Route path='/monitor' element={<Monitor />} />
         </Routes>
       
     </div>

@@ -20,17 +20,17 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
 
         // 보낼때 sender_id, receiver_id, text
         socket.onopen = () => {
-        console.log('WebSocket connection opened');
+        // console.log('WebSocket connection opened');
         const userId = localStorage.getItem('user_id');
         setUserId(userId);
         };
 
         socket.onmessage = (event) => {
             const msg = JSON.parse(event.data);
-            console.log('msg.value : ', msg.value);
+            // console.log('msg.value : ', msg.value);
             if (Array.isArray(msg.value)) {
                 setChatRoomList(msg.value);
-                console.log('chatRoomList : ', chatRoomList);
+                // console.log('chatRoomList : ', chatRoomList);
             } else {
                 const transformedData = {
                     sender_id: null,
@@ -40,39 +40,44 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                 transformedData.sender_id = msg.value.sender_id;
                 transformedData.content = msg.value.content;
                 transformedData.created_at = msg.value.created_at;
-                console.log('transformedData : ', transformedData);
+                // console.log('transformedData : ', transformedData);
                 setResponse((prev) => [...prev, transformedData]);
-                console.log('response : ', response);
-                console.log('type : ', typeof msg.value);
-                console.log('받은게 array가 아님');
+                // console.log('response : ', response);
+                // console.log('type : ', typeof msg.value);
+                // console.log('받은게 array가 아님');
             }
-            console.log('onmessage : ', response);
+            // console.log('onmessage : ', response);
             
         };
 
         return () => {
         socket.close();
-        console.log('WebSocket connection closed');
+        // console.log('WebSocket connection closed');
         };
     }, []); ///
 
   
     const sendMessage = () => {
       socketRef.current.send(JSON.stringify({ type: 'message', sender: userId, receiver: receiver_id, text: message }));
-      console.log(`receiver_id : ${receiver_id}`);
-      console.log('message sent');
+    //   console.log(`receiver_id : ${receiver_id}`);
+    //   console.log('message sent');
     };
 
     const handleChatList = () => {
         if (chatRoomList.length === 0){
-            console.log('chatRoomList is empty');
+            // console.log('chatRoomList is empty');
         } else {
-            console.log('check response : ', response);
+            // console.log('check response : ', response);
             if(response.length == 0){
-                console.log(`find Id in chatroom : ${receiver_id}`);
+                // console.log(`find Id in chatroom : ${receiver_id}`);
                 const chatRoom = chatRoomList.find(room => room.room_name.includes(receiver_id));
                 // console.log('chatRoom : ', chatRoom);
                 if(chatRoom === undefined){
+                    const newChatRoomList = [...chatRoomList];
+                    const room = userId > receiver_id ? userId + receiver_id : userId + receiver_id;
+                    const addedChatRoomList = {room_name: room, chat_list: []};
+                    newChatRoomList.push(addedChatRoomList);
+                    setChatRoomList(newChatRoomList);
                     // console.log('chatRoomList : chatRoom is undefined');
                     setResponse([]);
                 } else {
@@ -148,6 +153,7 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                         <div>
                             {chatRoomList.map((room, index) => (
                                 <div key={index} className="userBox">
+                                    { room.chat_list.length != 0 &&
                                     <button onClick={() => changeReceiverId(room.room_name)} className="userBox-content">
                                         <div className="chat-list-user">{getReceiverName(room.room_name)}</div>
                                         <div className="chat-list-userContent">
@@ -155,7 +161,8 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                                             ? `${room.chat_list[room.chat_list.length - 1].content.slice(0, 5)}...` 
                                             : room.chat_list[room.chat_list.length - 1].content}
                                         </div>
-                                    </button>
+                                    </button>}
+                                    { room.chat_list.length != 0 &&
                                     <div className="userBox-alert">
                                         
                                         <div className="time">
@@ -169,7 +176,7 @@ const ChatApp = ({showChat, postit_id, postits, onClose}) => {
                                             }).format(new Date(room.chat_list[room.chat_list.length - 1].created_at))
                                         }
                                         </div>
-                                    </div>
+                                    </div>}
                                 </div>
                             ))}
                             
