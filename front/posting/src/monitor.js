@@ -89,7 +89,7 @@ function LoginPage() {
                 </table>
             </div>)}
         <div>
-        <form className="login" onSubmit={handleSubmitClick}>
+        <form className="monitor" onSubmit={handleSubmitClick}>
           <div>
             <h2>Monitoring</h2>
           </div>
