@@ -66,6 +66,7 @@ function App() {
     useEffect(() => {
         const endpoint = '/api/postit/all';
         const access_token = localStorage.getItem('token');
+        const myId = localStorage.getItem('user_id');
 
         const headers = {
             Authorization: `Bearer ${access_token}` // 'Bearer'는 일반적인 인증 스킴입니다.
@@ -79,7 +80,16 @@ function App() {
                     response.data.postits.map((postit) => {
                         postit.liked = false;
                     });
-                    setPostits(response.data.postits);
+                    const myPostitTemp = response.data.postits.find(postit => postit.user_id === myId);
+                    
+                    const shuffledPostits = response.data.postits.sort(() => 0.5 - Math.random());
+                    const selectedPostits = shuffledPostits.slice(0, 30);
+                    
+                    if (myPostitTemp && !selectedPostits.includes(myPostitTemp)) {
+                        selectedPostits.push(myPostitTemp);
+                    }
+                    setPostits(selectedPostits);
+                    // setPostits(response.data.postits);
                     // console.log(response.data.postits);
                 } else {
                     console.error('받아온 데이터가 배열이 아닙니다:', response.data);
@@ -601,7 +611,7 @@ function App() {
                         </div>
                         <div className="infoContent">
                             {/* postit.hobby가 null이 아니면 */}
-                            {postit.hobby && postit.hobby.map((item, index) => (
+                            {postit.hobby && postit.hobby.slice(0,3).map((item, index) => (
                                 <div key={index} className={`infoItem ${postit.sex}`}>
                                     {item}
                                 </div>

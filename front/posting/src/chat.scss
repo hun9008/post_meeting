@@ -160,12 +160,14 @@ $fontAsap: 'Asap', sans-serif;
         }
         .userBox-content {
             width:100%;
+            border: none;
             .chat-list-user {
                 text-align: left;
                 /* 굵게 */
                 font-weight: bold;
                 margin-left:10%;
                 margin-top:5%;
+                border:none;
             }
             .chat-list-userContent {
                 text-align: left;
